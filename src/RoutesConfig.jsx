@@ -36,7 +36,7 @@ export const routesConfig = [
   { path: "/balance", element: <ProtectedRoute><Balance /></ProtectedRoute> },
   { path: "/financial", element: <ProtectedRoute><FinancialStatement /></ProtectedRoute> },
   { path: "/pending", element: <ProtectedRoute><PendingPayments /></ProtectedRoute> },
-  { path: "/notebooks", element: <Notebooks><Notebooks /></Notebooks> },
+  { path: "/notebooks", element: <ProtectedRoute><Notebooks /></ProtectedRoute> },
 
   { path: "/adminpending", element: <ProtectedRoute allowedRoles={["admin"]}><AdminPending /></ProtectedRoute> },
   { path: "/allUser", element: <ProtectedRoute allowedRoles={["admin"]}><GetUser /></ProtectedRoute> },

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import axios from 'axios';
-export default function AddSaveNum() {
+export default function AddSaveNum({ onClose }) {
 
   function parseJwt (token){
     try{
@@ -12,7 +13,7 @@ export default function AddSaveNum() {
   const token = localStorage.getItem('token')
     const decoded = parseJwt(token);
     const email = decoded?.email;
-
+  
 
 
   const [formData, setFormData] = useState({
@@ -68,15 +69,45 @@ export default function AddSaveNum() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = axios.post('http://localhost:5000/api/payment/addnumber' , {formData})
+    const res = await axios.post('https://paynet-1.onrender.com/api/payment/save-number' ,
+     
+      formData , {
+        headers:{
+          Authorization: `Bearer ${token}`,
+
+        }
+      }
+    )
+    alert('تم حفظ الرقم بنجاح')
+    setFormData({
+      name: "",
+      number: "",
+      company: "",
+      date: "",
+      amount: "",
+    })
+    
+
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-xl shadow-md w-96">
-        <h1 className="text-black font-bold text-lg mb-4 text-center">اضافة رقم</h1>
+    <div 
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white p-6 rounded-xl shadow-md w-96 z-[10000]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-black font-bold text-lg">اضافة رقم</h1>
+          <AiOutlineCloseCircle 
+            className="text-gray-500 hover:text-gray-700 cursor-pointer text-xl"
+            onClick={onClose}
+          />
+        </div>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
@@ -85,6 +116,7 @@ export default function AddSaveNum() {
             placeholder="الاسم"
             value={formData.name}
             onChange={handleChange}
+            required
           />
           <input
             type="number"
@@ -93,12 +125,14 @@ export default function AddSaveNum() {
             placeholder="الرقم"
             value={formData.number}
             onChange={handleChange}
+            required
           />
 
           {/* اختيار الشركة */}
           <select
             name="company"
             className="w-full border p-2 rounded"
+            required
             value={formData.company}
             onChange={handleChange}
           >
@@ -114,12 +148,14 @@ export default function AddSaveNum() {
             type="date"
             name="date"
             className="w-full border p-2 rounded"
+            required
             value={formData.date}
             onChange={handleChange}
           />
           <input
             type="number"
             name="amount"
+            required
             className="w-full border p-2 rounded"
             placeholder="المبلغ"
             value={formData.amount}
@@ -130,6 +166,7 @@ export default function AddSaveNum() {
           <select
             name="speed"
             className="w-full border p-2 rounded"
+            required
             value={formData.speed}
             onChange={handleChange}
           >
