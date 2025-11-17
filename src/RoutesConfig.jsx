@@ -1,5 +1,6 @@
 import React from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
+import react from "react";
 
 const Login = React.lazy(() => import("./pages/Login"));
 const Home = React.lazy(() => import("./pages/Home"));
@@ -21,6 +22,7 @@ const Haram = React.lazy(() => import("./pages/Haram"));
 const PaymentStatement = React.lazy(() => import("./pages/PaymentStatement"));
 const FinancialPoint = React.lazy(() => import("./pages/FinancialPoint"));
 const Notebooks = React.lazy(() => import("./pages/Notebooks"));
+const Advertisements = react.lazy(()=> import('./pages/Advertisements') )
 
 
 export const routesConfig = [
@@ -48,6 +50,7 @@ export const routesConfig = [
   { path: "/haram", element: <ProtectedRoute><Haram /></ProtectedRoute> },
   { path: "/PaymentStatement", element: <ProtectedRoute><PaymentStatement /></ProtectedRoute> },
   { path: "/financial-point", element: <ProtectedRoute><FinancialPoint /></ProtectedRoute> },
+  { path: "/advertisements", element: <ProtectedRoute><Advertisements /></ProtectedRoute> },
 
   { path: "*", element: <Home /> },
 ];

@@ -15,6 +15,7 @@ import {
   FaTimes,
   FaUser,
   FaStickyNote,
+  FaBullhorn ,
 } from "react-icons/fa";
 
 const NavBar = () => {
@@ -95,6 +96,11 @@ const NavBar = () => {
             label: "الارقام المحفوظة",
             icon: <FaStickyNote />,
           },
+          // {
+          //   to: "/advertisements",
+          //   label: "اعلانات",
+          //   icon: <FaBullhorn  />,
+          // },
           {
             external: "https://wa.me/963993822320",
             label: "واتساب",

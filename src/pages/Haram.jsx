@@ -137,7 +137,7 @@ export default function TransferForm() {
             />
             <Input
               name="noticeNumber"
-              type="text"
+              type="number"
               label="رقم الإشعار"
               value={formData.noticeNumber}
               onChange={handleChange}

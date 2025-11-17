@@ -81,9 +81,6 @@ export default function Astalam() {
       }
     });
 
-    return () => {
-      socket.disconnect();
-    };
   }, [email]);
 
   // دالة الاستعلام
