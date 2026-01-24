@@ -16,6 +16,8 @@ import {
   FaUser,
   FaStickyNote,
   FaBullhorn,
+  FaShoppingCart 
+  
 } from "react-icons/fa";
 
 const NavBar = () => {
@@ -113,8 +115,8 @@ const NavBar = () => {
         },
         // {
         //   to: "/advertisements",
-        //   label: "اعلانات",
-        //   icon: <FaBullhorn />,
+        //   label: "المنتجات",
+        //   icon: <FaShoppingCart  />,
         // },
         {
           external: "https://wa.me/963993822320",
