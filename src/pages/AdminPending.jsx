@@ -8,7 +8,7 @@ export default function AdminPending() {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
     // 1. إنشاء الاتصال بالسيرفر عبر سوكيت
-    const newSocket = io("https://paynet-1.onrender.com"); // عدّل الرابط إذا لزم
+    const newSocket = io("http://localhost:5000"); // عدّل الرابط إذا لزم
     setSocket(newSocket);
 
     // 2. الاستماع للتحديثات من السيرفر
@@ -29,7 +29,7 @@ export default function AdminPending() {
   const fetchPending = async () => {
     try {
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/pending"
+        "http://localhost:5000/api/admin/pending"
       );
       setPayments(res.data);
     } catch (error) {
@@ -46,7 +46,7 @@ export default function AdminPending() {
 
     try {
       await axios.patch(
-        `https://paynet-1.onrender.com/api/admin/confirm/${id}`
+        `http://localhost:5000/api/admin/confirm/${id}`
       );
       fetchPending(); // إعادة التحديث بعد التأكيد
     } catch (error) {
@@ -61,7 +61,7 @@ export default function AdminPending() {
 
     try {
       await axios.patch(
-        `https://paynet-1.onrender.com/api/admin/start/${id}`
+        `http://localhost:5000/api/admin/start/${id}`
       );
       fetchPending(); // إعادة التحديث بعد التأكيد
     } catch (error) {
@@ -76,7 +76,7 @@ export default function AdminPending() {
 
     try {
       await axios.post(
-        `https://paynet-1.onrender.com/api/admin/reject/${payment._id}`,
+        `http://localhost:5000/api/admin/reject/${payment._id}`,
         {
           email: payment.email,
           amount: payment.amount,
@@ -123,11 +123,10 @@ export default function AdminPending() {
                 <td className="py-3 px-4">{p.amount.toLocaleString()} ل.س</td>
                 <td className="py-3 px-4">
                   <span
-                    className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                      p.status === "جاري التسديد"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-green-100 text-green-800"
-                    }`}
+                    className={`px-2 py-1 rounded-full text-xs font-semibold ${p.status === "جاري التسديد"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-green-100 text-green-800"
+                      }`}
                   >
                     {p.status}
                   </span>

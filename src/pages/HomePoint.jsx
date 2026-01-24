@@ -14,28 +14,28 @@ const HomePoint = () => {
   const navigate = useNavigate();
   const vantaRef = useRef(null);
   const [vantaEffect, setVantaEffect] = useState(null);
-    const {hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
-      const [socket, setSocket] = useState(null);
-      
-      
-useEffect(()=>{
-  const newSocket = io("https://paynet-1.onrender.com");
+  const { hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
+  const [socket, setSocket] = useState(null);
 
-  newSocket.on("connect" , ()=>{
-    console.log('تم الاتصال بالسيرفر')
-    newSocket.emit("financial" ,"done");
-  });
 
-  newSocket.on("json_message" , (data)=>{
-    console.log(data)
-    setHasNewUnpaid(data)
-  });
+  useEffect(() => {
+    const newSocket = io("http://localhost:5000");
 
-  return () => {
-    newSocket.disconnect();
-  };
+    newSocket.on("connect", () => {
+      console.log('تم الاتصال بالسيرفر')
+      newSocket.emit("financial", "done");
+    });
 
-},[]);
+    newSocket.on("json_message", (data) => {
+      console.log(data)
+      setHasNewUnpaid(data)
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+
+  }, []);
 
 
   useEffect(() => {
@@ -82,9 +82,9 @@ useEffect(()=>{
 
   return (
     <div ref={vantaRef} className="min-h-screen w-full text-white relative">
-<NavBar/>
+      <NavBar />
       <div
-          className="grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 place-items-center"
+        className="grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 place-items-center"
         dir="rtl"
       >
         {services.map((service, idx) => (

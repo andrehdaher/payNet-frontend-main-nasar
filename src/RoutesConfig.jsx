@@ -23,6 +23,8 @@ const PaymentStatement = React.lazy(() => import("./pages/PaymentStatement"));
 const FinancialPoint = React.lazy(() => import("./pages/FinancialPoint"));
 const Notebooks = React.lazy(() => import("./pages/Notebooks"));
 const Advertisements = react.lazy(()=> import('./pages/Advertisements') )
+const ProductUpload = react.lazy(()=> import('./pages/ProductUpload') )
+const MaintenancePage = react.lazy(()=> import('./pages/MaintenancePage') )
 
 
 export const routesConfig = [
@@ -37,10 +39,11 @@ export const routesConfig = [
 
   { path: "/balance", element: <ProtectedRoute><Balance /></ProtectedRoute> },
   { path: "/financial", element: <ProtectedRoute><FinancialStatement /></ProtectedRoute> },
-  { path: "/pending", element: <ProtectedRoute><PendingPayments /></ProtectedRoute> },
+  // { path: "/pending", element: <ProtectedRoute><PendingPayments /></ProtectedRoute> },
   { path: "/notebooks", element: <ProtectedRoute><Notebooks /></ProtectedRoute> },
 
   { path: "/adminpending", element: <ProtectedRoute allowedRoles={["admin"]}><AdminPending /></ProtectedRoute> },
+  { path: "/productUpload", element: <ProtectedRoute allowedRoles={["admin"]}><ProductUpload /></ProtectedRoute> },
   { path: "/allUser", element: <ProtectedRoute allowedRoles={["admin"]}><GetUser /></ProtectedRoute> },
   { path: "/adminPaymentStatement", element: <ProtectedRoute allowedRoles={["admin"]}><AdminPaymentStatement /></ProtectedRoute> },
   { path: "/adminfinancial", element: <ProtectedRoute allowedRoles={["admin"]}><Adminadminfinancial /></ProtectedRoute> },
@@ -48,7 +51,7 @@ export const routesConfig = [
   { path: "/adminAddUser", element: <ProtectedRoute allowedRoles={["admin"]}><AddUser /></ProtectedRoute> },
 
   { path: "/haram", element: <ProtectedRoute><Haram /></ProtectedRoute> },
-  { path: "/PaymentStatement", element: <ProtectedRoute><PaymentStatement /></ProtectedRoute> },
+  // { path: "/PaymentStatement", element: <ProtectedRoute><PaymentStatement /></ProtectedRoute> },
   { path: "/financial-point", element: <ProtectedRoute><FinancialPoint /></ProtectedRoute> },
   { path: "/advertisements", element: <ProtectedRoute><Advertisements /></ProtectedRoute> },
 

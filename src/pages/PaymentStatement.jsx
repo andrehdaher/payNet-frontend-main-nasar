@@ -20,8 +20,8 @@ export default function FinancialStatement() {
   const [searchStatus, setSearchStatus] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("");
   const vantaRef = useRef(null);
-  const {hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
-  
+  const { hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
+
   useEffect(() => {
     fetchConfirmed();
   }, []);
@@ -35,7 +35,7 @@ export default function FinancialStatement() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("https://paynet-1.onrender.com/api/saveBalance/all", {
+      const res = await axios.get("http://localhost:5000/api/saveBalance/all", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -57,7 +57,7 @@ export default function FinancialStatement() {
       : true;
     const dateMatch = searchDate
       ? new Date(p.updatedAt || p.createdAt).toISOString().split("T")[0] ===
-        searchDate
+      searchDate
       : true;
 
     return landlineMatch && dateMatch && statusPayment;
@@ -105,7 +105,7 @@ export default function FinancialStatement() {
       <Card className="m-6">
         <CardHeader>
           <h2 className="text-3xl font-bold text-center text-gray-700">
-           البيان المالي للدفعات
+            البيان المالي للدفعات
           </h2>
         </CardHeader>
         <CardContent>

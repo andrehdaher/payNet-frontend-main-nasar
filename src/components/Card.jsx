@@ -1,5 +1,5 @@
 // components/ServiceCard.jsx
-const ServiceCard = ({ title, description, image, buttonText, onClick, tag }) => {
+const ServiceCard = ({ title, description, image, buttonText, onClick, tag  }) => {
   return (
     <div className="max-w-xs p-6 rounded-md shadow-md  transform transition-transform duration-300 hover:-translate-y-2 hover:scale-105 hover:shadow-xl bg-[#00000050]  text-[#ffffffd3] border-none m-2">
       <img

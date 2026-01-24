@@ -1,4 +1,4 @@
-import { useState,useEffect,useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ScreenWrapper from "../components/ScreenWrapper";
@@ -10,9 +10,9 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  
-  
+
+
+
 
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ export default function Login() {
 
     try {
 
-      const res = await axios.post("https://paynet-1.onrender.com/api/login", {
+      const res = await axios.post("http://localhost:5000/api/login", {
         email,
         password,
       });
@@ -55,9 +55,9 @@ export default function Login() {
     } catch (err) {
       setError(err.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول");
     }
-     finally {
-    setIsSubmitting(false);
-  }
+    finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -83,7 +83,7 @@ export default function Login() {
           required
           error={error}
         />
-        
+
         <Input
           label={'كلمة المرور'}
           type="password"

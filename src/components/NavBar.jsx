@@ -15,7 +15,7 @@ import {
   FaTimes,
   FaUser,
   FaStickyNote,
-  FaBullhorn ,
+  FaBullhorn,
 } from "react-icons/fa";
 
 const NavBar = () => {
@@ -23,6 +23,7 @@ const NavBar = () => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [daen, setDaen] = useState(null);
   const navigate = useNavigate();
   const { hasNewUnpaid } = useNotification();
 
@@ -45,14 +46,28 @@ const NavBar = () => {
     const fetchBalance = async () => {
       try {
         const res = await axios.get(
-          "https://paynet-1.onrender.com/api/user/balance",
+          "http://localhost:5000/api/user/balance",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setBalance(res.data.balance);
+
       } catch (error) {
         console.error("فشل في جلب الرصيد:", error);
       }
     };
+    const fetchDaen = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/user/daen",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log("الدين الحالي:", res.data.daen);
+        setDaen(res.data.daen);
+      } catch (error) {
+        console.error("فشل في جلب الدين:", error);
+      }
+    };
+    fetchDaen();
 
     fetchBalance();
   }, []);
@@ -66,58 +81,58 @@ const NavBar = () => {
     { to: "/", label: "الصفحة الرئيسية", icon: <FaHome /> },
     {
       to: "/financial",
-      label: "البيان المالي للتسديد",
+      label: "البيان المالي ",
       icon: <FaMoneyBill />,
       badge: hasNewUnpaid,
     },
-    { to: "/pending", label: "عمليات قيد الترحيل", icon: <FaExchangeAlt /> },
+    // { to: "/pending", label: "عمليات قيد الترحيل", icon: <FaExchangeAlt /> },
 
     // خيارات للمستخدم العادي
     ...(role === "user"
       ? [
-          { to: "/balance", label: "تعبئة رصيد", icon: <FaWallet /> },
-          {
-            to: "/PaymentStatement",
-            label: "البيان المالي للدفعات",
-            icon: <FaFileInvoice />,
-          },
-          {
-            to: "/financial-point",
-            label: "البيان المالي للنقاط الفرعية",
-            icon: <FaFileInvoice />,
-          },
-          {
-            to: "/add-point",
-            label: "نقاط البيع الفرعية",
-            icon: <FaUser />,
-          },
-          {
-            to: "/notebooks",
-            label: "الارقام المحفوظة",
-            icon: <FaStickyNote />,
-          },
-          // {
-          //   to: "/advertisements",
-          //   label: "اعلانات",
-          //   icon: <FaBullhorn  />,
-          // },
-          {
-            external: "https://wa.me/963993822320",
-            label: "واتساب",
-            icon: <FaWhatsapp className="text-green-500" />,
-          },
-        ]
+        { to: "/balance", label: "تعبئة رصيد", icon: <FaWallet /> },
+        // {
+        //   to: "/PaymentStatement",
+        //   label: "البيان المالي للدفعات",
+        //   icon: <FaFileInvoice />,
+        // },
+        {
+          to: "/financial-point",
+          label: "البيان المالي للنقاط الفرعية",
+          icon: <FaFileInvoice />,
+        },
+        {
+          to: "/add-point",
+          label: "نقاط البيع الفرعية",
+          icon: <FaUser />,
+        },
+        {
+          to: "/notebooks",
+          label: "الارقام المحفوظة",
+          icon: <FaStickyNote />,
+        },
+        // {
+        //   to: "/advertisements",
+        //   label: "اعلانات",
+        //   icon: <FaBullhorn />,
+        // },
+        {
+          external: "https://wa.me/963993822320",
+          label: "واتساب",
+          icon: <FaWhatsapp className="text-green-500" />,
+        },
+      ]
       : []),
 
     // خيارات لنقاط البيع
     ...(role === "user-point"
       ? [
-          {
-            to: "/PointPayment",
-            label: "البيان المالي للدفعات",
-            icon: <FaFileInvoice />,
-          },
-        ]
+        {
+          to: "/PointPayment",
+          label: "البيان المالي للدفعات",
+          icon: <FaFileInvoice />,
+        },
+      ]
       : []),
   ];
 
@@ -125,22 +140,34 @@ const NavBar = () => {
   return (
     <>
       {/* زر فتح القائمة */}
-      <div className="z-40 fixed top-0 px-5 bg-muted w-full flex justify-between shadow-md">
+      <div className="z-40 fixed top-0  bg-muted w-full flex justify-between shadow-md">
+        <div className="bg-[#ff8a0090] text-white absolute top-14 w-full overflow-hidden">
+          <div className="whitespace-nowrap animate-marquee px-3">
+            عملاؤنا الكرام، نود إعلامكم بأنه تم اعتماد العملة الجديدة في جميع عمليات التسديد والدفع اعتبارًا من اليوم. يرجى الانتباه إلى أن جميع المبالغ المعروضة والمسددة أصبحت محسوبة وفق العملة الجديدة. نشكركم على تفهمكم وتعاونكم الدائم.
+          </div>
+        </div>
+
         <div className="p-4 border-b flex justify-center items-center gap-2">
           <span className="font-bold text-violet-700">{email || "جاري التحميل..."}</span>
           <span className="text-sm text-gray-600">
             الرصيد الحالي:
-            {balance !== null ? ` ${balance.toFixed(2)} ل.س` : "جاري التحميل..."}
+            {balance !== null ? ` ${balance.toFixed(2)} ل.س جديدة` : "جاري التحميل..."}
           </span>
+          {daen !== null && daen !== 0 && (
+            <span className="text-sm text-red-600">
+              الدين الحالي:
+              {` ${daen.toFixed(2)} ل.س`}
+            </span>
+          )}
         </div>
+
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="h-fit my-auto text-violet-600 p-2 rounded-md hover:bg-violet-200 transition"
         >
           <span
-            className={`inline-block transition-transform duration-300 ease-in-out ${
-              isOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"
-            }`}
+            className={`inline-block transition-transform duration-300 ease-in-out ${isOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"
+              }`}
           >
             {!isOpen ? <FaBars size={20} /> : <FaTimes size={20} />}
           </span>
@@ -157,7 +184,7 @@ const NavBar = () => {
         <div className="p-4 border-b bg-violet-500/10 flex flex-row-reverse justify-between items-center gap-1">
           <span className="font-bold text-foreground">{email || "جاري التحميل..."}</span>
           <span className="text-sm text-gray-500">
-            {balance !== null ? `${balance.toFixed(2)} ل.س` : "جاري التحميل..."}
+            {balance !== null ? `${balance.toFixed(2)} ل.س جديدة` : "جاري التحميل..."}
           </span>
         </div>
 

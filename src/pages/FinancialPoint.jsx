@@ -22,12 +22,12 @@ export default function FinancialStatement() {
   const [searchLandline, setSearchLandline] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("");
-  const {hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
-  
+  const { hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
+
   useEffect(() => {
     fetchConfirmed();
   }, []);
-    
+
   function parseJwt(token) {
     try {
       return JSON.parse(atob(token.split(".")[1]));
@@ -50,11 +50,11 @@ export default function FinancialStatement() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        `https://paynet-1.onrender.com/api/point/user/confirmed/point?emailPoint=${email}`,
+        `http://localhost:5000/api/point/user/confirmed/point?emailPoint=${email}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          },  
+          },
         }
       );
 
@@ -77,7 +77,7 @@ export default function FinancialStatement() {
       : true;
     const dateMatch = searchDate
       ? new Date(p.updatedAt || p.createdAt).toISOString().split("T")[0] ===
-        searchDate
+      searchDate
       : true;
 
     return pointname && landlineMatch && statusMatch && dateMatch && statusPayment;
@@ -107,11 +107,10 @@ export default function FinancialStatement() {
       label: "الحالة",
       render: (p) => (
         <span
-          className={`px-2 py-1 rounded-full text-xs font-semibold ${
-            p.status === "تم التسديد"
-              ? "bg-green-200 text-green-800"
-              : "bg-red-200 text-red-800"
-          }`}
+          className={`px-2 py-1 rounded-full text-xs font-semibold ${p.status === "تم التسديد"
+            ? "bg-green-200 text-green-800"
+            : "bg-red-200 text-red-800"
+            }`}
         >
           {p.status}
         </span>
@@ -194,7 +193,7 @@ export default function FinancialStatement() {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
-            onRowClick={(r)=>{
+            onRowClick={(r) => {
               console.log(r)
             }}
           />

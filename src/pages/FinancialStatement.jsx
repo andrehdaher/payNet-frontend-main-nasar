@@ -12,7 +12,7 @@ import { Card, CardCon, CardContent, CardHeader } from "../components/Custom/Car
 export default function FinancialStatement() {
   const [confirmedPayments, setConfirmedPayments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // فلاتر البحث
   const [searchDate, setSearchDate] = useState("");
@@ -20,8 +20,8 @@ export default function FinancialStatement() {
   const [searchStatus, setSearchStatus] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("");
   const vantaRef = useRef(null);
-  const {hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
-  
+  const { hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
+
   useEffect(() => {
     fetchConfirmed();
   }, []);
@@ -36,11 +36,11 @@ export default function FinancialStatement() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/user/confirmed",
+        "http://localhost:5000/api/admin/user/confirmed",
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          },  
+          },
         }
       );
 
@@ -54,11 +54,11 @@ export default function FinancialStatement() {
 
   const handlePaymentTypeChange = async (id, newType) => {
     const confirm = window.confirm("هل انت متاكد من تعديل نوع الدفع")
-    if(!confirm) return
+    if (!confirm) return
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `https://paynet-1.onrender.com/api/admin/payment/${id}`,
+        `http://localhost:5000/api/admin/payment/${id}`,
         { paymentType: newType },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -82,7 +82,7 @@ export default function FinancialStatement() {
       : true;
     const dateMatch = searchDate
       ? new Date(p.updatedAt || p.createdAt).toISOString().split("T")[0] ===
-        searchDate
+      searchDate
       : true;
 
     return landlineMatch && statusMatch && dateMatch && statusPayment;
@@ -126,11 +126,16 @@ export default function FinancialStatement() {
       label: "الحالة",
       render: (p) => (
         <span
-          className={`px-2 py-1 rounded-full text-xs font-semibold ${
-            p.status === "تم التسديد"
-              ? "bg-green-200 text-green-800"
-              : "bg-red-200 text-red-800"
-          }`}
+          className={`px-2 py-1 rounded-full text-xs font-semibold ${p.status === "تم التسديد"
+            ? "bg-green-200 text-green-800"
+            : p.status === "غير مسددة"
+              ? "bg-red-200 text-red-800"
+              : p.status === "جاري التسديد"
+                ? "bg-yellow-200 text-yellow-800"
+                : p.status === "بدء التسديد"
+                  ? "bg-blue-200 text-blue-800"
+                  : "bg-gray-200 text-gray-800"
+            }`}
         >
           {p.status}
         </span>
@@ -213,6 +218,8 @@ export default function FinancialStatement() {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            pageSize={itemsPerPage}
+            onPageSizeChange={(size) => { setItemsPerPage(size); setCurrentPage(1); }}
           />
         </CardContent>
       </Card>

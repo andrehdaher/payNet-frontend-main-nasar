@@ -1,4 +1,4 @@
-import React, { useState , useEffect , useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "../components/NavBar";
 import axios from "axios";
 import ScreenWrapper from "../components/ScreenWrapper";
@@ -53,13 +53,13 @@ export default function TransferForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      if (isSubmitting) return; // حماية إضافية
-      setIsSubmitting(true);
+    if (isSubmitting) return; // حماية إضافية
+    setIsSubmitting(true);
 
     const token = localStorage.getItem("token");
     const decoded = parseJwt(token);
 
-    await axios.post("https://paynet-1.onrender.com/api/saveBalance/haram", formData, {
+    await axios.post("http://localhost:5000/api/saveBalance/haram", formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -101,22 +101,22 @@ export default function TransferForm() {
               onChange={handleChange}
               required
             />
-            
+
             {
-              serviceType == 'SHAMKASH' ? 
-              <div className="text-center space-y-2">
-                <p className="font-semibold text-sm text-gray-600">امسح رمز QR التالي للتحويل إلى الرقم:</p>
-                <img src={qrImage} alt="QR Code" className="mx-auto w-40 h-40 object-contain" />
-              </div>
-              :
-              <Input
-                name="number"
-                type="text"
-                label="الرقم"
-                value={formData.number}
-                onChange={handleChange}
-                required
-              />
+              serviceType == 'SHAMKASH' ?
+                <div className="text-center space-y-2">
+                  <p className="font-semibold text-sm text-gray-600">امسح رمز QR التالي للتحويل إلى الرقم:</p>
+                  <img src={qrImage} alt="QR Code" className="mx-auto w-40 h-40 object-contain" />
+                </div>
+                :
+                <Input
+                  name="number"
+                  type="text"
+                  label="الرقم"
+                  value={formData.number}
+                  onChange={handleChange}
+                  required
+                />
             }
             <Input
               className='col-span-2'

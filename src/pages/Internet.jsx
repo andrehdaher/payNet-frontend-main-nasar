@@ -13,11 +13,15 @@ import astalam from '../assets/astalam.png'
 import ADSL from '../assets/tasded.png'
 import elictric from '../assets/electric.png'
 import water from '../assets/water.png'
-
+import SYRIATEL from '../assets/SYRIATEL.jpeg'
+import MTN from '../assets/MTN.jpeg'
+import axios from "axios";
 
 const Home = () => {
 
+
   const navigate = useNavigate();
+  const [cardKey , setCardKey] = useState([]);
   
   function parseJwt(token) {
     try {
@@ -28,12 +32,14 @@ const Home = () => {
   }
 
   const token = localStorage.getItem("token");
-  const decoded = parseJwt(token);
+const decoded = token ? parseJwt(token) : null;
   const email = decoded?.email;
 
   const location = useLocation()
   const serviceType = location.state
-  
+
+
+
   const services = serviceType == 'ADSL' ?  [
     {
       title: "تسديد فاتورة",
@@ -100,7 +106,25 @@ const Home = () => {
       Action: (formType) => {navigate('/payinternet', {state: formType})},
       image: water
     },
-  ]:
+
+  ]:     serviceType == 'SYR' ? [
+    {
+      title:"تحويل وحدات سريتل",
+      formType: 'SYR',
+      description:"تحويل وحدات وفواتير سريتل وسريتل كاش",
+      buttonText:"تسديد فاتورة",
+      Action: (formType) => {navigate('/payinternet', {state: formType})},
+      image: SYRIATEL
+    },
+    {
+      title:"تحويل وحدات MTN",
+      formType: 'MTN',
+      description:"تحويل وحدات وفواتير MTN MTN كاش",
+      buttonText:"تسديد فاتورة",
+      Action: (formType) => {navigate('/payinternet', {state: formType})},
+      image: MTN
+    }
+    ]:
   [];
 
   return (
@@ -109,6 +133,7 @@ const Home = () => {
       className="grid gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:gap-12 lg:grid-cols-4 place-items-center"
       dir="rtl"
     >        
+    
       {
         services.map((service, idx) => {
           return <Card key={idx} className="w-72 h-[22rem]">

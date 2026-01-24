@@ -22,7 +22,7 @@ export default function AddUser() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://paynet-1.onrender.com/api/user", {
+      const res = await fetch("http://localhost:5000/api/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -48,17 +48,17 @@ export default function AddUser() {
   };
 
   return (
-<div>
-        <Navbar/>
+    <div>
+      <Navbar />
       <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
         <form
           onSubmit={handleSubmit}
           className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg"
         >
           <h2 className="text-2xl font-bold mb-4 text-center">إضافة مستخدم جديد</h2>
-  
+
           {message && <div className="mb-4 text-center text-sm">{message}</div>}
-  
+
           <input
             type="text"
             name="name"
@@ -112,7 +112,7 @@ export default function AddUser() {
             <option value="user">مستخدم</option>
             <option value="admin">مدير</option>
           </select>
-  
+
           <button
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded"
@@ -121,6 +121,6 @@ export default function AddUser() {
           </button>
         </form>
       </div>
-</div>
+    </div>
   );
 }

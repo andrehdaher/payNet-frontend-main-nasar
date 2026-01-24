@@ -1,72 +1,72 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { Button } from "../components/Custom/Button";
 import DataTable from "../components/Custom/DataTable";
 import AddSaveNum from "../components/AddSaveNum";
 import axios from "axios";
- 
+
 
 export default function Notebooks() {
-  
-  function parseJwt (token){
-    try{
+
+  function parseJwt(token) {
+    try {
       return JSON.parse(atob(token.split(".")[1]));
-    }catch{
+    } catch {
       return null;
     }
   }
   const token = localStorage.getItem('token')
-    const decoded = parseJwt(token);
-    const email = decoded?.email;
-  
+  const decoded = parseJwt(token);
+  const email = decoded?.email;
+
 
   const [selectedRows, setSelectedRows] = useState([]);
-  const[formData, setFormData]=useState([])
+  const [formData, setFormData] = useState([])
   const [loading, setLoading] = useState(true); // حالة التحميل
-  const[checNumber , setChecNumber]=useState()
-    const [showForm, setShowForm] = useState(false); // ✅ حالة لعرض النموذج
+  const [checNumber, setChecNumber] = useState()
+  const [showForm, setShowForm] = useState(false); // ✅ حالة لعرض النموذج
   const [editingId, setEditingId] = useState(null);
   const [editedRow, setEditedRow] = useState({});
-      
-  useEffect(()=>{
+
+  useEffect(() => {
     console.log("aaaaaaaaa")
-    const handleData = async()=>{
+    const handleData = async () => {
       setLoading(true); // بدء التحميل
-      try{
-        const res = await axios.get(`https://paynet-1.onrender.com/api/payment/save-number?email=${email}`)
+      try {
+        const res = await axios.get(`http://localhost:5000/api/payment/save-number?email=${email}`)
         console.log("البيانات المسترجعة:", res.data)
         console.log("بنية البيانات:", JSON.stringify(res.data, null, 2))
         setFormData(res.data || []) // تأكد من أن البيانات مصفوفة
         setSelectedRows([]) // إعادة تعيين الـ checkboxes المحددة
 
-      }catch(err){
+      } catch (err) {
         console.log("خطأ في جلب البيانات:", err)
         setFormData([]) // في حالة الخطأ، اجعل البيانات مصفوفة فارغة
-      }finally{
+      } finally {
         setLoading(false); // انتهاء التحميل
       }
     }
-    
-    if(email) { // تأكد من وجود email قبل الاستدعاء
+
+    if (email) { // تأكد من وجود email قبل الاستدعاء
       handleData();
-    }else{
+    } else {
       setLoading(false); // إذا لم يكن هناك email، توقف التحميل
     }
 
-  },[email])  
+  }, [email])
 
   // دالة لإعادة تحميل البيانات
   const refreshData = async () => {
     setLoading(true);
-    try{
-      const res = await axios.get(`https://paynet-1.onrender.com/api/payment/save-number?email=${email}`)
+    try {
+      const res = await axios.get(`http://localhost:5000/api/payment/save-number?email=${email}`)
       console.log("تم إعادة تحميل البيانات:", res.data)
       setFormData(res.data || [])
       setSelectedRows([]) // إعادة تعيين الـ checkboxes المحددة
-    }catch(err){
+    } catch (err) {
       console.log("خطأ في إعادة تحميل البيانات:", err)
       setFormData([])
-    }finally{
+    } finally {
       setLoading(false);
     }
   }
@@ -95,8 +95,8 @@ export default function Notebooks() {
         );
       },
     },
-    { 
-      key: "landline", 
+    {
+      key: "landline",
       label: "الرقم",
       render: (row) => {
         const rowId = row._id || row.id || row.landline;
@@ -112,8 +112,8 @@ export default function Notebooks() {
         return row.landline;
       }
     },
-    { 
-      key: "company", 
+    {
+      key: "company",
       label: "الشركة",
       render: (row) => {
         const rowId = row._id || row.id || row.landline;
@@ -143,7 +143,7 @@ export default function Notebooks() {
       render: (row) => {
         const rowId = row._id || row.id || row.landline;
         if (editingId === rowId) {
-          const value = editedRow.date ? new Date(editedRow.date).toISOString().slice(0,10) : "";
+          const value = editedRow.date ? new Date(editedRow.date).toISOString().slice(0, 10) : "";
           return (
             <input
               type="date"
@@ -174,8 +174,8 @@ export default function Notebooks() {
         return `${row.amount.toLocaleString()} ل.س`;
       }
     },
-    { 
-      key: "speed", 
+    {
+      key: "speed",
       label: "السرعة",
 
     },
@@ -228,31 +228,31 @@ export default function Notebooks() {
     },
   ];
 
-  const selectNum = async()=>{
+  const selectNum = async () => {
     // الحصول على الأرقام المحددة فقط
 
-    const selectedNumbers = formData.filter((row , index) => {
+    const selectedNumbers = formData.filter((row, index) => {
       const uniqueId = row.id || row._id || index;
       return selectedRows.includes(uniqueId);
     });
-    
+
     console.log("الأرقام المحددة:", selectedNumbers);
     console.log("عدد الأرقام المحددة:", selectedNumbers.length);
-    
+
     // طباعة الأرقام فقط
     const numbers = selectedNumbers.map(row => row.landline);
     console.log("الأرقام:", numbers);
-    
+
     // إذا لم يتم تحديد أي رقم
     if (selectedNumbers.length === 0) {
       alert("لم يتم تحديد أي رقم");
       return;
     }
-    
+
     try {
       // إرسال الأرقام المحددة إلى API للتسديد
       const response = await axios.post(
-        'https://paynet-1.onrender.com/api/payment/pay-selected',
+        'http://localhost:5000/api/payment/pay-selected',
         {
           email: email,
           numbers: numbers,
@@ -264,13 +264,13 @@ export default function Notebooks() {
           },
         }
       );
-      
+
       console.log("استجابة التسديد:", response.data);
       alert(`تم تسديد ${selectedNumbers.length} رقم بنجاح: ${numbers.join(', ')}`);
-      
+
       // إعادة تحميل البيانات وإعادة تعيين التحديد
       await refreshData();
-      
+
     } catch (error) {
       console.error("خطأ في تسديد الأرقام:", error);
       alert("حدث خطأ في تسديد الأرقام. حاول مرة أخرى.");
@@ -299,7 +299,7 @@ export default function Notebooks() {
   const saveEdit = async (rowId) => {
     try {
       await axios.put(
-        `https://paynet-1.onrender.com/api/payment/save-number/${rowId}`,
+        `http://localhost:5000/api/payment/save-number/${rowId}`,
         {
           landline: editedRow.landline,
           company: editedRow.company,
@@ -322,11 +322,11 @@ export default function Notebooks() {
 
   const deleteSaved = async (row) => {
     const confirm = window.confirm("هل انت متاكد من حذف الرقم")
-    if(!confirm)   return;
+    if (!confirm) return;
 
     try {
       await axios.delete(
-        `https://paynet-1.onrender.com/api/payment/save-number/${row._id || row.id}`,
+        `http://localhost:5000/api/payment/save-number/${row._id || row.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -352,7 +352,7 @@ export default function Notebooks() {
           <div className="w-full flex justify-between px-4">
             <div className="flex gap-2">
               <Button
-                className="bg-blue-400 text-white text-sm" 
+                className="bg-blue-400 text-white text-sm"
                 variant="outline"
                 onClick={() => {
                   const allIds = formData.map((row, index) => row.id || row._id || index);
@@ -363,7 +363,7 @@ export default function Notebooks() {
                 تحديد الكل
               </Button>
               <Button
-                className="bg-gray-400 text-white text-sm" 
+                className="bg-gray-400 text-white text-sm"
                 variant="outline"
                 onClick={() => setSelectedRows([])}
                 disabled={selectedRows.length === 0}
@@ -372,18 +372,18 @@ export default function Notebooks() {
               </Button>
             </div>
             <Button
-             className="bg-violet-400 text-white" 
-             variant="outline"
-             onClick={()=>{setShowForm(true)}}
-             >
+              className="bg-violet-400 text-white"
+              variant="outline"
+              onClick={() => { setShowForm(true) }}
+            >
               اضافة رقم
             </Button>
           </div>
 
           {showForm && (
-            
-            <AddSaveNum  
-              onClose={()=>{setShowForm(false)}}
+
+            <AddSaveNum
+              onClose={() => { setShowForm(false) }}
               onSuccess={refreshData}
             />
           )}
@@ -402,7 +402,7 @@ export default function Notebooks() {
                 data={formData}
                 currentPage={1}
                 totalPages={1}
-                onPageChange={() => {}}
+                onPageChange={() => { }}
               />
             ) : (
               <div className="text-center py-8">
@@ -415,15 +415,15 @@ export default function Notebooks() {
               </div>
             )}
           </div>
-           <div className="w-full px-4 mt-4">
-             <Button 
-               onClick={()=>{selectNum()}}
-               className="bg-green-500 text-white w-full"
-               disabled={selectedRows.length === 0}
-             >
-               تسديد الأرقام المحددة ({selectedRows.length})
-             </Button>
-           </div>
+          <div className="w-full px-4 mt-4">
+            <Button
+              onClick={() => { selectNum() }}
+              className="bg-green-500 text-white w-full"
+              disabled={selectedRows.length === 0}
+            >
+              تسديد الأرقام المحددة ({selectedRows.length})
+            </Button>
+          </div>
 
         </div>
       </ScreenWrapper>

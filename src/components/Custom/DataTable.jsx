@@ -1,17 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import { Button } from "./Button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function DataTable({
   columns = [],
   data = [],
   currentPage = 1,
   totalPages = 1,
-  onPageChange = () => {},
-  onRowClick = () => {}, // ✅ إضافة prop جديد
+  onPageChange = () => { },
+  onRowClick = () => { },
+  pageSize = 10,
+  onPageSizeChange = () => { },
 }) {
+  const pageSizeOptions = [5, 10, 20, 50, 100];
+
   return (
     <div className="bg-white shadow-md rounded-xl overflow-hidden">
       {/* جعل الجدول قابل للتمرير على الشاشات الصغيرة */}
       <div className="overflow-x-auto">
+
         <table className="w-full text-sm text-gray-700">
           <thead className="bg-gray-100 text-xs uppercase text-gray-600">
             <tr>
@@ -33,7 +40,11 @@ export default function DataTable({
                 <tr
                   key={idx}
                   onClick={() => onRowClick(row)} // ✅ استدعاء الدالة عند الضغط
-                  className="border-b hover:bg-gray-50 transition text-center cursor-pointer"
+                  className={`border-b hover:bg-gray-50 transition text-center cursor-pointer
+                    ${row.source === "batch" ? "bg-blue-200 hover:bg-blue-300" : "hover:bg-gray-50"}
+                    `}
+
+
                 >
                   {columns.map((col) =>
                     col.hidden ? null : (
@@ -72,41 +83,51 @@ export default function DataTable({
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex flex-wrap justify-center items-center gap-2 py-3">
-          <button
-            onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-          >
-            السابق
-          </button>
+      <div dir="rtl" className="flex flex-wrap justify-center items-center gap-2 py-3">
 
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => onPageChange(i + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === i + 1
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-muted-foreground">عدد الاسطر :</span>
+            <select
+              className="border rounded px-2 py-1 text-sm"
+              value={pageSize}
+              onChange={(e) => {
+                const newSize = Number(e.target.value);
+                onPageSizeChange(newSize);
+                onPageChange(1); // رجوع للصفحة الأولى
+              }}
             >
-              {i + 1}
-            </button>
-          ))}
+              {pageSizeOptions.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
 
-          <button
-            onClick={() =>
-              onPageChange(Math.min(totalPages, currentPage + 1))
-            }
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-          >
-            التالي
-          </button>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <span className="text-sm">
+              Page {currentPage} of {totalPages || 1}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage === totalPages || totalPages === 0}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

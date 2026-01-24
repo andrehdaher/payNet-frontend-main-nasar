@@ -26,7 +26,7 @@ export default function AdminFinancialStatement() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/user/allconfirmed");
+        "http://localhost:5000/api/admin/user/allconfirmed");
 
       setConfirmedPayments(res.data);
     } catch (err) {
@@ -40,8 +40,8 @@ export default function AdminFinancialStatement() {
     const statusMatch = searchStatus ? p.status === searchStatus : true;
     const dateMatch = searchDate
       ? new Date(p.updatedAt || p.createdAt)
-          .toISOString()
-          .split("T")[0] === searchDate
+        .toISOString()
+        .split("T")[0] === searchDate
       : true;
 
     return landlineMatch && statusMatch && dateMatch;
@@ -121,11 +121,10 @@ export default function AdminFinancialStatement() {
                     </td>
                     <td className="py-3 px-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          p.status === "تم التسديد"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${p.status === "تم التسديد"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                          }`}
                       >
                         {p.status}
                       </span>
@@ -163,11 +162,10 @@ export default function AdminFinancialStatement() {
               <button
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === index + 1
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-700"
-                }`}
+                className={`px-3 py-1 rounded ${currentPage === index + 1
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+                  }`}
               >
                 {index + 1}
               </button>
