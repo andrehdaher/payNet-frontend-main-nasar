@@ -35,7 +35,7 @@ export default function ProductUpload() {
         try {
             setUploading(true);
 
-            const apiBase = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+            const apiBase = process.env.REACT_APP_API_BASE_URL || "https://paynet-1.onrender.com";
 
             const res = await axios.post(
                 `${apiBase}/api/product/add`,

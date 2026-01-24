@@ -37,7 +37,7 @@ const Home = () => {
 
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5000");
+    const newSocket = io("https://paynet-1.onrender.com");
 
     newSocket.on("connect", () => {
       newSocket.emit("financial", "done");
@@ -56,7 +56,7 @@ const Home = () => {
   const getUser = async () => {
 
     try {
-      const res = await axios.get(`http://localhost:5000/api/user/get-user-by-email?email=${email}`, {
+      const res = await axios.get(`https://paynet-1.onrender.com/api/user/get-user-by-email?email=${email}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

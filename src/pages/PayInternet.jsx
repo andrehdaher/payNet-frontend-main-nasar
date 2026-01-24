@@ -167,7 +167,7 @@ export default function PayInternet() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/payment/internet-full",
+        "https://paynet-1.onrender.com/api/payment/internet-full",
         {
           landline,
           company: selectedCompany,

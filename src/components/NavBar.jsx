@@ -16,8 +16,8 @@ import {
   FaUser,
   FaStickyNote,
   FaBullhorn,
-  FaShoppingCart 
-  
+  FaShoppingCart
+
 } from "react-icons/fa";
 
 const NavBar = () => {
@@ -48,7 +48,7 @@ const NavBar = () => {
     const fetchBalance = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/user/balance",
+          "https://paynet-1.onrender.com/api/user/balance",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setBalance(res.data.balance);
@@ -60,7 +60,7 @@ const NavBar = () => {
     const fetchDaen = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/user/daen",
+          "https://paynet-1.onrender.com/api/user/daen",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         console.log("الدين الحالي:", res.data.daen);

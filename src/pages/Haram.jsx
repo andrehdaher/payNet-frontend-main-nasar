@@ -59,7 +59,7 @@ export default function TransferForm() {
     const token = localStorage.getItem("token");
     const decoded = parseJwt(token);
 
-    await axios.post("http://localhost:5000/api/saveBalance/haram", formData, {
+    await axios.post("https://paynet-1.onrender.com/api/saveBalance/haram", formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
