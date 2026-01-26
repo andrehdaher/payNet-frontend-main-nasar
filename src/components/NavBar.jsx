@@ -143,12 +143,7 @@ const NavBar = () => {
     <>
       {/* زر فتح القائمة */}
       <div className="z-40 fixed top-0  bg-muted w-full flex justify-between shadow-md">
-        <div className="bg-[#ff8a0090] text-white absolute top-14 w-full overflow-hidden">
-          <div className="whitespace-nowrap animate-marquee px-3">
-            عملاؤنا الكرام، نود إعلامكم بأنه تم اعتماد العملة الجديدة في جميع عمليات التسديد والدفع اعتبارًا من اليوم. يرجى الانتباه إلى أن جميع المبالغ المعروضة والمسددة أصبحت محسوبة وفق العملة الجديدة. نشكركم على تفهمكم وتعاونكم الدائم.
-          </div>
-        </div>
-
+       
         <div className="p-4 border-b flex justify-center items-center gap-2">
           <span className="font-bold text-violet-700">{email || "جاري التحميل..."}</span>
           <span className="text-sm text-gray-600">

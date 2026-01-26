@@ -25,6 +25,8 @@ const Notebooks = React.lazy(() => import("./pages/Notebooks"));
 const Advertisements = react.lazy(()=> import('./pages/Advertisements') )
 const ProductUpload = react.lazy(()=> import('./pages/ProductUpload') )
 const MaintenancePage = react.lazy(()=> import('./pages/MaintenancePage') )
+const PointPayment = react.lazy(()=> import('./pages/PointPayment') )
+const Play = react.lazy(()=> import('./pages/Play') )
 
 
 export const routesConfig = [
@@ -32,7 +34,8 @@ export const routesConfig = [
   { path: "/", element: <ProtectedRoute><Home /></ProtectedRoute> },
   { path: "/add-point", element: <ProtectedRoute><AddPoint /></ProtectedRoute> },
   { path: "/HomePoint", element: <ProtectedRoute><HomePoint /></ProtectedRoute> },
-  
+  {path : '/PointPayment' , element : <ProtectedRoute><PointPayment/></ProtectedRoute>},
+  { path: "/play", element: <ProtectedRoute><Play /></ProtectedRoute> },
   { path: "/internet", element: <ProtectedRoute><Internet /></ProtectedRoute> },
   { path: "/payinternet", element: <ProtectedRoute><PayInternet /></ProtectedRoute> },
   { path: "/astalam", element: <ProtectedRoute><Astalam /></ProtectedRoute> },

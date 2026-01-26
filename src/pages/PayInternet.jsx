@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from "../components/Custom/Card";
 import { Input } from "../components/Custom/Input";
 import { Button } from "../components/Custom/Button";
 import { useLocation } from "react-router-dom";
+import { internetDetails } from "../components/payInternet/internetDetails";
 
 export default function PayInternet() {
   const vantaRef = useRef(null);
@@ -16,23 +17,28 @@ export default function PayInternet() {
   const [paymentType, setPaymentType] = useState("cash"); // القيمة الافتراضية نقداً
   const location = useLocation()
   const formType = location.state
+  const config = internetDetails[formType] || {};
+  console.log(config)
+
+
 
   function parseJwt(token) {
     try {
       return JSON.parse(atob(token.split(".")[1]));
+
     } catch (e) {
       return null;
     }
   }
 
-  const multiplier = ['SYR', 'MTN'].includes(formType) ? 1.075 : 1.05;
+  const multiplier = config.multiplier;
   const calculatedAmount = amountToPay ? (amountToPay * multiplier).toFixed(2) : "";
 
 
   const inputs = [
     {
       id: "landline",
-      label: ['WATER', 'ELEC'].includes(formType) ? 'رقم الباركود' : ['SYR', 'MTN'].includes(formType) ? 'رقم الهاتف' : "رقم الارضي",
+      label: config.label,
       type: "number",
       value: landline,
       onChange: setLandline,
@@ -45,7 +51,7 @@ export default function PayInternet() {
     },
     {
       id: "amountToPay",
-      label: "المبلغ المراد تسديده",
+      label: ['شحن يدوي jawaker'].includes(config.title) ? "ادخل الكمية التي تريد شحنها" : "المبلغ المراد تسديده",
       type: "number",
       value: amountToPay,
       onChange: setAmountToPay,
@@ -59,101 +65,11 @@ export default function PayInternet() {
     },
   ];
   const isFormValid =
-    landline && selectedCompany && selectedSpeed && amountToPay;
+    landline && selectedCompany && (selectedSpeed || ['PHONE', 'SYR', 'MTN'].includes(formType)) && amountToPay;
 
-  const companies = ['PHONE'].includes(formType) ? [
-    "",
-    "تسديد ارضي فقط",
-    "تسديد انترنت بريد فقط",
-    "تسديد ارضي + انترنت بريد",
-  ] : ['ELEC'].includes(formType) ? [
-    "",
-    "حماة-كهرباء",
-    "حمص-كهرباء",
-    "دمشق-كهرباء",
-    "ريف دمشق-كهرباء",
-    "السويداء-كهرباء",
-    "درعا-كهرباء",
-    "القنيطرة-كهرباء",
-    "اللاذقية-كهرباء",
-    "طرطوس-كهرباء",
-    "دير الزور-كهرباء",
-    "حلب-كهرباء",
-  ] : ['WATER'].includes(formType) ? [
-    "",
-    "حماة-مياه",
-    "حمص-مياه",
-    "دمشق-مياه",
-    "ريف دمشق-مياه",
-    "السويداء-مياه",
-    "درعا-مياه",
-    "القنيطرة-مياه",
-    "اللاذقية-مياه",
-    "طرطوس-مياه",
-    "دير الزور-مياه",
-    "حلب-مياه",
-  ]
-    : ['SYR'].includes(formType) ? [
-      '',
-      'تحويل وحدات سريتل',
-      'تحويل فاتورة سريتل',
-      'تحويل كاش سريتل'
-    ]
-      : ['MTN'].includes(formType) ? [
-        '',
-        'تحويل وحدات MTN',
-        'تحويل فاتورة MTN',
-        'تحويل كاش MTN'
-
-      ] : [
-        "",
-        "ناس",
-        "برونت",
-        "اينت",
-        "رنت",
-        "الكم",
-        "ليما",
-        "سوا",
-        "اية",
-        "يارا",
-        "بطاقات",
-        "هايبر",
-        "ويف",
-        "امنية",
-        "فيو",
-        "ليزر",
-        "متس",
-        "سما",
-        "زاد",
-        "دنيا",
-        "هاي فاي",
-        "تكامل",
-        "لاين",
-        "الجمعية",
-      ];
-  const speeds = ['ADSL'].includes(formType) ? [
-    "512 Mbps   السعر 140",
-    "1 Mbps     السعر 185",
-    "2 Mbps     السعر 240",
-    "4 Mbps     السعر 380",
-    "8 Mbps     السعر 640",
-    "16 Mbps   السعر  830",
-  ] : ['IPTV'].includes(formType) ? [
-    "البرونزية      السعر 175",
-    "العائلية       السعر 220",
-    "الذهبية        السعر 290",
-
-  ] : [
-    "5 GB        السعر 18",
-    "10 GB       السعر 33",
-    "20 GB       السعر 57",
-    "30 GB       السعر 76",
-    "50 GB       السعر 115",
-    "75 GB       السعر 135",
-    "100 GB      السعر 190",
-    "200 GB      السعر 350",
-  ];
-
+  const companies = config.companies || [];
+  const speeds = Array.isArray(config.speeds) ? config.speeds : [];
+  const title = config.title || "";
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -163,7 +79,6 @@ export default function PayInternet() {
     const decoded = parseJwt(token);
     const email = decoded?.email;
 
-    console.log(formType)
 
     try {
       const res = await axios.post(
@@ -211,15 +126,9 @@ export default function PayInternet() {
     <ScreenWrapper className={'min-h-screen flex items-center justify-center p-4'}>
       <Card>
         <CardHeader>
+
           <h1 className="text-2xl">
-            {formType == 'ADSL' && 'تسديد فاتورة ADSL'}
-            {formType == 'IPTV' && 'تسديد فاتورة IPTV'}
-            {formType == 'RECHARGE' && 'شحن باقة'}
-            {formType == 'PHONE' && 'دفع فاتورة هاتف'}
-            {formType == 'ELEC' && 'دفع فاتورة كهرباء'}
-            {formType == 'WATER' && 'دفع فاتورة مياه'}
-            {formType == 'SYR' && 'تحويل وحدات سريتل'}
-            {formType == 'MTN' && 'تحويل وحدات MTN'}
+            {title}
           </h1>
         </CardHeader>
         <CardContent>
@@ -230,7 +139,7 @@ export default function PayInternet() {
                 input.id == 1 ? <>
                   <div className="relative">
                     <label className="block mb-1 mr-3 text-sm font-medium text-foreground">
-                      {!['PHONE', 'SYR', 'MTN'].includes(formType) ? 'اختر الشركة' : 'نوع الدفع'}
+                      {config.description}
                     </label>
                     <select
                       value={selectedCompany}
@@ -247,22 +156,19 @@ export default function PayInternet() {
                   </div>
                 </>
                   : input.id == 2 ? <>
-                    {/* اختيار السرعة */}
-                    {Array.isArray(speeds) && speeds.length > 0 && !['PHONE', 'SYR', 'MTN'].includes(formType) && (
-                      ['ELEC', 'WATER'].includes(formType) ?
-                        <>
-                          <Input
-                            key={input.id}
-                            id={input.id}
-                            label={'رقم الاشتراك / العداد'}
-                            type={'Number'}
-                            value={selectedSpeed}
-                            onChange={(e) => setSelectedSpeed(e.target.value)}
-                            readOnly={input.readOnly || false}
-                            required={!input.readOnly}
-                          />
-                        </>
-                        :
+                    {/* اختيار السرعة أو العداد */}
+                    {(Array.isArray(config.speeds) && config.speeds.length > 0) || config.speeds === "counter" || config.speeds === 'mobilelegend' ? (
+                      config.speeds === "counter" || config.speeds === 'mobilelegend' ? (
+                        <Input
+                          key={input.id}
+                          id={input.id}
+                          label={config.speeds === 'mobilelegend' ? 'يرجى ادخال Zone ID' : 'رقم الاشتراك / العداد'}
+                          type={'number'}
+                          value={selectedSpeed}
+                          onChange={(e) => setSelectedSpeed(e.target.value)}
+                          required
+                        />
+                      ) : (
                         <div className="relative col-span-2">
                           <label className="block mb-1 mr-3 text-sm font-medium text-foreground">
                             {formType == 'ADSL' ? 'اختر السرعة' : 'اختر الباقة'}
@@ -281,7 +187,8 @@ export default function PayInternet() {
                             ))}
                           </select>
                         </div>
-                    )}
+                      )
+                    ) : null}
                   </>
                     :
                     <Input

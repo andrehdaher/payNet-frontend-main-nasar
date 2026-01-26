@@ -24,6 +24,7 @@ export default function ScreenWrapper({ children, className, withNav = true }) {
             if (vantaEffect) vantaEffect.destroy();
         };
     }, [vantaEffect]);
+    
     useEffect(() => {
         if (!vantaEffect || !vantaRef.current) return;
 
@@ -34,10 +35,9 @@ export default function ScreenWrapper({ children, className, withNav = true }) {
                 if (typeof vantaEffect.resize === "function") {
                     vantaEffect.resize();
                 } else if (typeof vantaEffect.setOptions === "function") {
-                    // fallback لإجبار إعادة الرسم
                     vantaEffect.setOptions({});
                 }
-            }, 100); // تأخير 100ms لتجنب الحلقة
+            }, 100);
         });
 
         ro.observe(vantaRef.current);

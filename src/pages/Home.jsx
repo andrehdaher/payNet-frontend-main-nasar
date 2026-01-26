@@ -4,6 +4,7 @@ import { data, useNavigate } from "react-router-dom";
 import ADSL from "../assets/ADSL.png";
 import elecandwater from "../assets/elecandwater.png";
 import ARDE1 from "../assets/ARDE1.png"
+import Play from "../assets/play.jpeg";
 import { useNotification } from "../context/NotificationContext";
 import NavBar from "../components/NavBar";
 import { io } from "socket.io-client";
@@ -111,6 +112,15 @@ const Home = () => {
       image: SYR,
       buttonText: "عرض التفاصيل",
       cardKey: 'cardSyriatel',
+      route: "/internet",
+    },
+    {
+      title: "قسم الألعاب",
+      service: "play",
+      description: "شحن حسابات الألعاب المختلفة بسرعة وأمان.",
+      image: Play,
+      buttonText: "عرض التفاصيل",
+      cardKey: 'cardPlay',
       route: "/internet",
     },
 
