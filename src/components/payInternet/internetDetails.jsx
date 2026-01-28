@@ -222,7 +222,8 @@ export const internetDetails = {
             'حزمة الشعار الخرافي ( السعر 668 ل.س ) ',
             'برايم بلس لمدة شهر ( السعر 1151 ل.س ) ',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن pubg mobile",
         description: 'اختر حجم الشدات',
         label: 'يرجى ادخال معرف المستخدم',
@@ -238,7 +239,8 @@ export const internetDetails = {
             'PUBG TR 3850 ( السعر 5003 ل.س )',
             'PUBG TR 8100 ( السعر 9994 ل.س )',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن pubg mobile TR",
         description: 'اختر حجم الشدات',
 
@@ -263,7 +265,8 @@ export const internetDetails = {
             'Free Fire ترقية المستوى 25 ( السعر 87 ل.س )',
             'Free Fire ترقية المستوى 30 ( السعر 134 ل.س )',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن free fire",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
@@ -286,7 +289,8 @@ export const internetDetails = {
             'Ball Pool 800 العملات الورقية( السعر 895 ل.س )',
             'Ball Pool 2000 العملات الورقية( السعر 1800 ل.س )',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن ball pool 8",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
@@ -304,7 +308,8 @@ export const internetDetails = {
             'سكنات الملوك ( السعر 1326 ل.س )',
             'سكنات القرية ( السعر 929 ل.س )',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن clash of clans",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
@@ -318,7 +323,8 @@ export const internetDetails = {
             '1200 DIAMOND ( السعر 1214 ل.س )',
             'ROYAL PASS ( السعر 1499 ل.س )',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن clash royal",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
@@ -328,7 +334,8 @@ export const internetDetails = {
         companies: [
             'قم بتدخيل المبلغ بشكل يدوي'
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن يدوي jawaker",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 0.0127,
@@ -345,7 +352,8 @@ export const internetDetails = {
             'المسرع الاسود  (السعر 1692 ل.س)',
             'المسرع الذهبي  (السعر 3258 ل.س)',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن  jawaker",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
@@ -361,7 +369,8 @@ export const internetDetails = {
             '1280 GOLD (السعر 2575 ل.س)',
             '1980 GOLD (السعر 3863 ل.س)',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن knives out",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
@@ -375,7 +384,8 @@ export const internetDetails = {
             '13580 ألماسة (السعر 2911)',
             '55800 ألماسة (السعر 11825)',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن ludo king",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
@@ -404,7 +414,8 @@ export const internetDetails = {
             '',
             'PE 500 STAR CHIPS (السعر 123 ل.س)',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن project entropy",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
@@ -418,7 +429,8 @@ export const internetDetails = {
             'DIAMOND 1999 (السعر 2646)',
             'DIAMOND 4999 (السعر 6524)',
         ],
-        speeds: [],
+        speeds: null,
+
         title: "شحن whithout survivial",
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,

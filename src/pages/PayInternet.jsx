@@ -119,7 +119,7 @@ export default function PayInternet() {
   };
 
   useEffect(() => {
-    if (['PHONE', 'SYR', 'MTN'].includes(formType)) { setSelectedSpeed('0') }
+    if (['PHONE', 'SYR', 'MTN' , 'pubg' ,'pubgtr' , 'freefire' , 'ballpool8' , 'clashclans' , 'clashroyal' ,'jawakerman' , 'jawaker' , 'knivesout' , 'ludoking' , 'mobilelegend', 'projectentropy' ,'whithoutsurvivial'].includes(formType)) { setSelectedSpeed('0') }
   }, [])
 
   return (
