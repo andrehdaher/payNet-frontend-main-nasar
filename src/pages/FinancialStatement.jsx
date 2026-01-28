@@ -36,7 +36,7 @@ export default function FinancialStatement() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/user/confirmed",
+        "http://localhost:5000/api/admin/user/confirmed",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ export default function FinancialStatement() {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `https://paynet-1.onrender.com/api/admin/payment/${id}`,
+        `http://localhost:5000/api/admin/payment/${id}`,
         { paymentType: newType },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -29,7 +29,7 @@ const Navbar = () => {
     const fetchBalance = async () => {
       try {
         const res = await axios.get(
-          "https://paynet-1.onrender.com/api/user/balance",
+          "http://localhost:5000/api/user/balance",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

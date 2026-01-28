@@ -11,7 +11,7 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
   });
 
   useEffect(() => {
-    axios.get(`https://paynet-1.onrender.com/api/admin/user/${userId}`)
+    axios.get(`http://localhost:5000/api/admin/user/${userId}`)
       .then(res => setUserData(res.data))
       .catch(err => console.error("حدث خطأ في جلب المستخدم", err));
   }, [userId]);
@@ -24,7 +24,7 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://paynet-1.onrender.com/api/admin/updateuser/${userId}`, userData);
+      await axios.put(`http://localhost:5000/api/admin/updateuser/${userId}`, userData);
       alert("تم التعديل بنجاح ✅");
       onUpdate();  // إعادة تحميل المستخدمين
       onClose();   // إغلاق النموذج

@@ -13,7 +13,7 @@ export default function UsersTable() {
   const navigate = useNavigate()
 
   const fetchUsers = () => {
-    axios.get("https://paynet-1.onrender.com/api/admin/all-user")
+    axios.get("http://localhost:5000/api/admin/all-user")
       .then(res => setUsers(res.data))
       .catch(err => console.error(err));
   };
@@ -26,7 +26,7 @@ export default function UsersTable() {
     const confirmed = window.confirm("هل انت متاكد من حذف المستخدم");
     if (!confirmed) return;
     try {
-      await axios.delete(`https://paynet-1.onrender.com/api/admin/deleteuser/${id}`);
+      await axios.delete(`http://localhost:5000/api/admin/deleteuser/${id}`);
       setUsers(users.filter(user => user._id !== id));
       alert("تم حذف المستخدم")
 
@@ -51,7 +51,7 @@ export default function UsersTable() {
 
     try {
 
-      await axios.put(`https://paynet-1.onrender.com/api/admin/addbatch/${id}`, {
+      await axios.put(`http://localhost:5000/api/admin/addbatch/${id}`, {
         amount, // إرسال القيمة بعد التحويل لرقم
       });
       alert("تمت إضافة الدفعة بنجاح ✅");

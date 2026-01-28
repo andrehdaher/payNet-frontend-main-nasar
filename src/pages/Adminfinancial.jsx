@@ -26,7 +26,7 @@ export default function AdminFinancialStatement() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/user/allconfirmed");
+        "http://localhost:5000/api/admin/user/allconfirmed");
 
       setConfirmedPayments(res.data);
     } catch (err) {

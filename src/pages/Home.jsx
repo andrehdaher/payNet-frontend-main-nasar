@@ -12,6 +12,7 @@ import SYR from '../assets/SYR.png'
 import ScreenWrapper from "../components/ScreenWrapper";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/Custom/Card";
 import { Button } from "../components/Custom/Button";
+import application from '../assets/application.jpeg'
 import axios from "axios";
 
 
@@ -38,7 +39,7 @@ const Home = () => {
 
 
   useEffect(() => {
-    const newSocket = io("https://paynet-1.onrender.com");
+    const newSocket = io("http://localhost:5000");
 
     newSocket.on("connect", () => {
       newSocket.emit("financial", "done");
@@ -57,7 +58,7 @@ const Home = () => {
   const getUser = async () => {
 
     try {
-      const res = await axios.get(`https://paynet-1.onrender.com/api/user/get-user-by-email?email=${email}`, {
+      const res = await axios.get(`http://localhost:5000/api/user/get-user-by-email?email=${email}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -123,6 +124,15 @@ const Home = () => {
       cardKey: 'cardPlay',
       route: "/internet",
     },
+    {
+      title: "قسم التطبيقات",
+      service: "application",
+      description: "شحن الطبيقات وبرامج المحادثة المختلفة بسرعة و أمان",
+      image: application,
+      buttonText: "عرض التفاصيل",
+      cardKey: 'cardapplication',
+      route: "/internet",
+    },
 
   ];
 
@@ -133,7 +143,6 @@ const Home = () => {
       return userCards.cardKey[service.cardKey] === true;
     })
     setCardTrue(filteredServices)
-    console.log(filteredServices)
 
   }, [userCards])
 
@@ -146,7 +155,7 @@ const Home = () => {
         {cardTrue.map((service, idx) => (
           <Card key={idx} className="">
             <CardContent>
-              <img className="size-2/3 mx-auto" src={service.image} alt="" />
+              <img className="w-96 h-80 mx-auto object-cover" src={service.image} alt="" />
             </CardContent>
 
             <CardHeader>

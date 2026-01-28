@@ -82,7 +82,7 @@ export default function PayInternet() {
 
     try {
       const res = await axios.post(
-        "https://paynet-1.onrender.com/api/payment/internet-full",
+        "http://localhost:5000/api/payment/internet-full",
         {
           landline,
           company: selectedCompany,
@@ -119,7 +119,7 @@ export default function PayInternet() {
   };
 
   useEffect(() => {
-    if (['PHONE', 'SYR', 'MTN' , 'pubg' ,'pubgtr' , 'freefire' , 'ballpool8' , 'clashclans' , 'clashroyal' ,'jawakerman' , 'jawaker' , 'knivesout' , 'ludoking' , 'mobilelegend', 'projectentropy' ,'whithoutsurvivial'].includes(formType)) { setSelectedSpeed('0') }
+    if (['PHONE', 'SYR', 'MTN', 'pubg', 'pubgtr', 'freefire', 'ballpool8', 'clashclans', 'clashroyal', 'jawakerman', 'jawaker', 'knivesout', 'ludoking', 'mobilelegend', 'projectentropy', 'whithoutsurvivial'].includes(formType)) { setSelectedSpeed('0') }
   }, [])
 
   return (

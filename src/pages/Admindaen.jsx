@@ -10,7 +10,7 @@ export default function PaymentStatement() {
   const fetchPayments = async () => {
     try {
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/daen"
+        "http://localhost:5000/api/admin/daen"
       );
       setPayments(res.data);
     } catch (error) {
@@ -28,7 +28,7 @@ export default function PaymentStatement() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "https://paynet-1.onrender.com/api/admin/confirm-daen",
+        "http://localhost:5000/api/admin/confirm-daen",
         {
           id: payment._id,
           email: payment.name, // أو يمكن تغيير الحقل حسب اسم الحقل الحقيقي للبريد
@@ -60,7 +60,7 @@ export default function PaymentStatement() {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`https://paynet-1.onrender.com/api/admin/delete/${id}`)
+      await axios.delete(`http://localhost:5000/api/admin/delete/${id}`)
       alert("تم حذف الدفعة بنجاح")
       fetchPayments();
 

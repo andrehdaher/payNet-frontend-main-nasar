@@ -211,16 +211,16 @@ export const internetDetails = {
     pubg: {
         companies: [
             '',
-            '60UC ( السعر 105 ل.س )',
-            '325UC ( السعر 526 ل.س )',
-            '660UC ( السعر 1053 ل.س )',
-            '1800UC ( السعر 2553 ل.س )',
-            '3850UC ( السعر 5176 ل.س )',
-            '8100UC ( السعر 10386 ل.س )',
-            'حزمة الشراء الأول ( السعر 161 ل.س ) ',
-            'حزمة ترقية الأسلحة ( السعر 396 ل.س ) ',
-            'حزمة الشعار الخرافي ( السعر 668 ل.س ) ',
-            'برايم بلس لمدة شهر ( السعر 1151 ل.س ) ',
+            '60UC ( السعر 105 ل.س ) pubg',
+            '325UC ( السعر 526 ل.س ) pubg',
+            '660UC ( السعر 1053 ل.س ) pubg',
+            '1800UC ( السعر 2553 ل.س ) pubg',
+            '3850UC ( السعر 5176 ل.س ) pubg',
+            '8100UC ( السعر 10386 ل.س ) pubg',
+            'حزمة الشراء الأول ( السعر 161 ل.س )  pubg',
+            'حزمة ترقية الأسلحة ( السعر 396 ل.س )  pubg',
+            'حزمة الشعار الخرافي ( السعر 668 ل.س ) pubg',
+            'برايم بلس لمدة شهر ( السعر 1151 ل.س )  pubg',
         ],
         speeds: null,
 
@@ -232,12 +232,12 @@ export const internetDetails = {
     pubgtr: {
         companies: [
             '',
-            'PUBG TR 60 ( السعر 122 ل.س )',
-            'PUBG TR 325 ( السعر 543 ل.س )',
-            'PUBG TR 660 ( السعر 1000 ل.س )',
-            'PUBG TR 1800 ( السعر 2516 ل.س )',
-            'PUBG TR 3850 ( السعر 5003 ل.س )',
-            'PUBG TR 8100 ( السعر 9994 ل.س )',
+            'PUBG TR 60 ( السعر 122 ل.س ) pubg mobile TR',
+            'PUBG TR 325 ( السعر 543 ل.س ) pubg mobile TR',
+            'PUBG TR 660 ( السعر 1000 ل.س ) pubg mobile TR',
+            'PUBG TR 1800 ( السعر 2516 ل.س ) pubg mobile TR',
+            'PUBG TR 3850 ( السعر 5003 ل.س ) pubg mobile TR',
+            'PUBG TR 8100 ( السعر 9994 ل.س ) pubg mobile TR',
         ],
         speeds: null,
 
@@ -300,13 +300,13 @@ export const internetDetails = {
     clashclans: {
         companies: [
             '',
-            '80 DIAMOND ( السعر 161 ل.س )',
-            '250 DIAMOND ( السعر 645 ل.س )',
-            '1200 DIAMOND ( السعر 1326 ل.س )',
-            'التذكرة الذهبية ( السعر 917 ل.س )',
-            'تذكرة الحدث المصغرة ( السعر 657 ل.س )',
-            'سكنات الملوك ( السعر 1326 ل.س )',
-            'سكنات القرية ( السعر 929 ل.س )',
+            '80 DIAMOND ( السعر 161 ل.س ) clash of clans',
+            '250 DIAMOND ( السعر 645 ل.س ) clash of clans',
+            '1200 DIAMOND ( السعر 1326 ل.س ) clash of clans',
+            'التذكرة الذهبية ( السعر 917 ل.س ) clash of clans',
+            'تذكرة الحدث المصغرة ( السعر 657 ل.س ) clash of clans',
+            'سكنات الملوك ( السعر 1326 ل.س ) clash of clans',
+            'سكنات القرية ( السعر 929 ل.س ) clash of clans',
         ],
         speeds: null,
 
@@ -318,10 +318,10 @@ export const internetDetails = {
     clashroyal: {
         companies: [
             '',
-            '80 DIAMOND ( السعر 122 ل.س )',
-            '500 DIAMOND ( السعر 607 ل.س )',
-            '1200 DIAMOND ( السعر 1214 ل.س )',
-            'ROYAL PASS ( السعر 1499 ل.س )',
+            '80 DIAMOND ( السعر 122 ل.س ) clash royal',
+            '500 DIAMOND ( السعر 607 ل.س ) clash royal',
+            '1200 DIAMOND ( السعر 1214 ل.س ) clash royal',
+            'ROYAL PASS ( السعر 1499 ل.س ) clash royal',
         ],
         speeds: null,
 
@@ -332,7 +332,8 @@ export const internetDetails = {
     },
     jawakerman: {
         companies: [
-            'قم بتدخيل المبلغ بشكل يدوي'
+            '',
+            'قم بتدخيل المبلغ بشكل يدوي jawaker'
         ],
         speeds: null,
 
@@ -347,10 +348,10 @@ export const internetDetails = {
             'JAWAKER 400.000 (السعر 5175 ل.س)',
             'JAWAKER 525.000 (السعر 6700 ل.س)',
             'JAWAKER 805.000 (السعر 10300 ل.س)',
-            'المسرع الاحمر  (السعر 196 ل.س)',
-            'المسرع الازرق  (السعر 910 ل.س)',
-            'المسرع الاسود  (السعر 1692 ل.س)',
-            'المسرع الذهبي  (السعر 3258 ل.س)',
+            'المسرع الاحمر  (السعر 196 ل.س) JAWAKER',
+            'المسرع الازرق  (السعر 910 ل.س) JAWAKER',
+            'المسرع الاسود  (السعر 1692 ل.س) JAWAKER',
+            'المسرع الذهبي  (السعر 3258 ل.س) JAWAKER',
         ],
         speeds: null,
 
@@ -362,12 +363,12 @@ export const internetDetails = {
     knivesout: {
         companies: [
             '',
-            '60 GOLD (السعر 127 ل.س)',
-            '180 GOLD (السعر 386 ل.س)',
-            '300 GOLD (السعر 647 ل.س)',
-            '680 GOLD (السعر 1287 ل.س)',
-            '1280 GOLD (السعر 2575 ل.س)',
-            '1980 GOLD (السعر 3863 ل.س)',
+            '60 GOLD (السعر 127 ل.س) knives out',
+            '180 GOLD (السعر 386 ل.س) knives out',
+            '300 GOLD (السعر 647 ل.س) knives out',
+            '680 GOLD (السعر 1287 ل.س) knives out',
+            '1280 GOLD (السعر 2575 ل.س) knives out',
+            '1980 GOLD (السعر 3863 ل.س) knives out',
         ],
         speeds: null,
 
@@ -379,10 +380,10 @@ export const internetDetails = {
     ludoking: {
         companies: [
             '',
-            '830 ألماسة (السعر 252)',
-            '5150 ألماسة (السعر 1146)',
-            '13580 ألماسة (السعر 2911)',
-            '55800 ألماسة (السعر 11825)',
+            '830 ألماسة (السعر 252) ludo ',
+            '5150 ألماسة (السعر 1146) ludo king',
+            '13580 ألماسة (السعر 2911) ludo king',
+            '55800 ألماسة (السعر 11825) ludo king',
         ],
         speeds: null,
 
@@ -394,12 +395,12 @@ export const internetDetails = {
     mobilelegend: {
         companies: [
             '',
-            'Diamonds 257 (السعر 470)',
-            'Diamonds 344 (السعر 583)',
-            'Diamonds 514 (السعر 838)',
-            'Diamonds 1050 (السعر 1733)',
-            'Diamonds 2195 (السعر 3476)',
-            'Diamonds 5533 (السعر 8757)',
+            'Diamonds 257 (السعر 470) mobile legends',
+            'Diamonds 344 (السعر 583) mobile legends',
+            'Diamonds 514 (السعر 838) mobile legends',
+            'Diamonds 1050 (السعر 1733) mobile legends',
+            'Diamonds 2195 (السعر 3476) mobile legends',
+            'Diamonds 5533 (السعر 8757) mobile legends',
         ],
         speeds: 'mobilelegend',
         title: "شحن mobile legends",
@@ -412,7 +413,7 @@ export const internetDetails = {
     projectentropy: {
         companies: [
             '',
-            'PE 500 STAR CHIPS (السعر 123 ل.س)',
+            'PE 500 STAR CHIPS (السعر 123 ل.س) project entropy',
         ],
         speeds: null,
 
@@ -424,10 +425,10 @@ export const internetDetails = {
     whithoutsurvivial: {
         companies: [
             '',
-            'DIAMOND 499 (السعر 635)',
-            'DIAMOND 999 (السعر 1306)',
-            'DIAMOND 1999 (السعر 2646)',
-            'DIAMOND 4999 (السعر 6524)',
+            'DIAMOND 499 (السعر 635) whithout survivial',
+            'DIAMOND 999 (السعر 1306) whithout survivial',
+            'DIAMOND 1999 (السعر 2646) whithout survivial',
+            'DIAMOND 4999 (السعر 6524) whithout survivial',
         ],
         speeds: null,
 

@@ -8,7 +8,7 @@ export default function AdminPending() {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
     // 1. إنشاء الاتصال بالسيرفر عبر سوكيت
-    const newSocket = io("https://paynet-1.onrender.com"); // عدّل الرابط إذا لزم
+    const newSocket = io("http://localhost:5000"); // عدّل الرابط إذا لزم
     setSocket(newSocket);
 
     // 2. الاستماع للتحديثات من السيرفر
@@ -29,7 +29,7 @@ export default function AdminPending() {
   const fetchPending = async () => {
     try {
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/pending"
+        "http://localhost:5000/api/admin/pending"
       );
       setPayments(res.data);
     } catch (error) {
@@ -46,7 +46,7 @@ export default function AdminPending() {
 
     try {
       await axios.patch(
-        `https://paynet-1.onrender.com/api/admin/confirm/${id}`
+        `http://localhost:5000/api/admin/confirm/${id}`
       );
       fetchPending(); // إعادة التحديث بعد التأكيد
     } catch (error) {
@@ -61,7 +61,7 @@ export default function AdminPending() {
 
     try {
       await axios.patch(
-        `https://paynet-1.onrender.com/api/admin/start/${id}`
+        `http://localhost:5000/api/admin/start/${id}`
       );
       fetchPending(); // إعادة التحديث بعد التأكيد
     } catch (error) {
@@ -76,7 +76,7 @@ export default function AdminPending() {
 
     try {
       await axios.post(
-        `https://paynet-1.onrender.com/api/admin/reject/${payment._id}`,
+        `http://localhost:5000/api/admin/reject/${payment._id}`,
         {
           email: payment.email,
           amount: payment.amount,

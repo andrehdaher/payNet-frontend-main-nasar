@@ -44,7 +44,7 @@ export default function AddPointForm({ onClose }) {
   const handelSave = async () => {
     try {
       setLoading(true); // ✅ بدء التحميل
-      await axios.post("https://paynet-1.onrender.com/api/point/add-point", { formData, email })
+      await axios.post("http://localhost:5000/api/point/add-point", { formData, email })
       alert("تم اضافة نقطة البيع بنجاح")
     }
     catch (err) {

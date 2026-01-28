@@ -32,7 +32,7 @@ export default function Login() {
 
     try {
 
-      const res = await axios.post("https://paynet-1.onrender.com/api/login", {
+      const res = await axios.post("http://localhost:5000/api/login", {
         email,
         password,
       });

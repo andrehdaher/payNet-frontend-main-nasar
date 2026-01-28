@@ -33,7 +33,7 @@ export default function Notebooks() {
     const handleData = async () => {
       setLoading(true); // بدء التحميل
       try {
-        const res = await axios.get(`https://paynet-1.onrender.com/api/payment/save-number?email=${email}`)
+        const res = await axios.get(`http://localhost:5000/api/payment/save-number?email=${email}`)
         console.log("البيانات المسترجعة:", res.data)
         console.log("بنية البيانات:", JSON.stringify(res.data, null, 2))
         setFormData(res.data || []) // تأكد من أن البيانات مصفوفة
@@ -59,7 +59,7 @@ export default function Notebooks() {
   const refreshData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`https://paynet-1.onrender.com/api/payment/save-number?email=${email}`)
+      const res = await axios.get(`http://localhost:5000/api/payment/save-number?email=${email}`)
       console.log("تم إعادة تحميل البيانات:", res.data)
       setFormData(res.data || [])
       setSelectedRows([]) // إعادة تعيين الـ checkboxes المحددة
@@ -252,7 +252,7 @@ export default function Notebooks() {
     try {
       // إرسال الأرقام المحددة إلى API للتسديد
       const response = await axios.post(
-        'https://paynet-1.onrender.com/api/payment/pay-selected',
+        'http://localhost:5000/api/payment/pay-selected',
         {
           email: email,
           numbers: numbers,
@@ -299,7 +299,7 @@ export default function Notebooks() {
   const saveEdit = async (rowId) => {
     try {
       await axios.put(
-        `https://paynet-1.onrender.com/api/payment/save-number/${rowId}`,
+        `http://localhost:5000/api/payment/save-number/${rowId}`,
         {
           landline: editedRow.landline,
           company: editedRow.company,
@@ -326,7 +326,7 @@ export default function Notebooks() {
 
     try {
       await axios.delete(
-        `https://paynet-1.onrender.com/api/payment/save-number/${row._id || row.id}`,
+        `http://localhost:5000/api/payment/save-number/${row._id || row.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

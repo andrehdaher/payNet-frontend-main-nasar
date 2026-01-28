@@ -48,7 +48,7 @@ const NavBar = () => {
     const fetchBalance = async () => {
       try {
         const res = await axios.get(
-          "https://paynet-1.onrender.com/api/user/balance",
+          "http://localhost:5000/api/user/balance",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setBalance(res.data.balance);
@@ -60,7 +60,7 @@ const NavBar = () => {
     const fetchDaen = async () => {
       try {
         const res = await axios.get(
-          "https://paynet-1.onrender.com/api/user/daen",
+          "http://localhost:5000/api/user/daen",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         console.log("الدين الحالي:", res.data.daen);
@@ -143,7 +143,7 @@ const NavBar = () => {
     <>
       {/* زر فتح القائمة */}
       <div className="z-40 fixed top-0  bg-muted w-full flex justify-between shadow-md">
-       
+
         <div className="p-4 border-b flex justify-center items-center gap-2">
           <span className="font-bold text-violet-700">{email || "جاري التحميل..."}</span>
           <span className="text-sm text-gray-600">

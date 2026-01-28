@@ -50,7 +50,7 @@ export default function FinancialStatement() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        `https://paynet-1.onrender.com/api/point/user/confirmed/point?emailPoint=${email}`,
+        `http://localhost:5000/api/point/user/confirmed/point?emailPoint=${email}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

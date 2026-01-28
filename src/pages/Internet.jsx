@@ -14,6 +14,7 @@ import water from '../assets/water.png'
 import SYRIATEL from '../assets/SYRIATEL.jpeg'
 import MTN from '../assets/MTN.jpeg'
 import PlayDetails from "../components/payInternet/PlayDetails";
+import ApplicationDetails from "../components/payInternet/ApplicationDetails";
 
 const Home = () => {
 
@@ -32,7 +33,8 @@ const Home = () => {
   const token = localStorage.getItem("token");
   const decoded = token ? parseJwt(token) : null;
   const email = decoded?.email;
-
+const ITEMS_PER_LOAD = 12;
+const [visibleCount, setVisibleCount] = useState(ITEMS_PER_LOAD);
   const location = useLocation()
   const serviceType = location.state
 
@@ -127,7 +129,15 @@ const Home = () => {
       [
         ...PlayDetails()
       ] :
+      serviceType == 'application'?
+      [
+        ...ApplicationDetails()
+
+      ] :
       [];
+
+      const visibleServices = services.slice(0, visibleCount);
+
 
   return (
     <ScreenWrapper>
@@ -137,7 +147,7 @@ const Home = () => {
       >
 
         {
-          services.map((service, idx) => {
+          visibleServices.map((service, idx) => {
             return <Card key={idx} className="w-72 h-[22rem] hover:shadow-lg hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out">
               <CardContent>
                 <img className="w-40 h-40 mx-auto object-cover" src={service.image} alt="" />
@@ -156,9 +166,22 @@ const Home = () => {
                 >{service.buttonText}</Button>
               </CardFooter>
             </Card>
+            
           })
+          
         }
       </div>
+      {visibleCount < services.length && (
+  <div className="flex justify-center  mt-6">
+    <Button
+      className = 'w-80'
+      onClick={() => setVisibleCount(prev => prev + ITEMS_PER_LOAD)}
+    >
+      تحميل المزيد
+    </Button>
+  </div>
+)}
+
     </ScreenWrapper>
   );
 };
