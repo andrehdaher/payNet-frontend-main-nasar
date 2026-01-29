@@ -19,7 +19,7 @@ const HomePoint = () => {
 
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5000");
+    const newSocket = io("https://paynet-1.onrender.com");
 
     newSocket.on("connect", () => {
       console.log('تم الاتصال بالسيرفر')

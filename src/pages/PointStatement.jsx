@@ -45,7 +45,7 @@ export default function PaymentStatement() {
       try {
         const token = localStorage.getItem("token");
         console.log(email)
-        const res = await axios.get(`http://localhost:5000/api/point/all?email=${email}`, {
+        const res = await axios.get(`https://paynet-1.onrender.com/api/point/all?email=${email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

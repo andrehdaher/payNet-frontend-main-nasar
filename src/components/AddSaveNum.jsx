@@ -71,7 +71,7 @@ export default function AddSaveNum({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios.post('http://localhost:5000/api/payment/save-number',
+    const res = await axios.post('https://paynet-1.onrender.com/api/payment/save-number',
 
       formData, {
       headers: {

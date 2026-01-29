@@ -42,7 +42,7 @@ export default function AddPoint() {
 
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/point/add-point?email=${decoded.email}`
+        `https://paynet-1.onrender.com/api/point/add-point?email=${decoded.email}`
       );
       setFormData(res.data);
     } catch (err) {
@@ -61,7 +61,7 @@ export default function AddPoint() {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/point/add-balance/${id}`,
+        `https://paynet-1.onrender.com/api/point/add-balance/${id}`,
         { amount, email, username, owner }
       );
       alert("تمت إضافة الرصيد بنجاح ✅");
@@ -78,7 +78,7 @@ export default function AddPoint() {
 
     try {
       await axios.delete(
-        `http://localhost:5000/api/point/delete/${id}`
+        `https://paynet-1.onrender.com/api/point/delete/${id}`
       );
       alert("تم حذف النقطة ✅");
       getPoint();

@@ -13,7 +13,7 @@ export default function Advertisements() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/product/get-product",
+        "https://paynet-1.onrender.com/api/product/get-product",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ export default function Advertisements() {
       const token = localStorage.getItem("token");
       console.log("Searching for:", name);
       const res = await axios.get(
-        `http://localhost:5000/api/product/search-product?name=${name}`,
+        `https://paynet-1.onrender.com/api/product/search-product?name=${name}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
