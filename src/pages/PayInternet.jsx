@@ -6,6 +6,7 @@ import { Input } from "../components/Custom/Input";
 import { Button } from "../components/Custom/Button";
 import { useLocation } from "react-router-dom";
 import { internetDetails } from "../components/payInternet/internetDetails";
+import { min } from "three/tsl";
 
 export default function PayInternet() {
   const vantaRef = useRef(null);
@@ -55,6 +56,7 @@ export default function PayInternet() {
       type: "number",
       value: amountToPay,
       onChange: setAmountToPay,
+      min: ['شحن يدوي jawaker'].includes(config.title) ? 128 : undefined
     },
     {
       id: "calculatedAmount",
@@ -200,6 +202,7 @@ export default function PayInternet() {
                       onChange={(e) => input.onChange && input.onChange(e.target.value)}
                       readOnly={input.readOnly || false}
                       required={!input.readOnly}
+                      min={input.min}
                     />
               ))}
             </div>
