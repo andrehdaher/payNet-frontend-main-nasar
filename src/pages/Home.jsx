@@ -124,15 +124,15 @@ const Home = () => {
       cardKey: 'cardPlay',
       route: "/internet",
     },
-    {
-      title: "قسم التطبيقات",
-      service: "application",
-      description: "شحن الطبيقات وبرامج المحادثة المختلفة بسرعة و أمان",
-      image: application,
-      buttonText: "عرض التفاصيل",
-      cardKey: 'cardapplication',
-      route: "/internet",
-    },
+    // {
+    //   title: "قسم التطبيقات",
+    //   service: "application",
+    //   description: "شحن الطبيقات وبرامج المحادثة المختلفة بسرعة و أمان",
+    //   image: application,
+    //   buttonText: "عرض التفاصيل",
+    //   cardKey: 'cardapplication',
+    //   route: "/internet",
+    // },
 
   ];
 

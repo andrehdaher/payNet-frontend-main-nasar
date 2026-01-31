@@ -56,7 +56,7 @@ export default function PayInternet() {
       type: "number",
       value: amountToPay,
       onChange: setAmountToPay,
-      min: ['شحن يدوي jawaker'].includes(config.title) ? 128 : undefined
+      min: ['شحن يدوي jawaker'].includes(config.title) ? 10000 : undefined
     },
     {
       id: "calculatedAmount",
@@ -92,6 +92,7 @@ export default function PayInternet() {
           amount: parseFloat(amountToPay),
           email,
           paymentType,
+          calculatedAmount,
         },
         {
           headers: {
