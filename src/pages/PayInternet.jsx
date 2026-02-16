@@ -6,12 +6,12 @@ import { Input } from "../components/Custom/Input";
 import { Button } from "../components/Custom/Button";
 import { useLocation } from "react-router-dom";
 import { internetDetails } from "../components/payInternet/internetDetails";
-import { min } from "three/tsl";
 
 export default function PayInternet() {
   const vantaRef = useRef(null);
-  const [landline, setLandline] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [landline, setLandline] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
   const [selectedSpeed, setSelectedSpeed] = useState("");
   const [amountToPay, setAmountToPay] = useState("");
@@ -19,7 +19,6 @@ export default function PayInternet() {
   const location = useLocation()
   const formType = location.state
   const config = internetDetails[formType] || {};
-  console.log(config)
 
 
 
@@ -56,7 +55,7 @@ export default function PayInternet() {
       type: "number",
       value: amountToPay,
       onChange: setAmountToPay,
-      min: ['شحن يدوي jawaker'].includes(config.title) ? 10000 : undefined
+      min: config.min
     },
     {
       id: "calculatedAmount",
@@ -122,7 +121,7 @@ export default function PayInternet() {
   };
 
   useEffect(() => {
-    if (['PHONE', 'SYR', 'MTN', 'pubg', 'pubgtr', 'freefire', 'ballpool8', 'clashclans', 'clashroyal', 'jawakerman', 'jawaker', 'knivesout', 'ludoking', 'mobilelegend', 'projectentropy', 'whithoutsurvivial'].includes(formType)) { setSelectedSpeed('0') }
+    if (['PHONE', 'PAYCELL', 'USDTTRC20', 'USDTBEB20', 'SYR', 'MTN', 'pubg', 'pubgtr', 'freefire', 'ballpool8', 'clashclans', 'clashroyal', 'jawakerman', 'jawaker', 'knivesout', 'ludoking', 'mobilelegend', 'projectentropy', 'whithoutsurvivial'].includes(formType)) { setSelectedSpeed('0') }
   }, [])
 
   return (
@@ -160,12 +159,12 @@ export default function PayInternet() {
                 </>
                   : input.id == 2 ? <>
                     {/* اختيار السرعة أو العداد */}
-                    {(Array.isArray(config.speeds) && config.speeds.length > 0) || config.speeds === "counter" || config.speeds === 'mobilelegend' ? (
-                      config.speeds === "counter" || config.speeds === 'mobilelegend' ? (
+                    {(Array.isArray(config.speeds) && config.speeds.length > 0) || config.speeds === "counter" || config.speeds === 'mobilelegend' || config.speeds === 'BANKTR' ? (
+                      config.speeds === "counter" || config.speeds === 'mobilelegend' || config.speeds === 'BANKTR' ? (
                         <Input
                           key={input.id}
                           id={input.id}
-                          label={config.speeds === 'mobilelegend' ? 'يرجى ادخال Zone ID' : 'رقم الاشتراك / العداد'}
+                          label={config.speeds === 'mobilelegend' ? 'يرجى ادخال Zone ID' : config.speeds === 'BANKTR' ? "يرجى ادخال رقم الحساب" : 'رقم الاشتراك / العداد'}
                           type={'number'}
                           value={selectedSpeed}
                           onChange={(e) => setSelectedSpeed(e.target.value)}

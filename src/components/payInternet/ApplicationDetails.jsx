@@ -73,6 +73,52 @@ import KITI from '../../assets/KITI.jpeg'
 import SAYALIKEE from '../../assets/SAYALIKEE.jpeg'
 import MASHICHAT from '../../assets/MASHICHAT.jpeg'
 import AZALLIVE from '../../assets/AZALLIVE.jpeg'
+import IMUCHAT from '../../assets/IMUCHAT.jpeg'
+import HIPLAYCHAT from '../../assets/HIPLAYCHAT.jpeg'
+import MOLISTAR from '../../assets/MOLISTAR.jpeg'
+import YOLO from '../../assets/YOLO.jpeg'
+import STAR from '../../assets/7STAR.jpeg'
+import MAZYOUN from '../../assets/MAZYOUN.jpeg'
+import SAADACHAT from '../../assets/SAADACHAT.jpeg'
+import NAWALIVE from '../../assets/NAWALIVE.jpeg'
+import YAMISTAR from '../../assets/YAMISTAR.jpeg'
+import WESOCHAT from '../../assets/WESOCHAT.jpeg'
+import ASHA from '../../assets/ASHA.jpeg'
+import YAAHLANCHAT from '../../assets/YAAHLANCHAT.jpeg'
+import YAHLLA from '../../assets/YAHLLA.jpeg'
+import TALKTALK from '../../assets/TALKTALK.jpeg'
+import HIYACHAT from '../../assets/HIYACHAT.jpeg'
+import MAJLISCHAT from '../../assets/MAJLISCHAT.jpeg'
+import ZNET from '../../assets/ZNET.jpeg'
+import BOBO from '../../assets/BOBO.jpeg'
+import HIGOLIVE from '../../assets/HIGOLIVE.jpeg'
+import TADACHAT from '../../assets/TADACHAT.jpeg'
+import OPALIVE from '../../assets/OPALIVE.jpeg'
+import AMO from '../../assets/AMO.jpeg'
+import KWAI from '../../assets/KWAI.jpeg'
+import VECOCHAT from '../../assets/VECOCHAT.jpeg'
+import HABBEYCHAT from '../../assets/HABBEYCHAT.jpeg'
+import TANGO from '../../assets/TANGO.jpeg'
+import HIYOOCHAT from '../../assets/HIYOOCHAT.jpeg'
+import SOULCHAT from '../../assets/SOULCHAT.jpeg'
+import HOBYCHAT from '../../assets/HOBYCHAT.jpeg'
+import GALASTAR from '../../assets/GALASTAR.jpeg'
+import JUNKOCHAT from '../../assets/JUNKOCHAT.jpeg'
+import EPARTY from '../../assets/EPARTY.jpeg'
+import KAFU from '../../assets/KAFU.jpeg'
+import SAHRACHAT from '../../assets/SAHRACHAT.jpeg'
+import FALLA from '../../assets/FALLA.jpeg'
+import KESSMETCHAT from '../../assets/KESSMETCHAT.jpeg'
+import HARTLIVE from '../../assets/HARTLIVE.jpeg'
+import NADDYSTAR from '../../assets/NADDYSTAR.jpeg'
+import WAKISTAR from '../../assets/WAKISTAR.jpeg'
+import LAKICHAT from '../../assets/LAKICHAT.jpeg'
+import UPFUN from '../../assets/UPFUN.jpeg'
+import TIKTOK from '../../assets/TIKTOK.jpeg'
+import SIYACHAT from '../../assets/SIYACHAT.jpeg'
+import POTALIVE from '../../assets/POTALIVE.jpeg'
+import YOPARTI from '../../assets/YOPARTI.jpeg'
+import SODFACHAT from '../../assets/SODFACHAT.jpeg'
 
 export default function ApplicationDetails() {
     const navigate = useNavigate();
@@ -83,7 +129,7 @@ export default function ApplicationDetails() {
 
     const ApplicationDetails = [
         {
-            title: ' SOULHILL CRYSTAL',
+            title: 'SOULHILL CRYSTAL',
             formType: 'SOULHILLCRYSTAL',
             description: 'شحن موقع SOULHILL CRYSTAL بسرعة وأمان',
             buttonText: "عرض التفاصيل",
@@ -681,6 +727,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع IMU CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image: IMUCHAT,
         },
         {
             title: 'شحن HIPLAY CHAT',
@@ -688,6 +735,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع HIPLAY CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image: HIPLAYCHAT,
         },
         {
             title: 'شحن MOLI STAR',
@@ -695,6 +743,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع MOLI STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image: MOLISTAR,
         },
         {
             title: 'شحن YOLO',
@@ -702,13 +751,15 @@ export default function ApplicationDetails() {
             description: 'شحن موقع YOLO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            iage: YOLO,
         },
         {
-            title: 'شحن 7STAR',
+            title: ' شحن 7STAR',
             formType: '7STAR',
             description: 'شحن موقع 7STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image: STAR,
         },
         {
             title: 'شحن MAZYOUN',
@@ -716,6 +767,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع MAZYOUN بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image: MAZYOUN,
         },
         {
             title: 'شحن SAADA CHAT',
@@ -723,6 +775,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع SAADA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image: SAADACHAT,
         },
         {
             title: 'شحن NAWA LIVE',
@@ -730,6 +783,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع NAWA LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image: NAWALIVE,
         },
         {
             title: 'شحن YAMI STAR',
@@ -737,6 +791,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع YAMI STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image: YAMISTAR,
         },
         {
             title: 'شحن WESO CHAT',
@@ -744,6 +799,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع WESO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :WESOCHAT,
         },
         {
             title: 'شحن ASHA',
@@ -751,6 +807,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع ASHA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image: ASHA
         },
         {
             title: 'شحن YAAHLAN CHAT',
@@ -758,6 +815,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع YAAHLAN CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :YAAHLANCHAT,
         },
         {
             title: 'شحن YAHLLA',
@@ -765,6 +823,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع YAHLLA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :YAHLLA,
         },
         {
             title: 'شحن TALK TALK',
@@ -772,6 +831,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع TALK TALK بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :TALKTALK,
         },
         {
             title: 'شحن HIYA CHAT',
@@ -779,6 +839,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع HIYA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :HIYACHAT,
         },
         {
             title: 'شحن MAJLIS CHAT',
@@ -786,6 +847,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع MAJLIS CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :MAJLISCHAT,
         },
         {
             title: 'شحن ZNET',
@@ -793,6 +855,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع ZNET بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :ZNET,
         },
         {
             title: 'شحن BOBO',
@@ -800,6 +863,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع BOBO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :BOBO,
         },
         {
             title: 'شحن HIGO LIVE',
@@ -807,6 +871,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع HIGO LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :HIGOLIVE,
         },
         {
             title: 'شحن TADA CHAT',
@@ -814,6 +879,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع TADA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :TADACHAT
         },
         {
             title: 'شحن OPA LIVE',
@@ -821,6 +887,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع OPA LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :OPALIVE,
         },
         {
             title: 'شحن AMO',
@@ -828,6 +895,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع AMO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :AMO,
         },
         {
             title: 'شحن KWAI',
@@ -835,6 +903,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع KWAI بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :KWAI,
         },
         {
             title: 'شحن VECO CHAT',
@@ -842,6 +911,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع VECO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :VECOCHAT,
         },
         {
             title: 'شحن HABBEY CHAT',
@@ -849,6 +919,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع HABBEY CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :HABBEYCHAT,
         },
         {
             title: 'شحن TANGO',
@@ -856,6 +927,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع TANGO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :TANGO,
         },
         {
             title: 'شحن HIYOO CHAT',
@@ -863,6 +935,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع HIYOO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :HIYOOCHAT,
         },
         {
             title: 'شحن SOUL CHAT',
@@ -870,6 +943,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع SOUL CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :SOULCHAT,
         },
         {
             title: 'شحن HOBY CHAT',
@@ -877,6 +951,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع HOBY CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :HOBYCHAT,
         },
         {
             title: 'شحن GALA STAR',
@@ -884,6 +959,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع GALA STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :GALASTAR,
         },
         {
             title: 'شحن JUNKO CHAT',
@@ -891,6 +967,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع JUNKO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :JUNKOCHAT,
         },
         {
             title: 'شحن E PARTY',
@@ -898,6 +975,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع E PARTY بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :EPARTY,
         },
         {
             title: 'شحن KAFU',
@@ -905,6 +983,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع KAFU بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            هةشلث :KAFU
         },
         {
             title: 'شحن SAHRA CHAT',
@@ -912,6 +991,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع SAHRA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image:SAHRACHAT,
         },
         {
             title: 'شحن FALLA',
@@ -919,6 +999,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع FALLA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :FALLA,
         },
         {
             title: 'شحن KESSMET CHAT',
@@ -926,6 +1007,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع KESSMET CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :KESSMETCHAT,
         },
         {
             title: 'شحن HART LIVE',
@@ -933,6 +1015,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع HART LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :HARTLIVE,
         },
         {
             title: 'شحن NADDY STAR',
@@ -940,6 +1023,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع NADDY STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :NADDYSTAR,
         },
         {
             title: 'شحن WAKI STAR',
@@ -947,6 +1031,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع WAKI STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :WAKISTAR,
         },
         {
             title: 'شحن LAKI CHAT',
@@ -954,6 +1039,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع LAKI CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :LAKICHAT,
         },
         {
             title: 'شحن UP FUN',
@@ -961,6 +1047,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع UP FUN بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :UPFUN,
         },
         {
             title: 'شحن TIK TOK',
@@ -968,6 +1055,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع TIK TOK بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :TIKTOK,
         },
         {
             title: 'شحن SIYA CHAT',
@@ -975,6 +1063,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع SIYA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :SIYACHAT,
         },
         {
             title: 'شحن POTA LIVE',
@@ -982,6 +1071,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع POTA LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :POTALIVE,
         },
         {
             title: 'شحن YOPARTI',
@@ -989,6 +1079,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع YOPARTI بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :YOPARTI,
         },
         {
             title: 'شحن SODFA CHAT',
@@ -996,6 +1087,7 @@ export default function ApplicationDetails() {
             description: 'شحن موقع SODFA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
+            image :SODFACHAT,
         },
         {
             title: 'شحن HALO STAR',

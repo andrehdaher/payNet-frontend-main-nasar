@@ -5,6 +5,7 @@ import ADSL from "../assets/ADSL.png";
 import elecandwater from "../assets/elecandwater.png";
 import ARDE1 from "../assets/ARDE1.png"
 import Play from "../assets/play.jpeg";
+import usdtpay from "../assets/usdtpay.jpeg";
 import { useNotification } from "../context/NotificationContext";
 import NavBar from "../components/NavBar";
 import { io } from "socket.io-client";
@@ -13,6 +14,7 @@ import ScreenWrapper from "../components/ScreenWrapper";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/Custom/Card";
 import { Button } from "../components/Custom/Button";
 import application from '../assets/application.jpeg'
+import viewapp from '../assets/viewapp.jpeg'
 import axios from "axios";
 
 
@@ -133,6 +135,24 @@ const Home = () => {
     //   cardKey: 'cardapplication',
     //   route: "/internet",
     // },
+    {
+      title: "قسم الدفع الالكتروني",
+      service: "usdtpay",
+      description: "شحن المحفظات الالكترونية المختلفة بسرعة و أمان",
+      image: usdtpay,
+      buttonText: "عرض التفاصيل",
+      cardKey: 'usdtpay',
+      route: "/internet",
+    },
+    {
+      title: "قسم تطبيقات المشاهدة",
+      service: "viewapp",
+      description: "شحن  تطبيقات المشاهدة المختلفة بسرعة و أمان",
+      image: viewapp,
+      buttonText: "عرض التفاصيل",
+      cardKey: 'viewapp',
+      route: "/internet",
+    },
 
   ];
 

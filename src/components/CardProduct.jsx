@@ -36,7 +36,7 @@ export default function CardProduct({
           {title}
         </h2>
 
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-500 text-sm ">
           {description}
         </p>
 

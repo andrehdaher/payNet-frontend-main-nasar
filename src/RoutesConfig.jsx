@@ -27,6 +27,7 @@ const ProductUpload = react.lazy(()=> import('./pages/ProductUpload') )
 const MaintenancePage = react.lazy(()=> import('./pages/MaintenancePage') )
 const PointPayment = react.lazy(()=> import('./pages/PointPayment') )
 const Play = react.lazy(()=> import('./pages/Play') )
+const PayApp = react.lazy(()=> import('./pages/PayApp') )
 
 
 export const routesConfig = [
@@ -38,6 +39,7 @@ export const routesConfig = [
   { path: "/play", element: <ProtectedRoute><Play /></ProtectedRoute> },
   { path: "/internet", element: <ProtectedRoute><Internet /></ProtectedRoute> },
   { path: "/payinternet", element: <ProtectedRoute><PayInternet /></ProtectedRoute> },
+  { path: "/payapp", element: <ProtectedRoute><PayApp /></ProtectedRoute> },
   { path: "/astalam", element: <ProtectedRoute><Astalam /></ProtectedRoute> },
 
   { path: "/balance", element: <ProtectedRoute><Balance /></ProtectedRoute> },

@@ -1,4 +1,5 @@
 import label from "daisyui/components/label";
+import { min } from "three/tsl";
 
 
 
@@ -15,6 +16,7 @@ export const internetDetails = {
         description: 'اختر نوع الدفع',
         label: 'رقم الارضي',
         multiplier: 1.05,
+        min : 1
     },
 
     ELEC: {
@@ -37,6 +39,7 @@ export const internetDetails = {
         description: 'اختر المحافظة',
         label: 'رقم الباركود',
         multiplier: 1.05,
+        min : 1
     },
 
     WATER: {
@@ -59,6 +62,7 @@ export const internetDetails = {
         description: 'اختر المحافظة',
         label: 'رقم الباركود',
         multiplier: 1.05,
+        min : 1
     },
     SYR: {
         companies: [
@@ -72,6 +76,7 @@ export const internetDetails = {
         description: 'اختر نوع الدفع',
         label: 'رقم الهاتف',
         multiplier: 1.075,
+        min : 1
     },
     MTN: {
         companies: [
@@ -85,6 +90,7 @@ export const internetDetails = {
         description: 'اختر نوع الدفع',
         label: 'رقم الهاتف',
         multiplier: 1.075,
+        min : 1
     },
 
     ADSL: {
@@ -126,6 +132,7 @@ export const internetDetails = {
         description: 'اختر الشركة',
         label: 'رقم الارضي',
         multiplier: 1.05,
+        min:1
     },
 
     IPTV: {
@@ -164,6 +171,7 @@ export const internetDetails = {
         description: 'اختر الباقة',
         label: 'رقم الارضي',
         multiplier: 1.05,
+        min : 1
     },
 
     RECHARGE: {
@@ -207,6 +215,7 @@ export const internetDetails = {
         description: 'اختر الباقة',
         label: 'رقم الارضي',
         multiplier: 1.05,
+        min:1
     },
     pubg: {
         companies: [
@@ -228,6 +237,7 @@ export const internetDetails = {
         description: 'اختر حجم الشدات',
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
+        min:1
     },
     pubgtr: {
         companies: [
@@ -246,6 +256,7 @@ export const internetDetails = {
 
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
+        min :1
     },
     freefire: {
         companies: [
@@ -271,7 +282,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر حجم الشدات',
-
+        min:1
     },
     ballpool8: {
         companies: [
@@ -295,7 +306,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر حجم العملات',
-
+        min:1
     },
     clashclans: {
         companies: [
@@ -314,6 +325,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر حجم العملات',
+        min:1
     },
     clashroyal: {
         companies: [
@@ -329,6 +341,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر حجم العملات',
+        min:1
     },
     jawakerman: {
         companies: [
@@ -341,6 +354,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 0.0127,
         description: 'اختر الكمية',
+        min : 10000,
     },
     jawaker: {
         companies: [
@@ -359,6 +373,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
+        min:1
     },
     knivesout: {
         companies: [
@@ -376,6 +391,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
+        min:1
     },
     ludoking: {
         companies: [
@@ -391,6 +407,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
+        min:1
     },
     mobilelegend: {
         companies: [
@@ -407,6 +424,7 @@ export const internetDetails = {
         label: 'يرجى ادخال User ID',
         multiplier: 1,
         description: 'اختر الكمية',
+        min:1
 
 
     },
@@ -421,6 +439,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
+        min:1
     },
     whithoutsurvivial: {
         companies: [
@@ -436,6 +455,60 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
+        min:1
+    },
+    USDTBEB20: {
+        companies: [
+            '',
+            'قم بتدخيل كمية USDT-BEB20 المراد شحنها'
+        ],
+        speeds: null,
+
+        title: "شحن  USDT-BEB20",
+        label: 'يرجى وضع رابط المحفظة',
+        multiplier: 123,
+        description: 'اختر الكمية',
+        min: 50,
+    },
+    USDTTRC20: {
+        companies: [
+            '',
+            'قم بتدخيل كمية USDT-TRC20 المراد شحنها'
+        ],
+        speeds: null,
+
+        title: "شحن  USDT-TRC20",
+        label: 'يرجى وضع رابط المحفظة',
+        multiplier: 123,
+        description: 'اختر الكمية',
+        min: 50,
+    },
+
+    BANKTR: {
+        companies: [
+            '',
+            'قم بتدخيل كمية BANK-TR المراد شحنها'
+        ],
+        speeds: 'BANKTR',
+
+        title: "شحن  BANK-TR",
+        label: 'يرجى  ادخال اسم المستقبل',
+        multiplier: 2.90,
+        description: 'اختر الكمية',
+        min : 100,
+    },
+    PAYCELL: {
+        companies: [
+            '',
+            'قم بتدخيل كمية PAYCELL المراد شحنها'
+        ],
+        speeds: null,
+
+        title: "شحن PAYCELL",
+        label: 'يرجى  ادخال معرف المستخدم',
+        multiplier: 2.90,
+        description: 'اختر الكمية',
+        min : 25,
     },
 
 

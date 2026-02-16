@@ -15,7 +15,8 @@ import SYRIATEL from '../assets/SYRIATEL.jpeg'
 import MTN from '../assets/MTN.jpeg'
 import PlayDetails from "../components/payInternet/PlayDetails";
 import ApplicationDetails from "../components/payInternet/ApplicationDetails";
-
+import Usdtpay from "../components/payInternet/Usdtpay";
+import ViewApp from "../components/payInternet/ViewApp";
 const Home = () => {
 
 
@@ -33,8 +34,8 @@ const Home = () => {
   const token = localStorage.getItem("token");
   const decoded = token ? parseJwt(token) : null;
   const email = decoded?.email;
-const ITEMS_PER_LOAD = 12;
-const [visibleCount, setVisibleCount] = useState(ITEMS_PER_LOAD);
+  const ITEMS_PER_LOAD = 12;
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_LOAD);
   const location = useLocation()
   const serviceType = location.state
 
@@ -129,14 +130,25 @@ const [visibleCount, setVisibleCount] = useState(ITEMS_PER_LOAD);
       [
         ...PlayDetails()
       ] :
-      serviceType == 'application'?
-      [
-        ...ApplicationDetails()
+      serviceType == 'application' ?
+        [
+          ...ApplicationDetails()
 
-      ] :
-      [];
+        ] :
+        serviceType == 'usdtpay' ?
+          [
+            ...Usdtpay()
 
-      const visibleServices = services.slice(0, visibleCount);
+
+          ] :
+          serviceType == 'viewapp' ?
+            [
+              ...ViewApp()
+            ]
+            :
+            [];
+
+  const visibleServices = services.slice(0, visibleCount);
 
 
   return (
@@ -166,21 +178,21 @@ const [visibleCount, setVisibleCount] = useState(ITEMS_PER_LOAD);
                 >{service.buttonText}</Button>
               </CardFooter>
             </Card>
-            
+
           })
-          
+
         }
       </div>
       {visibleCount < services.length && (
-  <div className="flex justify-center  mt-6">
-    <Button
-      className = 'w-80'
-      onClick={() => setVisibleCount(prev => prev + ITEMS_PER_LOAD)}
-    >
-      تحميل المزيد
-    </Button>
-  </div>
-)}
+        <div className="flex justify-center  mt-6">
+          <Button
+            className='w-80'
+            onClick={() => setVisibleCount(prev => prev + ITEMS_PER_LOAD)}
+          >
+            تحميل المزيد
+          </Button>
+        </div>
+      )}
 
     </ScreenWrapper>
   );
