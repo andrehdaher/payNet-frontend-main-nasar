@@ -1,6 +1,6 @@
 import React from "react";
 
-const AppCard = ({ data, onClick }) => {
+const AppCard = ({ data, onClick  }) => {
     return (
         <div
             className={`w-full max-w-sm ${data.bgdown}  rounded-2xl shadow-lg overflow-hidden border ${data.border} transform hover:scale-[1.02] transition-all duration-300`}
@@ -15,7 +15,7 @@ const AppCard = ({ data, onClick }) => {
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        No image
+                        No imagez
                     </div>
                 )}
 
@@ -49,7 +49,7 @@ const AppCard = ({ data, onClick }) => {
                 </div>
 
                 <button
-                     onClick={() => onClick && onClick(data)}
+                    onClick={() => onClick && onClick(data)}
                     className={`w-full mt-4 ${data.btnbg || "bg-violet-600"
                         } ${data.hoverbtn ? `hover:${data.hoverbtn}` : "hover:bg-violet-700"
                         } text-white py-2 rounded-xl font-medium transition`}

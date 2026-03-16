@@ -17,6 +17,7 @@ import PlayDetails from "../components/payInternet/PlayDetails";
 import ApplicationDetails from "../components/payInternet/ApplicationDetails";
 import Usdtpay from "../components/payInternet/Usdtpay";
 import ViewApp from "../components/payInternet/ViewApp";
+import AI from "../components/payInternet/AI";
 const Home = () => {
 
 
@@ -146,6 +147,10 @@ const Home = () => {
               ...ViewApp()
             ]
             :
+            serviceType == 'ai'?
+            [
+              ...AI()
+            ]:
             [];
 
   const visibleServices = services.slice(0, visibleCount);

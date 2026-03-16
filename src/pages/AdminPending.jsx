@@ -6,6 +6,22 @@ import { io } from "socket.io-client";
 export default function AdminPending() {
   const [payments, setPayments] = useState([]);
   const [socket, setSocket] = useState(null);
+
+
+  function parseJwt(token) {
+    try {
+      return JSON.parse(atob(token.split(".")[1]));
+
+    } catch (e) {
+      return null;
+    }
+  }
+  const token = localStorage.getItem("token");
+  const decoded = parseJwt(token);
+  const email = decoded?.email;
+
+
+
   useEffect(() => {
     // 1. إنشاء الاتصال بالسيرفر عبر سوكيت
     const newSocket = io("https://paynet-1.onrender.com"); // عدّل الرابط إذا لزم
@@ -29,7 +45,11 @@ export default function AdminPending() {
   const fetchPending = async () => {
     try {
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/pending"
+        "https://paynet-1.onrender.com/api/admin/pending", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
       );
       setPayments(res.data);
     } catch (error) {
@@ -81,7 +101,8 @@ export default function AdminPending() {
           email: payment.email,
           amount: payment.amount,
           reason,
-        }
+        },
+
       );
       alert("تم رفض العملية وإرجاع الرصيد بنجاح.");
       fetchPending();

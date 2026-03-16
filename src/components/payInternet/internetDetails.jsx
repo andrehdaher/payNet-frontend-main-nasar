@@ -16,7 +16,7 @@ export const internetDetails = {
         description: 'اختر نوع الدفع',
         label: 'رقم الارضي',
         multiplier: 1.05,
-        min : 1
+        min: 1
     },
 
     ELEC: {
@@ -39,7 +39,7 @@ export const internetDetails = {
         description: 'اختر المحافظة',
         label: 'رقم الباركود',
         multiplier: 1.05,
-        min : 1
+        min: 1
     },
 
     WATER: {
@@ -62,7 +62,7 @@ export const internetDetails = {
         description: 'اختر المحافظة',
         label: 'رقم الباركود',
         multiplier: 1.05,
-        min : 1
+        min: 1
     },
     SYR: {
         companies: [
@@ -76,7 +76,7 @@ export const internetDetails = {
         description: 'اختر نوع الدفع',
         label: 'رقم الهاتف',
         multiplier: 1.075,
-        min : 1
+        min: 1
     },
     MTN: {
         companies: [
@@ -90,7 +90,7 @@ export const internetDetails = {
         description: 'اختر نوع الدفع',
         label: 'رقم الهاتف',
         multiplier: 1.075,
-        min : 1
+        min: 1
     },
 
     ADSL: {
@@ -132,7 +132,7 @@ export const internetDetails = {
         description: 'اختر الشركة',
         label: 'رقم الارضي',
         multiplier: 1.05,
-        min:1
+        min: 1
     },
 
     IPTV: {
@@ -171,7 +171,7 @@ export const internetDetails = {
         description: 'اختر الباقة',
         label: 'رقم الارضي',
         multiplier: 1.05,
-        min : 1
+        min: 1
     },
 
     RECHARGE: {
@@ -215,8 +215,9 @@ export const internetDetails = {
         description: 'اختر الباقة',
         label: 'رقم الارضي',
         multiplier: 1.05,
-        min:1
+        min: 1
     },
+    
     pubg: {
         companies: [
             '',
@@ -237,7 +238,7 @@ export const internetDetails = {
         description: 'اختر حجم الشدات',
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
-        min:1
+        min: 1
     },
     pubgtr: {
         companies: [
@@ -256,7 +257,7 @@ export const internetDetails = {
 
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
-        min :1
+        min: 1
     },
     freefire: {
         companies: [
@@ -282,7 +283,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر حجم الشدات',
-        min:1
+        min: 1
     },
     ballpool8: {
         companies: [
@@ -306,12 +307,12 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر حجم العملات',
-        min:1
+        min: 1
     },
     clashclans: {
         companies: [
             '',
-            '80 DIAMOND ( السعر 161 ل.س ) clash of clans',
+                '80 DIAMOND ( السعر 161 ل.س ) clash of clans',
             '250 DIAMOND ( السعر 645 ل.س ) clash of clans',
             '1200 DIAMOND ( السعر 1326 ل.س ) clash of clans',
             'التذكرة الذهبية ( السعر 917 ل.س ) clash of clans',
@@ -325,7 +326,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر حجم العملات',
-        min:1
+        min: 1
     },
     clashroyal: {
         companies: [
@@ -341,7 +342,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر حجم العملات',
-        min:1
+        min: 1
     },
     jawakerman: {
         companies: [
@@ -354,7 +355,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 0.0127,
         description: 'اختر الكمية',
-        min : 10000,
+        min: 10000,
     },
     jawaker: {
         companies: [
@@ -373,7 +374,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
-        min:1
+        min: 1
     },
     knivesout: {
         companies: [
@@ -391,7 +392,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
-        min:1
+        min: 1
     },
     ludoking: {
         companies: [
@@ -407,7 +408,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
-        min:1
+        min: 1
     },
     mobilelegend: {
         companies: [
@@ -424,7 +425,7 @@ export const internetDetails = {
         label: 'يرجى ادخال User ID',
         multiplier: 1,
         description: 'اختر الكمية',
-        min:1
+        min: 1
 
 
     },
@@ -439,7 +440,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
-        min:1
+        min: 1
     },
     whithoutsurvivial: {
         companies: [
@@ -455,7 +456,7 @@ export const internetDetails = {
         label: 'يرجى ادخال معرف المستخدم',
         multiplier: 1,
         description: 'اختر الكمية',
-        min:1
+        min: 1
     },
     USDTBEB20: {
         companies: [
@@ -495,7 +496,7 @@ export const internetDetails = {
         label: 'يرجى  ادخال اسم المستقبل',
         multiplier: 2.90,
         description: 'اختر الكمية',
-        min : 100,
+        min: 100,
     },
     PAYCELL: {
         companies: [
@@ -508,7 +509,23 @@ export const internetDetails = {
         label: 'يرجى  ادخال معرف المستخدم',
         multiplier: 2.90,
         description: 'اختر الكمية',
-        min : 25,
+        min: 25,
+    },
+    chatjpt: {
+        companies: [
+            '',
+            'ChatGPT plus حساب جديد جاهز لمدة شهر (السعر 750)',
+            'ChatGPT plus شهري تجديد حسابك (السعر 1500)',
+
+        ],
+        speeds: 'chatjpt',
+        title: "شراء اشتراك chatjpt ",
+        label: 'باسورد حساب الشات',
+        multiplier: 1,
+        description: 'اختر الكمية',
+        min: 1
+
+
     },
 
 

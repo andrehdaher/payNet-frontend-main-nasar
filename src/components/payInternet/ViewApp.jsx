@@ -32,8 +32,8 @@ export default function ViewApp() {
         },
         {
             title: 'LOOK 4K',
-            formType: 'LOOK4K',
-            description: 'شحن SHAMNA بسرعة وأمان',
+            formType: 'LOOK 4K',
+            description: 'شحن LOOK 4K بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
             image: LOOK4K
@@ -56,7 +56,7 @@ export default function ViewApp() {
         },
         {
             title: 'ZAIN TV',
-            formType: 'ZAINTV',
+            formType: 'ZAIN TV',
             description: 'شحن ZAIN TV بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,

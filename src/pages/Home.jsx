@@ -10,6 +10,7 @@ import { useNotification } from "../context/NotificationContext";
 import NavBar from "../components/NavBar";
 import { io } from "socket.io-client";
 import SYR from '../assets/SYR.png'
+import AI from '../assets/AI.jpeg'
 import ScreenWrapper from "../components/ScreenWrapper";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/Custom/Card";
 import { Button } from "../components/Custom/Button";
@@ -90,6 +91,7 @@ const Home = () => {
       cardKey: 'cardInternet',
       route: "/internet",
     },
+
     {
       title: "فواتير الارضي",
       service: "PHONE",
@@ -153,6 +155,15 @@ const Home = () => {
       cardKey: 'viewapp',
       route: "/internet",
     },
+    {
+      title: "قسم ال AI",
+      service: "ai",
+      description: "شحن  تطبيقات الذكاء الاصطناعي المختلفة بسرعة و أمان",
+      image: AI,
+      buttonText: "عرض التفاصيل",
+      cardKey: 'ai',
+      route: "/internet",
+    },
 
   ];
 
@@ -173,7 +184,10 @@ const Home = () => {
         dir="rtl"
       >
         {cardTrue.map((service, idx) => (
-          <Card key={idx} className="">
+          <Card
+            onClick={() => navigate(service.route, { state: service.service })}
+
+            key={idx} className="">
             <CardContent>
               <img className="w-96 h-80 mx-auto object-cover" src={service.image} alt="" />
             </CardContent>
@@ -185,13 +199,7 @@ const Home = () => {
 
 
             <CardFooter>
-              <Button
-                className="ml-auto"
-                variant="outline"
-                onClick={() => navigate(service.route, { state: service.service })}
-              >
-                {service.buttonText}
-              </Button>
+
             </CardFooter>
           </Card>
         ))}

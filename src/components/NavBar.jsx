@@ -113,11 +113,11 @@ const NavBar = () => {
           label: "الارقام المحفوظة",
           icon: <FaStickyNote />,
         },
-        {
-          to: "/advertisements",
-          label: "المنتجات",
-          icon: <FaShoppingCart />,
-        },
+        // {
+        //   to: "/advertisements",
+        //   label: "المنتجات",
+        //   icon: <FaShoppingCart />,
+        // },
         {
           external: "https://wa.me/963993822320",
           label: "واتساب",

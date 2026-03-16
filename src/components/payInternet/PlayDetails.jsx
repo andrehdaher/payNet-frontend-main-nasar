@@ -1,6 +1,8 @@
 import Pubg from '../../assets/pubg.jpeg'
+
 import Freefire from '../../assets/freefire.jpeg'
 import Pubgtr from '../../assets/pubgtr.jpeg'
+
 import Ballbool8 from '../../assets/ball-bool8.jpeg'
 import Clashclans from '../../assets/clash-clans.jpeg'
 import Clashroyall from '../../assets/clash-royall.jpeg'
@@ -18,50 +20,50 @@ export default function PlayDetails() {
     const playDetails = [
         {
             title: "شحن pubg mobile",
-            formType: "pubg",
+            formType: "PUBG",
             description: "شحن حسابات لعبة pubg mobile بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: Pubg
         },
         {
             title: "شحن pubg turkey",
-            formType: "pubgtr",
+            formType: "PUBG TR",
             description: "شحن حسابات لعبة pubg turkey بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: Pubgtr
         },
         {
             title: "شحن free fire",
-            formType: "freefire",
+            formType: "FREE FIRE",
             description: "شحن حسابات لعبة فري فاير-free fire بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: Freefire
         },
         {
             title: "شحن ball pool 8",
-            formType: "ballpool8",
+            formType: "8 BALL POOL",
             description: "شحن حسابات لعبة ball pool 8 بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: Ballbool8
         },
         {
             title: "شحن clash of clans",
-            formType: "clashclans",
+            formType: "CLASH OF CLANS",
             description: "شحن حسابات لعبة clash of clans بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: Clashclans
         },
         {
             title: "شحن clash royal",
-            formType: "clashroyal",
+            formType: "CLASH ROYAL",
             description: "شحن حسابات لعبة clash royal بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: Clashroyall
         },
         {
@@ -74,50 +76,50 @@ export default function PlayDetails() {
         },
         {
             title: "شحن جواكر",
-            formType: "jawaker",
+            formType: "JAWAKER",
             description: "شحن حسابات لعبة جواكر-jawaker بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: Jawaker
         },
         {
             title: "شحن knives out",
-            formType: "knivesout",
+            formType: "KNIVES OUT",
             description: "شحن حسابات لعبة knives out بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: KnivesOut
         },
         {
             title: "شحن ludo king",
-            formType: "ludoking",
+            formType: "LUDO KING",
             description: "شحن حسابات لعبة ludo king بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: Ludo
         },
         {
             title: "شحن mobile legend",
-            formType: "mobilelegend",
+            formType: "MOBILE LEGENDS",
             description: "شحن حسابات لعبة mobile legend بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: MobileLegend
         },
         {
             title: "شحن project entropy",
-            formType: "projectentropy",
+            formType: "PROJECT ENTROPY",
             description: "شحن حسابات لعبة project entropy بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: ProjectEntropy
         },
         {
             title: "شحن whithout ",
-            formType: "whithoutsurvivial",
+            formType: "WHITHOUT SURVIVAL",
             description: "شحن حسابات لعبة whithout survivial بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            Action: (formType) => { navigate('/payapp', { state: formType }) },
             image: without
         },
     ];
