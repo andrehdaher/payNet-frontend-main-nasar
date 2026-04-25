@@ -123,7 +123,7 @@ import SODFACHAT from '../../assets/SODFACHAT.jpeg'
 export default function ApplicationDetails() {
     const navigate = useNavigate();
     const Action = (formType) => {
-        navigate('/payinternet', { state: formType });
+        navigate('/payinternet', { state: formType, replace: 2 });
     };
 
 
