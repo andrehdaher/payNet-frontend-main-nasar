@@ -18,6 +18,7 @@ import ApplicationDetails from "../components/payInternet/ApplicationDetails";
 import Usdtpay from "../components/payInternet/Usdtpay";
 import ViewApp from "../components/payInternet/ViewApp";
 import AI from "../components/payInternet/AI";
+import programes from "../components/payInternet/programes";
 const Home = () => {
 
 
@@ -147,11 +148,15 @@ const Home = () => {
               ...ViewApp()
             ]
             :
-            serviceType == 'ai'?
-            [
-              ...AI()
-            ]:
-            [];
+            serviceType == 'ai' ?
+              [
+                ...AI()
+              ] :
+              serviceType == 'Software' ?
+                [
+                  ...programes()
+                ] :
+                [];
 
   const visibleServices = services.slice(0, visibleCount);
 
@@ -165,9 +170,12 @@ const Home = () => {
 
         {
           visibleServices.map((service, idx) => {
-            return <Card key={idx} className="w-72 h-[22rem] hover:shadow-lg hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out">
+            return <Card
+                onClick={() => service.Action(service.formType)}
+
+             key={idx} className="w-72 h-[22rem] hover:shadow-lg hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out">
               <CardContent>
-                <img className="w-40 h-40 mx-auto object-cover" src={service.image} alt="" />
+                <img className="w-50 h-40 mx-auto object-cover" src={service.image} alt="" />
               </CardContent>
 
               <CardHeader>
@@ -175,13 +183,7 @@ const Home = () => {
                 <CardDescription>{service.description}</CardDescription>
               </CardHeader>
 
-              <CardFooter>
-                <Button
-                  className={'ml-auto'}
-                  variant="outline"
-                  onClick={() => service.Action(service.formType)}
-                >{service.buttonText}</Button>
-              </CardFooter>
+              
             </Card>
 
           })

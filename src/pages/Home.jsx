@@ -16,6 +16,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "../components/Custom/Button";
 import application from '../assets/application.jpeg'
 import viewapp from '../assets/viewapp.jpeg'
+import inv from '../assets/inv.jpeg'
 import axios from "axios";
 
 
@@ -83,12 +84,39 @@ const Home = () => {
 
   const services = [
     {
+      title: "برامج محاسبة وتطبيقات ذكية",
+      service: "Software",
+      description: "اكتشف أقوى برامج المحاسبة والتطبيقات للكمبيوتر والهاتف لتطوير عملك وزيادة إنتاجيتك.",
+      image: inv,
+      buttonText: "عرض التفاصيل",
+      cardKey: 'cardInternet',
+      route: "/internet",
+    },
+    {
       title: "فواتير الإنترنت",
       service: "ADSL",
       description: "ادفع فواتير الإنترنت الخاصة بك بسرعة وأمان.",
       image: ADSL,
       buttonText: "عرض التفاصيل",
       cardKey: 'cardInternet',
+      route: "/internet",
+    },
+    {
+      title: "قسم ال AI",
+      service: "ai",
+      description: "شحن  تطبيقات الذكاء الاصطناعي المختلفة بسرعة و أمان",
+      image: AI,
+      buttonText: "عرض التفاصيل",
+      cardKey: 'ai',
+      route: "/internet",
+    },
+    {
+      title: "قسم تطبيقات المشاهدة",
+      service: "viewapp",
+      description: "شحن  تطبيقات المشاهدة المختلفة بسرعة و أمان",
+      image: viewapp,
+      buttonText: "عرض التفاصيل",
+      cardKey: 'viewapp',
       route: "/internet",
     },
 
@@ -128,15 +156,15 @@ const Home = () => {
       cardKey: 'cardPlay',
       route: "/internet",
     },
-    // {
-    //   title: "قسم التطبيقات",
-    //   service: "application",
-    //   description: "شحن الطبيقات وبرامج المحادثة المختلفة بسرعة و أمان",
-    //   image: application,
-    //   buttonText: "عرض التفاصيل",
-    //   cardKey: 'cardapplication',
-    //   route: "/internet",
-    // },
+    {
+      title: "قسم التطبيقات",
+      service: "application",
+      description: "شحن الطبيقات وبرامج المحادثة المختلفة بسرعة و أمان",
+      image: application,
+      buttonText: "عرض التفاصيل",
+      cardKey: 'cardapplication',
+      route: "/internet",
+    },
     {
       title: "قسم الدفع الالكتروني",
       service: "usdtpay",
@@ -146,24 +174,8 @@ const Home = () => {
       cardKey: 'usdtpay',
       route: "/internet",
     },
-    {
-      title: "قسم تطبيقات المشاهدة",
-      service: "viewapp",
-      description: "شحن  تطبيقات المشاهدة المختلفة بسرعة و أمان",
-      image: viewapp,
-      buttonText: "عرض التفاصيل",
-      cardKey: 'viewapp',
-      route: "/internet",
-    },
-    {
-      title: "قسم ال AI",
-      service: "ai",
-      description: "شحن  تطبيقات الذكاء الاصطناعي المختلفة بسرعة و أمان",
-      image: AI,
-      buttonText: "عرض التفاصيل",
-      cardKey: 'ai',
-      route: "/internet",
-    },
+
+
 
   ];
 

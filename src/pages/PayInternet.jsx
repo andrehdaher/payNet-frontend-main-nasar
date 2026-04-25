@@ -15,7 +15,7 @@ export default function PayInternet() {
   const [selectedCompany, setSelectedCompany] = useState("");
   const [selectedSpeed, setSelectedSpeed] = useState("");
   const [amountToPay, setAmountToPay] = useState("");
-  const [paymentType, setPaymentType] = useState("cash"); // القيمة الافتراضية نقداً
+  const [paymentType, setPaymentType] = useState("cash"); // Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ© Ù†Ù‚Ø¯Ø§Ù‹
   const location = useLocation()
   const formType = location.state
   const config = internetDetails[formType] || {};
@@ -51,7 +51,7 @@ export default function PayInternet() {
     },
     {
       id: "amountToPay",
-      label: ['شحن يدوي jawaker'].includes(config.title) ? "ادخل الكمية التي تريد شحنها" : "المبلغ المراد تسديده",
+      label: ['Ø´Ø­Ù† ÙŠØ¯ÙˆÙŠ jawaker'].includes(config.title) ? "Ø§Ø¯Ø®Ù„ Ø§Ù„ÙƒÙ…ÙŠØ© Ø§Ù„ØªÙŠ ØªØ±ÙŠØ¯ Ø´Ø­Ù†Ù‡Ø§" : "Ø§Ù„Ù…Ø¨Ù„Øº Ø§Ù„Ù…Ø±Ø§Ø¯ ØªØ³Ø¯ÙŠØ¯Ù‡",
       type: "number",
       value: amountToPay,
       onChange: setAmountToPay,
@@ -59,7 +59,7 @@ export default function PayInternet() {
     },
     {
       id: "calculatedAmount",
-      label: "المبلغ المطلوب",
+      label: "Ø§Ù„Ù…Ø¨Ù„Øº Ø§Ù„Ù…Ø·Ù„ÙˆØ¨",
       type: "number",
       value: calculatedAmount,
       readOnly: true,
@@ -99,22 +99,22 @@ export default function PayInternet() {
           },
         }
       );
-      alert("تم التسديد بنجاح. الرصيد الجديد: " + res.data.newBalance);
+      alert("ØªÙ… Ø§Ù„ØªØ³Ø¯ÙŠØ¯ Ø¨Ù†Ø¬Ø§Ø­. Ø§Ù„Ø±ØµÙŠØ¯ Ø§Ù„Ø¬Ø¯ÙŠØ¯: " + res.data.newBalance);
 
 
-      // إعادة تعيين الحقول
+      // Ø¥Ø¹Ø§Ø¯Ø© ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ø­Ù‚ÙˆÙ„
       setLandline("");
       setSelectedCompany("");
       setSelectedSpeed("");
       setAmountToPay("");
-      // إعادة تحميل الصفحة أو تحديث الحالة حسب الحاجة
+      // Ø¥Ø¹Ø§Ø¯Ø© ØªØ­Ù…ÙŠÙ„ Ø§Ù„ØµÙØ­Ø© Ø£Ùˆ ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø­Ø§Ù„Ø© Ø­Ø³Ø¨ Ø§Ù„Ø­Ø§Ø¬Ø©
       window.location.reload();
 
     } catch (err) {
-      alert(err.response?.data?.message || "حدث خطأ");
-      // التوكن غير صالح، نسجل الخروج
-      localStorage.removeItem('token'); // أو حسب تخزينك للتوكن
-      window.location.href = '/login'; // إعادة توجيه لصفحة تسجيل الدخول
+      alert(err.response?.data?.message || "Ø­Ø¯Ø« Ø®Ø·Ø£");
+      // Ø§Ù„ØªÙˆÙƒÙ† ØºÙŠØ± ØµØ§Ù„Ø­ØŒ Ù†Ø³Ø¬Ù„ Ø§Ù„Ø®Ø±ÙˆØ¬
+      localStorage.removeItem('token'); // Ø£Ùˆ Ø­Ø³Ø¨ ØªØ®Ø²ÙŠÙ†Ùƒ Ù„Ù„ØªÙˆÙƒÙ†
+      window.location.href = '/login'; // Ø¥Ø¹Ø§Ø¯Ø© ØªÙˆØ¬ÙŠÙ‡ Ù„ØµÙØ­Ø© ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„
     } finally {
       setIsSubmitting(false);
     }
@@ -135,7 +135,7 @@ export default function PayInternet() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6 ">
-            {/* الحقول النصية */}
+            {/* Ø§Ù„Ø­Ù‚ÙˆÙ„ Ø§Ù„Ù†ØµÙŠØ© */}
             <div className="grid grid-cols-2 gap-6">
               {inputs.map((input, idx) => (
                 input.id == 1 ? <>
@@ -158,13 +158,13 @@ export default function PayInternet() {
                   </div>
                 </>
                   : input.id == 2 ? <>
-                    {/* اختيار السرعة أو العداد */}
+                    {/* Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø³Ø±Ø¹Ø© Ø£Ùˆ Ø§Ù„Ø¹Ø¯Ø§Ø¯ */}
                     {(Array.isArray(config.speeds) && config.speeds.length > 0) || config.speeds === "counter" || config.speeds === 'mobilelegend' || config.speeds === 'BANKTR' ? (
                       config.speeds === "counter" || config.speeds === 'mobilelegend' || config.speeds === 'BANKTR' ? (
                         <Input
                           key={input.id}
                           id={input.id}
-                          label={config.speeds === 'mobilelegend' ? 'يرجى ادخال Zone ID' : config.speeds === 'BANKTR' ? "يرجى ادخال رقم الحساب" : 'رقم الاشتراك / العداد'}
+                          label={config.speeds === 'mobilelegend' ? 'ÙŠØ±Ø¬Ù‰ Ø§Ø¯Ø®Ø§Ù„ Zone ID' : config.speeds === 'BANKTR' ? "ÙŠØ±Ø¬Ù‰ Ø§Ø¯Ø®Ø§Ù„ Ø±Ù‚Ù… Ø§Ù„Ø­Ø³Ø§Ø¨" : 'Ø±Ù‚Ù… Ø§Ù„Ø§Ø´ØªØ±Ø§Ùƒ / Ø§Ù„Ø¹Ø¯Ø§Ø¯'}
                           type={'number'}
                           value={selectedSpeed}
                           onChange={(e) => setSelectedSpeed(e.target.value)}
@@ -173,7 +173,7 @@ export default function PayInternet() {
                       ) : (
                         <div className="relative col-span-2">
                           <label className="block mb-1 mr-3 text-sm font-medium text-foreground">
-                            {formType == 'ADSL' ? 'اختر السرعة' : 'اختر الباقة'}
+                            {formType == 'ADSL' ? 'Ø§Ø®ØªØ± Ø§Ù„Ø³Ø±Ø¹Ø©' : 'Ø§Ø®ØªØ± Ø§Ù„Ø¨Ø§Ù‚Ø©'}
                           </label>
                           <select
                             value={selectedSpeed}
@@ -207,10 +207,10 @@ export default function PayInternet() {
               ))}
             </div>
 
-            {/* نوع الدفع */}
+            {/* Ù†ÙˆØ¹ Ø§Ù„Ø¯ÙØ¹ */}
             <div className="">
               <label className="block mb-2 mr-3 text-sm font-medium text-foreground">
-                نوع الدفع
+                Ù†ÙˆØ¹ Ø§Ù„Ø¯ÙØ¹
               </label>
               <div className="flex gap-2">
                 <Button
@@ -221,7 +221,7 @@ export default function PayInternet() {
                   }}
                   variant={paymentType == 'cash' ? 'default' : 'outline'}
                 >
-                  نقدا
+                  Ù†Ù‚Ø¯Ø§
                 </Button>
                 <Button
                   type={'button'}
@@ -231,12 +231,12 @@ export default function PayInternet() {
                   }}
                   variant={paymentType == 'credit' ? 'default' : 'outline'}
                 >
-                  دين
+                  Ø¯ÙŠÙ†
                 </Button>
               </div>
             </div>
 
-            {/* زر التسديد */}
+            {/* Ø²Ø± Ø§Ù„ØªØ³Ø¯ÙŠØ¯ */}
             <button
               type="submit"
               disabled={!isFormValid || isSubmitting}
@@ -245,7 +245,7 @@ export default function PayInternet() {
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
             >
-              {isSubmitting ? "جاري التسديد..." : "تسديد الفاتورة"}
+              {isSubmitting ? "Ø¬Ø§Ø±ÙŠ Ø§Ù„ØªØ³Ø¯ÙŠØ¯..." : "ØªØ³Ø¯ÙŠØ¯ Ø§Ù„ÙØ§ØªÙˆØ±Ø©"}
             </button>
           </form>
         </CardContent>
