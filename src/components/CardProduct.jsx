@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "./Custom/Button";
 
 export default function CardProduct({
   title,
@@ -9,57 +10,22 @@ export default function CardProduct({
   textButton,
 }) {
   return (
-    <div
-      className="
-        card bg-white w-80 mx-3
-        shadow-md
-        transition-all duration-300
-        border border-gray-100
-        hover:-translate-y-2 hover:shadow-xl
-        rounded-2xl
-        flex flex-col
-        flex-shrink-0
-      "
-    >
-      {/* الصورة */}
+    <div className="flex w-full max-w-xs flex-shrink-0 flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
       <figure className="p-4">
-        <img
-          src={image}
-          alt={title}
-          className="rounded-xl h-48 w-full"
-        />
+        <img src={image} alt={title} className="h-48 w-full rounded-md object-cover" />
       </figure>
 
-      {/* المحتوى */}
-      <div className="card-body p-5 flex flex-col flex-1">
-        <h2 className="card-title text-lg font-semibold text-gray-800">
-          {title}
-        </h2>
+      <div className="flex flex-1 flex-col p-5">
+        <h2 className="text-lg font-bold text-slate-900">{title}</h2>
 
-        <p className="text-gray-500 text-sm ">
-          {description}
-        </p>
+        <p className="mt-2 text-sm leading-6 text-slate-700">{description}</p>
 
-        {/* السعر + الزر (مثبت بالأسفل) */}
-        <div className="flex items-center justify-between mt-auto pt-4">
-          <span className="text-lg font-bold text-green-600">
-            {price}$
-          </span>
+        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+          <span className="text-lg font-bold text-emerald-700">{price}$</span>
 
-          <button
-            onClick={action}
-            className="
-              
-              btn btn-primary btn-sm
-              px-4 py-2
-              rounded-full
-              bg-violet-600 text-white
-              hover:scale-105
-              transition-transform
-            "
-          >
+          <Button type="button" onClick={action} size="sm">
             {textButton}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

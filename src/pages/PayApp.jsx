@@ -1,153 +1,138 @@
-import React from 'react'
+import React, { useState } from "react";
+import axios from "axios";
 import { useLocation } from "react-router-dom";
-import { appDetails } from '../components/payInternet/appDetails';
-import AppCard from '../components/payInternet/CardApp';
-import ScreenWrapper from '../components/ScreenWrapper';
-import { useState } from 'react';
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { appDetails } from "../components/payInternet/appDetails";
+import AppCard from "../components/payInternet/CardApp";
+import ScreenWrapper from "../components/ScreenWrapper";
 import PurchaseModal from "../components/payInternet/PurchaseModal";
-import axios from 'axios';
-
+import { useToast } from "../context/ToastContext";
+import {
+  authConfig,
+  getApiErrorMessage,
+  getCurrentEmail,
+  paymentQueryKeys,
+} from "../api/paymentQueries";
 
 export default function PayApp() {
-    const location = useLocation()
-    const formType = location.state
-    const config = appDetails[formType] || [];
-    const [paymentType, setPaymentType] = useState("cash");
-    const [showChatGPTForm, setShowChatGPTForm] = useState(false);
-    const [chatEmail, setChatEmail] = useState("");
-    const [chatPassword, setChatPassword] = useState("");
-    const [selectedCard, setSelectedCard] = useState(null);
-    const [card, setCard] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [name, setName] = useState(formType);
-    const [placeholder, setPlaceholder] = useState("ادخل الـ ID");
-    const [image, setImage] = useState("");
-    const [selectedProduct, setSelectedProduct] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+  const toast = useToast();
+  const location = useLocation();
+  const formType = location.state;
+  const config = appDetails[formType] || [];
+  const multiplier = config.multiplier || 1;
+  const [paymentType] = useState("cash");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
+  const productQuery = useQuery({
+    queryKey: paymentQueryKeys.productOnline(formType),
+    queryFn: async () => {
+      const response = await axios.get(`https://paynet-1.onrender.com/api/payment/save-number/api/productonline/get-product-online?name=${formType}`);
+      return {
+        card: response.data?.card?.[0] || [],
+        placeholder: response.data?.products?.[0]?.type || "ادخل الـ ID",
+      };
+    },
+    enabled: Boolean(formType),
+  });
 
+  const paymentMutation = useMutation({
+    mutationFn: ({ product, extra }) => {
+      const email = getCurrentEmail();
 
+      if (!email) {
+        throw new Error("الرجاء تسجيل الدخول");
+      }
 
+      const calculatedAmount = Number((product.price * multiplier).toFixed(2));
 
-    function parseJwt(token) {
-        try {
-            return JSON.parse(atob(token.split(".")[1]));
+      return axios.post(
+        "https://paynet-1.onrender.com/api/payment/save-number/api/payment/internet-full",
+        {
+          landline: product.name,
+          company: product.title,
+          speed: product.url,
+          amount: product.price,
+          email,
+          paymentType,
+          calculatedAmount,
+          ...extra,
+        },
+        authConfig(),
+      );
+    },
+    onSuccess: () => {
+      toast.success("تم التسديد بنجاح. سوف تصلكم معلومات الاشتراك برسالة واتساب");
+      setShowModal(false);
+      setSelectedProduct(null);
+    },
+    onError: (error) => {
+      toast.error(getApiErrorMessage(error, "حدث خطأ"));
+    },
+  });
 
-        } catch (e) {
-            return null;
-        }
+  const placeholder = productQuery.data?.placeholder || "ادخل الـ ID";
+  const cards = productQuery.data?.card || [];
+
+  const getPlaceholder = () => {
+    if (
+      placeholder.includes("view") ||
+      selectedProduct?.title?.includes("حساب جديد جاهز لمدة شهر")
+    ) {
+      return "ادخل رقم الواتس لارسال معلومات الاشتراك";
     }
 
-    const multiplier = config.multiplier;
+    if (selectedProduct?.title?.includes(" تجديد ")) {
+      return "ادخل الايميل";
+    }
 
+    return "ادخل الـ ID الخاص بك";
+  };
 
-    const handleSubmit = async (data) => {
-        setSelectedProduct(data);
-        setShowModal(true);
-
-    };
-
-
-    const sendPayment = async (data, extra = {}) => {
-        const token = localStorage.getItem("token");
-        const decoded = parseJwt(token);
-        const email = decoded?.email;
-
-        if (!email) {
-            alert("الرجاء تسجيل الدخول");
-            return;
+  return (
+    <>
+      <PurchaseModal
+        open={showModal}
+        title={selectedProduct?.title}
+        price={selectedProduct?.price}
+        name={selectedProduct?.name}
+        placeholder={getPlaceholder()}
+        loading={paymentMutation.isPending}
+        onClose={() => {
+          if (!paymentMutation.isPending) setShowModal(false);
+        }}
+        onConfirm={(value) =>
+          paymentMutation.mutateAsync({
+            product: selectedProduct,
+            extra: { playerId: value.value, password: value.password },
+          })
         }
+      />
 
-        const calculatedAmount = Number(
-            (data.price * multiplier).toFixed(2)
-        );
-
-        try {
-            const res = await axios.post(
-                "https://paynet-1.onrender.com/api/payment/internet-full",
-                {
-                    landline: data.name,
-                    company: data.title,
-                    speed: data.url,
-                    amount: data.price,
-                    email,
-                    paymentType,
-                    calculatedAmount: data.price,
-
-                    // 👇 بيانات إضافية (chatgpt)
-                    ...extra,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            alert(
-                "تم التسديد بنجاح.\nسوف تصلكم معلومات الاشتراك برسالة واتساب"
-            );
-
-            setShowChatGPTForm(false);
-            setChatEmail("");
-            setChatPassword("");
-
-        } catch (err) {
-            alert(err.response?.data?.message || "حدث خطأ");
-        }
-    };
-
-    const getProductOnline = async () => {
-        try {
-            const res = await axios.get(`https://paynet-1.onrender.com/api/productonline/get-product-online?name=${formType}`);
-            setImage(res.data.products[0].image);
-            setCard(res.data.card[0]);
-            setPlaceholder(res.data.products[0].type);
-        }
-        catch (err) {
-            alert(err.response?.data?.message || "حدث خطأ أثناء جلب المنتجات");
-        }
-    };
-
-    React.useEffect(() => {
-        getProductOnline();
-    }, [])
-
-
-
-    return (
-        <>
-            <PurchaseModal
-                open={showModal}
-
-                title={selectedProduct?.title}
-                price={selectedProduct?.price}
-                name={selectedProduct?.name}
-                placeholder={
-                    (placeholder && (placeholder.includes('view') || selectedProduct?.title?.includes('حساب جديد جاهز لمدة شهر'))) ?
-                        'ادخل رقم الواتس لارسال معلومات الاشتراك' :
-                        (selectedProduct?.title?.includes(' تجديد ')) ?
-                            'ادخل الايميل' :
-                            'ادخل الـ ID الخاص بك'
-                }
-                onClose={() => setShowModal(false)}
-                onConfirm={(value) => {
-                    sendPayment(selectedProduct, { playerId: value });
-                    setShowModal(false);
+      <ScreenWrapper>
+        {productQuery.isError && (
+          <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-800" dir="rtl">
+            {getApiErrorMessage(productQuery.error, "حدث خطأ أثناء جلب المنتجات")}
+          </div>
+        )}
+        <div className="my-2 grid grid-cols-1 place-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {productQuery.isLoading ? (
+            <p className="text-sm font-semibold text-slate-600" dir="rtl">جاري تحميل المنتجات...</p>
+          ) : (
+            cards.map((item, index) => (
+              <AppCard
+                key={item._id || item.id || index}
+                data={item}
+                name={formType}
+                onClick={(data) => {
+                  setSelectedProduct(data);
+                  setShowModal(true);
                 }}
-            />
-
-            <ScreenWrapper>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center my-2">
-
-                    {card.map((item, index) => (
-
-                        <AppCard key={index} data={item} name={name} onClick={handleSubmit} />
-
-                    ))}
-                </div>
-            </ScreenWrapper>
-        </>
-
-    )
+              />
+            ))
+          )}
+        </div>
+      </ScreenWrapper>
+    </>
+  );
 }

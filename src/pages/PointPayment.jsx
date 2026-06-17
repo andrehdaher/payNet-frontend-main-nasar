@@ -1,25 +1,22 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import Navbar from "../components/NavBar";
-import axios from "axios";
+import { Button } from "../components/Custom/Button";
+import { LoadingSkeleton } from "../components/Custom/LoadingSkeleton";
+import Alert from "../components/Custom/Alert";
+import {
+  fetchPaginated,
+  getApiErrorMessage,
+  getCurrentEmail,
+  paymentQueryKeys,
+} from "../api/paymentQueries";
 
 export default function PaymentStatement() {
-  const [payments, setPayments] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const [currentPage, setCurrentPage] = useState(1);
   const vantaRef = useRef(null);
   const [vantaEffect, setVantaEffect] = useState(null);
-  function parseJwt(token) {
-    try {
-      return JSON.parse(atob(token.split(".")[1]));
-    } catch (e) {
-      return null;
-    }
-  }
-
-  const token = localStorage.getItem("token");
-  const decoded = parseJwt(token);
-  const email = decoded?.email;
-
-
+  const email = getCurrentEmail();
 
   useEffect(() => {
     if (!vantaEffect && window.VANTA) {
@@ -31,7 +28,7 @@ export default function PaymentStatement() {
           points: 8.0,
           maxDistance: 20.0,
           spacing: 15.0,
-        })
+        }),
       );
     }
     return () => {
@@ -39,42 +36,56 @@ export default function PaymentStatement() {
     };
   }, [vantaEffect]);
 
+  const queryParams = { email, page: currentPage, limit: 20 };
+  const paymentsQuery = useQuery({
+    queryKey: paymentQueryKeys.pointPayments(queryParams),
+    queryFn: () =>
+      fetchPaginated(`https://paynet-1.onrender.com/api/payment/save-number/api/point/all-point?email=${email}`, {
+        page: currentPage,
+        limit: 20,
+      }),
+    enabled: Boolean(email),
+    placeholderData: keepPreviousData,
+  });
+
+  const payments = paymentsQuery.data?.data || [];
+  const pagination = paymentsQuery.data?.pagination || { totalPages: 1 };
 
   useEffect(() => {
-    const fetchPayments = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`https://paynet-1.onrender.com/api/point/all-point?email=${email}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setPayments(res.data);
-      } catch (error) {
-        console.error("فشل في جلب الدفعات:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPayments();
-  }, []);
+    if (email && currentPage < (pagination.totalPages || 1)) {
+      const nextParams = { email, page: currentPage + 1, limit: 20 };
+      queryClient.prefetchQuery({
+        queryKey: paymentQueryKeys.pointPayments(nextParams),
+        queryFn: () =>
+          fetchPaginated(`https://paynet-1.onrender.com/api/payment/save-number/api/point/all-point?email=${email}`, {
+            page: currentPage + 1,
+            limit: 20,
+          }),
+      });
+    }
+  }, [currentPage, email, pagination.totalPages, queryClient]);
 
   return (
-    <div >
+    <div>
       <Navbar />
-      <div ref={vantaRef} className="p-6 bg-gray-100 min-h-screen relative" dir="rtl">
+      <div ref={vantaRef} className="relative min-h-screen bg-gray-100 p-6" dir="rtl">
         <div className="relative z-10">
+          <h2 className="mb-6 text-center text-3xl font-bold text-black">البيان المالي للدفعات</h2>
 
-          <h2 className="text-3xl font-bold mb-6 text-black text-center">البيان المالي للدفعات</h2>
+          {paymentsQuery.isError && (
+            <Alert type="error" className="mb-4">
+              {getApiErrorMessage(paymentsQuery.error, "تعذر تحميل الدفعات.")}
+            </Alert>
+          )}
 
-          {loading ? (
-            <p className="text-center text-gray-500">جاري تحميل البيانات...</p>
+          {paymentsQuery.isLoading ? (
+            <LoadingSkeleton rows={6} />
           ) : payments.length === 0 ? (
             <p className="text-center text-gray-500">لا توجد دفعات محفوظة.</p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden text-sm">
+            <div className="overflow-x-auto rounded-lg bg-white shadow-md">
+              {paymentsQuery.isFetching && <div className="h-1 animate-pulse bg-violet-600" />}
+              <table className="min-w-full overflow-hidden text-sm">
                 <thead className="bg-violet-600 text-white">
                   <tr>
                     <th className="p-3">الاسم</th>
@@ -88,7 +99,7 @@ export default function PaymentStatement() {
                 </thead>
                 <tbody>
                   {payments.map((payment, index) => (
-                    <tr key={index} className="text-center border-b bg-[#00000050] hover:bg-gray-300">
+                    <tr key={payment._id || index} className="border-b bg-[#00000050] text-center hover:bg-gray-300">
                       <td className="p-3">{payment.name}</td>
                       <td className="p-3">{payment.destination}</td>
                       <td className="p-3">{payment.number}</td>
@@ -103,7 +114,17 @@ export default function PaymentStatement() {
             </div>
           )}
 
-        </div>      </div>
+          <div className="mt-4 flex items-center justify-center gap-3">
+            <Button disabled={currentPage <= 1 || paymentsQuery.isFetching} onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} variant="outline" size="sm">
+              السابق
+            </Button>
+            <span>صفحة {currentPage} من {pagination.totalPages || 1}</span>
+            <Button disabled={currentPage >= (pagination.totalPages || 1) || paymentsQuery.isFetching} onClick={() => setCurrentPage((p) => p + 1)} variant="outline" size="sm">
+              التالي
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

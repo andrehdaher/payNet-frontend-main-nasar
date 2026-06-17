@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import ServiceCard from "../components/Card";
 import { data, useNavigate } from "react-router-dom";
 import ADSL from "../assets/ADSL.png";
 import elecandwater from "../assets/elecandwater.png";
@@ -12,8 +11,9 @@ import { io } from "socket.io-client";
 import SYR from '../assets/SYR.png'
 import AI from '../assets/AI.jpeg'
 import ScreenWrapper from "../components/ScreenWrapper";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/Custom/Card";
-import { Button } from "../components/Custom/Button";
+import PageHeader from "../components/Custom/PageHeader";
+import ServiceCard from "../components/Custom/ServiceCard";
+import EmptyState from "../components/Custom/EmptyState";
 import application from '../assets/application.jpeg'
 import viewapp from '../assets/viewapp.jpeg'
 import inv from '../assets/inv.jpeg'
@@ -43,7 +43,7 @@ const Home = () => {
 
 
   useEffect(() => {
-    const newSocket = io("https://paynet-1.onrender.com");
+    const newSocket = io("https://paynet-1.onrender.com/api/payment/save-number");
 
     newSocket.on("connect", () => {
       newSocket.emit("financial", "done");
@@ -62,7 +62,7 @@ const Home = () => {
   const getUser = async () => {
 
     try {
-      const res = await axios.get(`https://paynet-1.onrender.com/api/user/get-user-by-email?email=${email}`, {
+      const res = await axios.get(`https://paynet-1.onrender.com/api/payment/save-number/api/user/get-user-by-email?email=${email}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -156,15 +156,15 @@ const Home = () => {
       cardKey: 'cardPlay',
       route: "/internet",
     },
-    {
-      title: "قسم التطبيقات",
-      service: "application",
-      description: "شحن الطبيقات وبرامج المحادثة المختلفة بسرعة و أمان",
-      image: application,
-      buttonText: "عرض التفاصيل",
-      cardKey: 'cardapplication',
-      route: "/internet",
-    },
+    // {
+    //   title: "قسم التطبيقات",
+    //   service: "application",
+    //   description: "شحن الطبيقات وبرامج المحادثة المختلفة بسرعة و أمان",
+    //   image: application,
+    //   buttonText: "عرض التفاصيل",
+    //   cardKey: 'cardapplication',
+    //   route: "/internet",
+    // },
     {
       title: "قسم الدفع الالكتروني",
       service: "usdtpay",
@@ -191,31 +191,29 @@ const Home = () => {
 
   return (
     <ScreenWrapper>
-      <div
-        className="grid gap-6 p-6 sm:grid-cols-2 lg:gap-16 lg:grid-cols-3 place-items-center"
-        dir="rtl"
-      >
+      <PageHeader
+        title="الخدمات المتاحة"
+        description="اختر الخدمة التي تريد تنفيذها. تظهر هنا الخدمات المفعلة لحسابك فقط."
+      />
+      {cardTrue.length === 0 ? (
+        <EmptyState
+          title="لا توجد خدمات مفعلة"
+          description="لم يتم تفعيل أي بطاقات خدمة لهذا الحساب بعد. تواصل مع الإدارة لتفعيل الخدمات المطلوبة."
+        />
+      ) : (
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" dir="rtl">
         {cardTrue.map((service, idx) => (
-          <Card
+          <ServiceCard
             onClick={() => navigate(service.route, { state: service.service })}
-
-            key={idx} className="">
-            <CardContent>
-              <img className="w-96 h-80 mx-auto object-cover" src={service.image} alt="" />
-            </CardContent>
-
-            <CardHeader>
-              <CardTitle>{service.title}</CardTitle>
-              <CardDescription>{service.description}</CardDescription>
-            </CardHeader>
-
-
-            <CardFooter>
-
-            </CardFooter>
-          </Card>
+            key={idx}
+            title={service.title}
+            description={service.description}
+            image={service.image}
+            actionLabel={service.buttonText}
+          />
         ))}
       </div>
+      )}
     </ScreenWrapper>
   );
 };

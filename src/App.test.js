@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import EmptyState from "./components/Custom/EmptyState";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test("renders shared empty state", () => {
+  render(<EmptyState title="لا توجد بيانات" description="اختبار حالة فارغة" />);
+  expect(screen.getByText("لا توجد بيانات")).toBeInTheDocument();
+  expect(screen.getByText("اختبار حالة فارغة")).toBeInTheDocument();
 });

@@ -115,7 +115,7 @@ export default function DataTable({
                                         {column.sortable ? (
                                             <Button
                                                 variant="ghost"
-                                                onClick={() => { handleSort(column.key); console.log(column.hidden) }}
+                                                onClick={() => { handleSort(column.key); }}
                                                 className={`h-auto p-0 font-medium`}
                                             >
                                                 {column.label}

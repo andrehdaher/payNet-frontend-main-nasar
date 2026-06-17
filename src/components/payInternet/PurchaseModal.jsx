@@ -1,116 +1,117 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { min } from "three/tsl";
+import { AnimatePresence, motion } from "framer-motion";
+import { X } from "lucide-react";
+import { Button } from "../Custom/Button";
+import { Input } from "../Custom/Input";
 
 export default function PurchaseModal({
-    open,
-    onClose,
-    onConfirm,
-    title,
-    price,
-    name,
-
-    placeholder = "ادخل القيمة",
-    confirmText = "شراء",
-    cancelText = "إلغاء",
+  open,
+  onClose,
+  onConfirm,
+  title,
+  price,
+  name,
+  placeholder = "أدخل القيمة",
+  confirmText = "شراء",
+  cancelText = "إلغاء",
+  loading: externalLoading = false,
 }) {
-      const [mainValue, setMainValue] = useState("");
+  const [mainValue, setMainValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
-    const [loading, setLoading] = useState(false);
+  const [internalLoading, setInternalLoading] = useState(false);
+  const needsPassword = name && name.includes("oldAccount");
+  const loading = externalLoading || internalLoading;
+
   const handleConfirm = async () => {
-    // لا نسمح بالتأكيد إذا كانت القيم فارغة أو جاري التنفيذ
-    if ((name && name.includes("oldAccount") && (!mainValue || !passwordValue)) || (!name.includes("oldAccount") && !mainValue) || loading) {
-      return;
-    }
+    if ((needsPassword && (!mainValue || !passwordValue)) || (!needsPassword && !mainValue) || loading) return;
 
     try {
-      setLoading(true);
-
-      // نرسل كائن القيم الصحيح حسب نوع الحساب
-      const dataToSend = name && name.includes("oldAccount")
-        ? { value: mainValue, password: passwordValue }
-        : { value: mainValue };
-
+      setInternalLoading(true);
+      const dataToSend = needsPassword ? { value: mainValue, password: passwordValue } : { value: mainValue };
       await onConfirm(dataToSend);
-
-      // إعادة تهيئة الحقول
       setMainValue("");
       setPasswordValue("");
     } finally {
-      setLoading(false);
+      setInternalLoading(false);
     }
   };
 
-    return (
-        <AnimatePresence>
-            {open && (
-                <motion.div
-                    className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={onClose}
-                >
-                    <motion.div
-                        onClick={(e) => e.stopPropagation()}
-                        initial={{ scale: 0.8, opacity: 0, y: 40 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.8, opacity: 0, y: 40 }}
-                        transition={{ type: "spring", stiffness: 260, damping: 22 }}
-                        className="bg-[#0f172a] w-full max-w-md rounded-3xl p-6 space-y-6 text-white relative shadow-2xl border border-white/10"
-                    >
-                        {/* السعر */}
-                        <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-700 to-blue-500 px-4 py-1.5 rounded-full text-sm font-bold shadow-lg">
-                            ل.س {price}
-                        </div>
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={loading ? undefined : onClose}
+          dir="rtl"
+          role="presentation"
+        >
+          <motion.div
+            onClick={(event) => event.stopPropagation()}
+            initial={{ scale: 0.96, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.96, opacity: 0, y: 20 }}
+            transition={{ duration: 0.18 }}
+            className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-lg border border-slate-200 bg-white p-5 text-slate-900 shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="purchase-modal-title"
+            aria-busy={loading}
+          >
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="absolute left-4 top-4 rounded-md p-1 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 disabled:opacity-60"
+              aria-label="إغلاق نافذة الشراء"
+            >
+              <X className="h-5 w-5" aria-hidden="true" />
+            </button>
 
-                        {/* العنوان */}
-                        <h2 className="text-xl font-bold text-right tracking-wide">
-                            {title}
-                        </h2>
+            <div className="mb-5">
+              <span className="inline-flex rounded-full bg-violet-100 px-3 py-1 text-sm font-bold text-violet-900">
+                {price} ل.س
+              </span>
+              <h2 id="purchase-modal-title" className="mt-3 text-xl font-bold leading-7 text-slate-900">
+                {title}
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-slate-700">
+                أدخل البيانات المطلوبة لإتمام الطلب.
+              </p>
+            </div>
 
-                        {/* Input */}
-                        <input
-                            type="text"
-                            placeholder={placeholder}
-                            value={mainValue}
-                            onChange={(e) => setMainValue(e.target.value)}
-                            className="w-full bg-gray-800/80 border border-gray-700 rounded-full px-5 py-3 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 text-right transition-all duration-200"
-                        />
-                        {name && name.includes('oldAccount') ?
-                            <input
-                                type="text"
-                                placeholder='باسورد حساب الشات'
-                                value={passwordValue}
-                                onChange={(e) => setPasswordValue(e.target.value)}
-                                className="w-full bg-gray-800/80 border border-gray-700 rounded-full px-5 py-3 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 text-right transition-all duration-200"
-                            /> : null}
+            <div className="space-y-4">
+              <Input
+                id="purchase-value"
+                label={placeholder}
+                value={mainValue}
+                onChange={(event) => setMainValue(event.target.value)}
+                required
+              />
+              {needsPassword && (
+                <Input
+                  id="purchase-password"
+                  label="باسورد حساب الشات"
+                  value={passwordValue}
+                  onChange={(event) => setPasswordValue(event.target.value)}
+                  required
+                />
+              )}
+            </div>
 
-
-                        {/* Buttons */}
-                        <div className="flex gap-4">
-                            <button
-                                onClick={handleConfirm}
-                                disabled={loading}
-                                className="flex-1 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-60 disabled:cursor-not-allowed rounded-full py-3 transition-all duration-200 font-semibold flex items-center justify-center gap-2"
-                            >
-                                {loading && (
-                                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                )}
-                                {loading ? "جاري التنفيذ..." : confirmText}
-                            </button>
-
-                            <button
-                                onClick={onClose}
-                                disabled={loading}
-                                className="flex-1 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white rounded-full py-3 transition-all duration-200 font-semibold"
-                            >
-                                {cancelText}
-                            </button>
-                        </div>
-                    </motion.div>
-                </motion.div>
-            )}
-        </AnimatePresence>
-    );
+            <div className="mt-6 grid grid-cols-2 gap-2">
+              <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
+                {cancelText}
+              </Button>
+              <Button type="button" variant="success" onClick={handleConfirm} loading={loading}>
+                {loading ? "جاري التنفيذ..." : confirmText}
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 }

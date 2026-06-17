@@ -1,105 +1,68 @@
-import React, { useEffect, useRef, useState } from "react";
-import ServiceCard from "../components/Card";
-import { data, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ADSL from "../assets/ADSL.png";
 import elecandwater from "../assets/elecandwater.png";
-import ARDE1 from "../assets/ARDE1.png"
+import ARDE1 from "../assets/ARDE1.png";
 import { useNotification } from "../context/NotificationContext";
-import NavBar from "../components/NavBar";
 import { io } from "socket.io-client";
+import ScreenWrapper from "../components/ScreenWrapper";
+import PageHeader from "../components/Custom/PageHeader";
+import ServiceCard from "../components/Custom/ServiceCard";
 
+const services = [
+  {
+    title: "تسديد فواتير الإنترنت",
+    description: "ادفع فواتير الإنترنت بسرعة وأمان.",
+    image: ADSL,
+    buttonText: "سدد الآن",
+    service: "ADSL",
+  },
+  {
+    title: "تسديد فواتير الأرضي",
+    description: "ادفع فواتير الهاتف الأرضي بسرعة وأمان.",
+    image: ARDE1,
+    buttonText: "سدد الآن",
+    service: "PHONE",
+  },
+  {
+    title: "تسديد كهرباء ومياه",
+    description: "إدارة فواتير الكهرباء والمياه بسهولة.",
+    image: elecandwater,
+    buttonText: "سدد الآن",
+    service: "ELEC",
+  },
+];
 
-
-const HomePoint = () => {
+export default function HomePoint() {
   const navigate = useNavigate();
-  const vantaRef = useRef(null);
-  const [vantaEffect, setVantaEffect] = useState(null);
-  const { hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
-  const [socket, setSocket] = useState(null);
-
+  const { setHasNewUnpaid } = useNotification();
 
   useEffect(() => {
-    const newSocket = io("https://paynet-1.onrender.com");
-
+    const newSocket = io("https://paynet-1.onrender.com/api/payment/save-number");
     newSocket.on("connect", () => {
-      console.log('تم الاتصال بالسيرفر')
       newSocket.emit("financial", "done");
     });
-
     newSocket.on("json_message", (data) => {
-      console.log(data)
-      setHasNewUnpaid(data)
+      setHasNewUnpaid(data);
     });
-
-    return () => {
-      newSocket.disconnect();
-    };
-
-  }, []);
-
-
-  useEffect(() => {
-    if (!vantaEffect && window.VANTA) {
-      setVantaEffect(
-        window.VANTA.NET({
-          el: vantaRef.current,
-          color: 0x0f172a,
-          backgroundColor: 0xeaeaea,
-          points: 8.0,
-          maxDistance: 20.0,
-          spacing: 15.0,
-        })
-      );
-    }
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
-  }, [vantaEffect]);
-
-  const services = [
-    {
-      title: "تسديد فواتير الإنترنت",
-      description: "ادفع فواتير الإنترنت الخاصة بك بسرعة وأمان.",
-      image: ADSL,
-      buttonText: "سدد الآن",
-      route: "/internet",
-    },
-    {
-      title: "تسديد فواتير الارضي",
-      description: "ادفع فواتير الارضي الخاصة بك بسرعة وأمان.",
-      image: ARDE1,
-      buttonText: "سدد الآن",
-      route: "/phone",
-    },
-    {
-      title: "تسديد كهرباء ومياه",
-      description: "إدارة فواتير الكهرباء والمياه بكل سهولة وأمان.",
-      image: elecandwater,
-      buttonText: "سدد الآن",
-      route: "/utilities",
-    },
-  ];
+    return () => newSocket.disconnect();
+  }, [setHasNewUnpaid]);
 
   return (
-    <div ref={vantaRef} className="min-h-screen w-full text-white relative">
-      <NavBar />
-      <div
-        className="grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 place-items-center"
-        dir="rtl"
-      >
-        {services.map((service, idx) => (
+    <ScreenWrapper>
+      <PageHeader title="خدمات نقطة البيع" description="اختر الخدمة المطلوبة لإتمام العملية." />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((service) => (
           <ServiceCard
-            key={idx}
+            key={service.service}
             title={service.title}
             description={service.description}
             image={service.image}
-            buttonText={service.buttonText}
-            onClick={() => navigate(service.route)}
+            actionLabel={service.buttonText}
+            onClick={() => navigate("/internet", { state: service.service })}
           />
         ))}
       </div>
-    </div>
+    </ScreenWrapper>
   );
-};
-
-export default HomePoint;
+}

@@ -5,8 +5,10 @@ import iptv from "../assets/iptv.png";
 import baka from "../assets/baka.png";
 import astfham from "../assets/astfham.png";
 import ScreenWrapper from "../components/ScreenWrapper";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/Custom/Card";
 import { Button } from "../components/Custom/Button";
+import PageHeader from "../components/Custom/PageHeader";
+import ServiceCard from "../components/Custom/ServiceCard";
+import EmptyState from "../components/Custom/EmptyState";
 import astalam from '../assets/astalam.png'
 import ADSL from '../assets/tasded.png'
 import elictric from '../assets/electric.png'
@@ -163,33 +165,32 @@ const Home = () => {
 
   return (
     <ScreenWrapper>
-      <div
-        className="grid gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:gap-12 lg:grid-cols-4 place-items-center"
-        dir="rtl"
-      >
+      <PageHeader
+        title="اختيار الخدمة"
+        description="اختر نوع العملية المطلوبة للمتابعة إلى نموذج الدفع أو الشراء."
+        onBack={() => navigate("/")}
+      />
 
+      {visibleServices.length === 0 ? (
+        <EmptyState title="لا توجد خدمات في هذا القسم" description="ارجع إلى الصفحة الرئيسية واختر قسما آخر." />
+      ) : (
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" dir="rtl">
         {
           visibleServices.map((service, idx) => {
-            return <Card
+            return <ServiceCard
                 onClick={() => service.Action(service.formType)}
-
-             key={idx} className="w-72 h-[22rem] hover:shadow-lg hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out">
-              <CardContent>
-                <img className="w-50 h-40 mx-auto object-cover" src={service.image} alt="" />
-              </CardContent>
-
-              <CardHeader>
-                <CardTitle>{service.title}</CardTitle>
-                <CardDescription>{service.description}</CardDescription>
-              </CardHeader>
-
-              
-            </Card>
+              key={idx}
+              title={service.title}
+              description={service.description}
+              image={service.image}
+              actionLabel={service.buttonText}
+            />
 
           })
 
         }
       </div>
+      )}
       {visibleCount < services.length && (
         <div className="flex justify-center  mt-6">
           <Button

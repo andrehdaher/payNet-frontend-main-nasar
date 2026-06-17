@@ -35,6 +35,7 @@ export const routesConfig = [
   { path: "/", element: <ProtectedRoute><Home /></ProtectedRoute> },
   { path: "/add-point", element: <ProtectedRoute><AddPoint /></ProtectedRoute> },
   { path: "/HomePoint", element: <ProtectedRoute><HomePoint /></ProtectedRoute> },
+  { path: "/home-point", element: <ProtectedRoute><HomePoint /></ProtectedRoute> },
   {path : '/PointPayment' , element : <ProtectedRoute><PointPayment/></ProtectedRoute>},
   { path: "/play", element: <ProtectedRoute><Play /></ProtectedRoute> },
   { path: "/internet", element: <ProtectedRoute><Internet /></ProtectedRoute> },

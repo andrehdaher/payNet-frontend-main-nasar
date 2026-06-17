@@ -1,192 +1,219 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import Navbar from "../components/NavbarAdmin";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { io } from "socket.io-client";
+import Navbar from "../components/NavbarAdmin";
+import PageHeader from "../components/Custom/PageHeader";
+import DataTable from "../components/Custom/DataTable";
+import StatusBadge from "../components/Custom/StatusBadge";
+import { Button } from "../components/Custom/Button";
+import ConfirmDialog from "../components/Custom/ConfirmDialog";
+import PromptDialog from "../components/Custom/PromptDialog";
+import Alert from "../components/Custom/Alert";
+import Footer from "../components/Footer";
+import {
+  authConfig,
+  fetchPaginated,
+  getApiErrorMessage,
+  paymentQueryKeys,
+} from "../api/paymentQueries";
 
 export default function AdminPending() {
-  const [payments, setPayments] = useState([]);
-  const [socket, setSocket] = useState(null);
+  const queryClient = useQueryClient();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [message, setMessage] = useState(null);
+  const [dialog, setDialog] = useState(null);
 
+  const queryParams = useMemo(
+    () => ({ page: currentPage, limit: itemsPerPage }),
+    [currentPage, itemsPerPage],
+  );
 
-  function parseJwt(token) {
-    try {
-      return JSON.parse(atob(token.split(".")[1]));
+  const pendingQuery = useQuery({
+    queryKey: paymentQueryKeys.adminPending(queryParams),
+    queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/admin/pending", queryParams),
+    placeholderData: keepPreviousData,
+  });
 
-    } catch (e) {
-      return null;
-    }
-  }
-  const token = localStorage.getItem("token");
-  const decoded = parseJwt(token);
-  const email = decoded?.email;
-
-
+  const payments = pendingQuery.data?.data || [];
+  const pagination = useMemo(
+    () => pendingQuery.data?.pagination || { total: 0, totalPages: 1 },
+    [pendingQuery.data?.pagination],
+  );
 
   useEffect(() => {
-    // 1. إنشاء الاتصال بالسيرفر عبر سوكيت
-    const newSocket = io("https://paynet-1.onrender.com"); // عدّل الرابط إذا لزم
-    setSocket(newSocket);
-
-    // 2. الاستماع للتحديثات من السيرفر
+    const newSocket = io("https://paynet-1.onrender.com/api/payment/save-number");
     newSocket.on("pendingPaymentsUpdate", (updatedPayments) => {
-      setPayments(updatedPayments);
+      queryClient.setQueryData(paymentQueryKeys.adminPending(queryParams), (current) => ({
+        data: Array.isArray(updatedPayments) ? updatedPayments : current?.data || [],
+        pagination: {
+          ...(current?.pagination || pagination),
+          total: Array.isArray(updatedPayments) ? updatedPayments.length : current?.pagination?.total || 0,
+        },
+      }));
     });
-
-    // 3. تنظيف الاتصال عند إغلاق المكون
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
+    return () => newSocket.disconnect();
+  }, [pagination, queryClient, queryParams]);
 
   useEffect(() => {
-    fetchPending();
-  }, []);
+    if (currentPage < (pagination.totalPages || 1)) {
+      const nextParams = { ...queryParams, page: currentPage + 1 };
+      queryClient.prefetchQuery({
+        queryKey: paymentQueryKeys.adminPending(nextParams),
+        queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/admin/pending", nextParams),
+      });
+    }
+  }, [currentPage, pagination.totalPages, queryClient, queryParams]);
 
-  const fetchPending = async () => {
-    try {
-      const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/pending", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+  const actionMutation = useMutation({
+    mutationFn: async ({ type, payment, reason }) => {
+      if (type === "confirm") {
+        return axios.patch(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/confirm/${payment._id}`, null, authConfig());
       }
-      );
-      setPayments(res.data);
-    } catch (error) {
-      console.error("فشل في جلب البيانات", error);
-    }
-  };
-
-  const confirmPayment = async (id, landline, amount, company) => {
-    const confirmed = window.confirm(
-      `هل أنت متأكد من تسديد رقم (${landline}) بمبلغ (${amount} ل.س) لشركة (${company})؟`
-    );
-
-    if (!confirmed) return;
-
-    try {
-      await axios.patch(
-        `https://paynet-1.onrender.com/api/admin/confirm/${id}`
-      );
-      fetchPending(); // إعادة التحديث بعد التأكيد
-    } catch (error) {
-      alert("حدث خطأ أثناء تأكيد التسديد");
-    }
-  };
-
-  const startPayment = async (id) => {
-    const confirmed = window.confirm('هل انت متاكد من بدء التسديد');
-
-    if (!confirmed) return;
-
-    try {
-      await axios.patch(
-        `https://paynet-1.onrender.com/api/admin/start/${id}`
-      );
-      fetchPending(); // إعادة التحديث بعد التأكيد
-    } catch (error) {
-      alert("حدث خطأ أثناء تأكيد التسديد");
-      console.log(error)
-    }
-  };
-
-  const rejectPayment = async (payment) => {
-    const reason = prompt("يرجى إدخال سبب رفض العملية:");
-    if (!reason) return;
-
-    try {
-      await axios.post(
-        `https://paynet-1.onrender.com/api/admin/reject/${payment._id}`,
+      if (type === "start") {
+        return axios.patch(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/start/${payment._id}`, null, authConfig());
+      }
+      return axios.post(
+        `https://paynet-1.onrender.com/api/payment/save-number/api/admin/reject/${payment._id}`,
         {
           email: payment.email,
           amount: payment.amount,
           reason,
         },
-
+        authConfig(),
       );
-      alert("تم رفض العملية وإرجاع الرصيد بنجاح.");
-      fetchPending();
-    } catch {
-      alert("حدث خطأ أثناء رفض العملية");
-    }
-  };
+    },
+    onSuccess: (_data, variables) => {
+      const successText =
+        variables.type === "confirm"
+          ? "تم تأكيد التسديد."
+          : variables.type === "start"
+            ? "تم بدء تنفيذ العملية."
+            : "تم رفض العملية وإرجاع الرصيد.";
+      setMessage({ type: "success", text: successText });
+      setDialog(null);
+      queryClient.invalidateQueries({ queryKey: ["payments", "admin-pending"] });
+    },
+    onError: (error) => {
+      setMessage({
+        type: "error",
+        text: getApiErrorMessage(error, "حدث خطأ أثناء تنفيذ العملية."),
+      });
+    },
+  });
+
+  const columns = useMemo(
+    () => [
+      { key: "email", label: "البريد الإلكتروني", render: (p) => p.email || "غير متوفر" },
+      { key: "landline", label: "رقم / معرف" },
+      { key: "company", label: "الشركة" },
+      { key: "speed", label: "السرعة" },
+      { key: "amount", label: "المبلغ", render: (p) => `${p.amount?.toLocaleString?.() || p.amount} ل.س` },
+      { key: "status", label: "الحالة", render: (p) => <StatusBadge value={p.status} /> },
+      {
+        key: "actions",
+        label: "الإجراء",
+        render: (p) => (
+          <div className="flex flex-wrap justify-center gap-2">
+            <Button size="sm" variant="warning" disabled={actionMutation.isPending} onClick={(e) => { e.stopPropagation(); setDialog({ type: "start", payment: p }); }}>
+              بدء التنفيذ
+            </Button>
+            <Button size="sm" variant="success" disabled={actionMutation.isPending} onClick={(e) => { e.stopPropagation(); setDialog({ type: "confirm", payment: p }); }}>
+              تأكيد التسديد
+            </Button>
+            <Button size="sm" variant="danger" disabled={actionMutation.isPending} onClick={(e) => { e.stopPropagation(); setDialog({ type: "reject", payment: p }); }}>
+              رفض
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [actionMutation.isPending],
+  );
+
+  const selected = dialog?.payment;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-slate-50 pt-20 pb-16" dir="rtl">
       <Navbar />
-      <h2 className="text-2xl font-bold text-center text-gray-700 mb-8">
-        عمليات قيد الترحيل
-      </h2>
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <PageHeader
+          title="عمليات قيد الترحيل"
+          description="راجع العمليات الواردة، ابدأ التنفيذ، ثم أكد التسديد أو ارفض العملية مع سبب واضح."
+          stats={[
+            { label: "إجمالي العمليات", value: payments.length },
+            { label: "قيد المتابعة", value: payments.filter((p) => p.status !== "تم التسديد").length },
+          ]}
+        />
 
-      <div className="overflow-x-auto shadow-lg rounded-lg bg-white">
-        <table className="min-w-full text-sm text-center text-gray-700">
-          <thead className="bg-blue-600 text-white text-sm">
-            <tr>
-              <th className="py-3 px-4">البريد الإلكتروني</th>
-              <th className="py-3 px-4">رقم أرضي</th>
-              <th className="py-3 px-4">الشركة</th>
-              <th className="py-3 px-4">السرعة</th>
-              <th className="py-3 px-4">المبلغ</th>
-              <th className="py-3 px-4">الحالة</th>
-              <th className="py-3 px-4">الاجراء</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payments.map((p) => (
-              <tr
-                key={p._id}
-                className="border-b hover:bg-gray-100 transition duration-200"
-              >
-                <td className="py-3 px-4">{p.email || "غير متوفر"}</td>
-                <td className="py-3 px-4">{p.landline}</td>
-                <td className="py-3 px-4">{p.company}</td>
-                <td className="py-3 px-4">{p.speed}</td>
-                <td className="py-3 px-4">{p.amount.toLocaleString()} ل.س</td>
-                <td className="py-3 px-4">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-semibold ${p.status === "جاري التسديد"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-green-100 text-green-800"
-                      }`}
-                  >
-                    {p.status}
-                  </span>
-                </td>
-                <td className="py-3 px-4">
-                  <button
-                    onClick={() =>
-                      confirmPayment(p._id, p.landline, p.amount, p.company)
-                    }
-                    className="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-1.5 rounded transition"
-                  >
-                    تأكيد التسديد
-                  </button>
-                  <button
-                    onClick={() => rejectPayment(p)}
-                    className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-4 mx-1 py-1.5 rounded transition"
-                  >
-                    رفض العملية
-                  </button>
-                  <button
-                    onClick={() => startPayment(p._id)}
-                    className="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 mx-1 py-1.5 rounded transition"
-                  >
-                    بدء التنفيذ
-                  </button>
-                </td>
-              </tr>
-            ))}
+        {(message || pendingQuery.isError) && (
+          <Alert type={message?.type || "error"} className="mb-4">
+            {message?.text || getApiErrorMessage(pendingQuery.error, "تعذر تحميل العمليات المعلقة.")}
+          </Alert>
+        )}
 
-            {payments.length === 0 && (
-              <tr>
-                <td colSpan="6" className="py-6 text-gray-500">
-                  لا توجد عمليات قيد الترحيل حاليًا.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+        <DataTable
+          columns={columns}
+          data={payments}
+          currentPage={currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={setCurrentPage}
+          pageSize={itemsPerPage}
+          onPageSizeChange={(size) => {
+            setItemsPerPage(size);
+            setCurrentPage(1);
+          }}
+          loading={pendingQuery.isLoading}
+          updating={pendingQuery.isFetching && !pendingQuery.isLoading}
+          emptyTitle="لا توجد عمليات معلقة"
+          emptyDescription="ستظهر العمليات الجديدة هنا عند وصولها."
+        />
+      </main>
+
+      <ConfirmDialog
+        open={dialog?.type === "confirm"}
+        title="تأكيد التسديد"
+        description={selected ? `هل تريد تأكيد تسديد الرقم ${selected.landline} بمبلغ ${selected.amount} ل.س؟` : ""}
+        confirmText="تأكيد التسديد"
+        tone="success"
+        loading={actionMutation.isPending}
+        onClose={() => {
+          if (!actionMutation.isPending) setDialog(null);
+        }}
+        onConfirm={() => selected && actionMutation.mutate({ type: "confirm", payment: selected })}
+      />
+
+      <ConfirmDialog
+        open={dialog?.type === "start"}
+        title="بدء التنفيذ"
+        description={selected ? `سيتم وضع العملية ${selected.landline} قيد التنفيذ.` : ""}
+        confirmText="بدء التنفيذ"
+        loading={actionMutation.isPending}
+        onClose={() => {
+          if (!actionMutation.isPending) setDialog(null);
+        }}
+        onConfirm={() => selected && actionMutation.mutate({ type: "start", payment: selected })}
+      />
+
+      <PromptDialog
+        open={dialog?.type === "reject"}
+        title="رفض العملية"
+        description="أدخل سبب الرفض ليظهر بشكل واضح في السجلات."
+        label="سبب الرفض"
+        placeholder="مثال: بيانات غير صحيحة"
+        confirmText="رفض العملية"
+        tone="danger"
+        loading={actionMutation.isPending}
+        onClose={() => {
+          if (!actionMutation.isPending) setDialog(null);
+        }}
+        onConfirm={(reason) => {
+          if (!reason || !selected) return;
+          actionMutation.mutate({ type: "reject", payment: selected, reason });
+        }}
+      />
+      <Footer />
     </div>
   );
 }

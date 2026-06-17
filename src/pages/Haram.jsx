@@ -1,177 +1,383 @@
-import React, { useState, useEffect, useRef } from "react";
-import Navbar from "../components/NavBar";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import ScreenWrapper from "../components/ScreenWrapper";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/Custom/Card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/Custom/Card";
 import { Input } from "../components/Custom/Input";
 import { Button } from "../components/Custom/Button";
-import { useLocation } from "react-router-dom";
 import qrImage from "../assets/QRcode.png";
+import { useToast } from "../context/ToastContext";
 
+const SERVICE_CONFIG = {
+  HARAM: {
+    label: "شركة الهرم",
+    destination: "ماهر حبيب ضاهر - محردة - هرم",
+    number: "0969735667",
+    requiresNumber: true,
+  },
+  SHAMKASH: {
+    label: "شام كاش",
+    destination: "andreh daher",
+    number: "0969735667",
+    requiresNumber: false,
+  },
+  FOAD: {
+    label: "شركة الفؤاد",
+    destination: "ماهر حبيب ضاهر - محردة - فؤاد",
+    number: "0969735667",
+    requiresNumber: true,
+  },
+};
 
-export default function TransferForm() {
+function parseJwt(token) {
+  try {
+    return JSON.parse(atob(token.split(".")[1]));
+  } catch {
+    return null;
+  }
+}
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const location = useLocation()
-  const serviceType = location.state
+function getCurrentUserEmail() {
+  const token = localStorage.getItem("token");
+  const decoded = parseJwt(token);
+  return decoded?.email || "";
+}
 
-  const [formData, setFormData] = useState({
-    name: "",
-    destination: serviceType == "HARAM" ? "ماهر حبيب ضاهر - محردة - هرم " : serviceType == "SHAMKASH" ? "andreh daher" : "ماهر حبيب ضاهر - محردة - فؤاد ",
-    number: serviceType == "FOAD" ? "0969735667" : "0969735667",
+function createInitialFormData(serviceConfig, name = "") {
+  return {
+    name,
+    destination: serviceConfig.destination,
+    number: serviceConfig.number,
     operator: "",
     noticeNumber: "",
     amount: "",
     date: "",
-  });
+  };
+}
 
-  function parseJwt(token) {
-    try {
-      return JSON.parse(atob(token.split(".")[1]));
-    } catch (e) {
-      return null;
-    }
-  }
+function trimValue(value) {
+  return String(value ?? "").trim();
+}
 
+export default function TransferForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const toast = useToast();
+  const location = useLocation();
 
+  const rawServiceType =
+    typeof location.state === "string" ? location.state : location.state?.service;
+  const serviceKey = SERVICE_CONFIG[rawServiceType] ? rawServiceType : "FOAD";
+  const serviceConfig = useMemo(() => SERVICE_CONFIG[serviceKey], [serviceKey]);
+
+  const [formData, setFormData] = useState(() =>
+    createInitialFormData(serviceConfig),
+  );
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const decoded = parseJwt(token);
-    if (decoded && decoded.email) {
-      setFormData((prev) => ({ ...prev, name: decoded.email }));
+    const email = getCurrentUserEmail();
+
+    setFormData((prev) => ({
+      ...prev,
+      name: prev.name || email,
+      destination: serviceConfig.destination,
+      number: serviceConfig.number,
+    }));
+  }, [serviceConfig]);
+
+  const validateForm = () => {
+    const nextErrors = {};
+    const noticeNumber = trimValue(formData.noticeNumber);
+    const amount = trimValue(formData.amount);
+    const numericAmount = Number(amount);
+
+    if (!trimValue(formData.name)) {
+      nextErrors.name = "يرجى إدخال اسم المستخدم.";
     }
-  }, []);
 
+    if (serviceConfig.requiresNumber && !trimValue(formData.number)) {
+      nextErrors.number = "يرجى إدخال الرقم.";
+    }
 
+    if (!trimValue(formData.destination)) {
+      nextErrors.destination = "يرجى إدخال جهة التحويل.";
+    }
 
+    if (!trimValue(formData.operator)) {
+      nextErrors.operator = "يرجى إدخال اسم صاحب الإشعار.";
+    }
+
+    if (!noticeNumber) {
+      nextErrors.noticeNumber = "يرجى إدخال رقم الإشعار.";
+    } else if (!/^\d+$/.test(noticeNumber)) {
+      nextErrors.noticeNumber = "يجب أن يحتوي رقم الإشعار على أرقام فقط.";
+    }
+
+    if (!amount) {
+      nextErrors.amount = "يرجى إدخال المبلغ.";
+    } else if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+      nextErrors.amount = "يجب أن يكون المبلغ أكبر من صفر.";
+    }
+
+    if (!formData.date) {
+      nextErrors.date = "يرجى اختيار تاريخ الحوالة.";
+    }
+
+    return nextErrors;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => {
+        const nextErrors = { ...prev };
+        delete nextErrors[name];
+        return nextErrors;
+      });
+    }
+
+    if (formError) {
+      setFormError("");
+    }
+  };
+
+  const resetForm = () => {
+    setFormData(createInitialFormData(serviceConfig, getCurrentUserEmail()));
+    setErrors({});
+    setFormError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitting) return; // حماية إضافية
-    setIsSubmitting(true);
+
+    if (isSubmitting) return;
+
+    const validationErrors = validateForm();
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setFormError("يرجى تصحيح الحقول المحددة قبل إرسال الإشعار.");
+      toast.error("يرجى تصحيح الحقول المحددة قبل إرسال الإشعار.");
+      return;
+    }
 
     const token = localStorage.getItem("token");
-    const decoded = parseJwt(token);
 
-    await axios.post("https://paynet-1.onrender.com/api/saveBalance/haram", formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    alert("تم تحويل الإشعار بنجاح");
+    if (!token) {
+      const message = "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.";
+      setFormError(message);
+      toast.error(message);
+      return;
+    }
 
-    setFormData({
-      name: "",
-      destination: "ماهر حبيب ضاهر - محردة - هرم ",
-      number: "0969735667",
-      operator: "",
-      noticeNumber: "",
-      amount: "",
-      date: "",
-    });
-    setIsSubmitting(false); // إعادة التفعيل
+    try {
+      setIsSubmitting(true);
+      setFormError("");
 
+      const payload = {
+        ...formData,
+        name: trimValue(formData.name),
+        destination: trimValue(formData.destination),
+        number: trimValue(formData.number),
+        operator: trimValue(formData.operator),
+        noticeNumber: trimValue(formData.noticeNumber),
+        amount: Number(formData.amount),
+      };
+
+      const res = await axios.post(
+        "https://paynet-1.onrender.com/api/payment/save-number/api/saveBalance/haram",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      toast.success(res.data?.message || "تم إرسال الإشعار بنجاح.");
+      resetForm();
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        "تعذر إرسال الإشعار. تحقق من الاتصال وحاول مرة أخرى.";
+
+      setFormError(message);
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <ScreenWrapper>
       <form
         onSubmit={handleSubmit}
-        className="w-3/4 mx-auto mt-8"
+        className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-8"
         dir="rtl"
+        noValidate
+        aria-busy={isSubmitting}
       >
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              تحويل اشعار
+        <Card className="border-slate-200 shadow-sm transition-shadow duration-200 hover:shadow-md">
+          <CardHeader className="border-b border-slate-200">
+            <CardTitle className="text-2xl text-slate-900">
+              تحويل إشعار {serviceConfig.label}
             </CardTitle>
+            <CardDescription className="text-sm text-slate-700">
+              أدخل بيانات الإشعار كما ظهرت في عملية التحويل ليتم تأكيد الرصيد من الإدارة.
+            </CardDescription>
           </CardHeader>
-          <CardContent className=' grid grid-cols-2 gap-2'>
-            <Input
-              name="name"
-              type="text"
-              label="اسم المستخدم"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
 
-            {
-              serviceType == 'SHAMKASH' ?
-                <div className="text-center space-y-2">
-                  <p className="font-semibold text-sm text-gray-600">امسح رمز QR التالي للتحويل إلى الرقم:</p>
-                  <img src={qrImage} alt="QR Code" className="mx-auto w-40 h-40 object-contain" />
+          <CardContent className="space-y-5 pt-5 sm:pt-6">
+            {formError && (
+              <div
+                role="alert"
+                className="rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm font-semibold leading-6 text-red-800"
+              >
+                {formError}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+              <Input
+                id="transfer-name"
+                name="name"
+                type="text"
+                label="اسم المستخدم"
+                value={formData.name}
+                onChange={handleChange}
+                error={errors.name}
+                helperText="سيتم استخدام هذا الاسم لمطابقة الطلب مع حسابك."
+                autoComplete="email"
+                required
+              />
+
+              {serviceKey === "SHAMKASH" ? (
+                <div
+                  className="rounded-md border border-slate-300 bg-slate-50 p-4 text-center shadow-sm transition-shadow duration-200"
+                  aria-labelledby="shamkash-qr-title"
+                >
+                  <p
+                    id="shamkash-qr-title"
+                    className="text-sm font-semibold leading-6 text-slate-800"
+                  >
+                    امسح رمز QR التالي للتحويل إلى حساب شام كاش
+                  </p>
+                  <img
+                    src={qrImage}
+                    alt="رمز QR للتحويل إلى حساب شام كاش"
+                    className="mx-auto mt-3 h-36 w-36 object-contain"
+                  />
                 </div>
-                :
+              ) : (
                 <Input
+                  id="transfer-number"
                   name="number"
                   type="text"
                   label="الرقم"
                   value={formData.number}
                   onChange={handleChange}
+                  error={errors.number}
+                  helperText="تأكد من مطابقة الرقم قبل إرسال الإشعار."
+                  inputMode="tel"
                   required
                 />
-            }
-            <Input
-              className='col-span-2'
-              name="destination"
-              type="text"
-              label="الى"
-              value={formData.destination}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              name="operator"
-              type="text"
-              label="صاحب الاشعار"
-              value={formData.operator}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              name="noticeNumber"
-              type="number"
-              label="رقم الإشعار"
-              value={formData.noticeNumber}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              name="amount"
-              type="number"
-              label="المبلغ"
-              value={formData.amount}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              name="date"
-              type="date"
-              label={'تاريخ الحوالة'}
-              value={formData.date}
-              onChange={handleChange}
-              required
-            />
-            {/*<Input
-              name="img"
-              type="file"
-              accept="image/*"
-              label={'صورة الاشعار'}
-              required
-            />*/}
-            <Button
-              type="submit"
-              className="w-full col-span-2"
-            >
-              {isSubmitting ? "جاري التحويل..." : "تحويل"}
-            </Button>
+              )}
+
+              <Input
+                id="transfer-destination"
+                name="destination"
+                type="text"
+                label="إلى"
+                value={formData.destination}
+                onChange={handleChange}
+                error={errors.destination}
+                helperText="جهة استلام التحويل."
+                containerClassName="sm:col-span-2"
+                required
+              />
+
+              <Input
+                id="transfer-operator"
+                name="operator"
+                type="text"
+                label="صاحب الإشعار"
+                value={formData.operator}
+                onChange={handleChange}
+                error={errors.operator}
+                autoComplete="name"
+                required
+              />
+
+              <Input
+                id="transfer-notice-number"
+                name="noticeNumber"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                label="رقم الإشعار"
+                value={formData.noticeNumber}
+                onChange={handleChange}
+                error={errors.noticeNumber}
+                required
+              />
+
+              <Input
+                id="transfer-amount"
+                name="amount"
+                type="number"
+                label="المبلغ"
+                value={formData.amount}
+                onChange={handleChange}
+                error={errors.amount}
+                helperText="أدخل المبلغ بالأرقام فقط."
+                min="1"
+                step="any"
+                required
+              />
+
+              <Input
+                id="transfer-date"
+                name="date"
+                type="date"
+                label="تاريخ الحوالة"
+                value={formData.date}
+                onChange={handleChange}
+                error={errors.date}
+                required
+              />
+
+              <div className="sm:col-span-2">
+                <Button
+                  type="submit"
+                  className="h-11 w-full"
+                  disabled={isSubmitting}
+                  loading={isSubmitting}
+                  aria-describedby="transfer-submit-status"
+                >
+                  {isSubmitting ? "جاري الإرسال..." : "إرسال الإشعار"}
+                </Button>
+                <p
+                  id="transfer-submit-status"
+                  className="sr-only"
+                  aria-live="polite"
+                >
+                  {isSubmitting ? "جاري إرسال الإشعار." : ""}
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </form>

@@ -5,6 +5,9 @@ import LiteBeam from '../assets/litebeam.png'
 import CardProduct from "../components/CardProduct";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import PageHeader from "../components/Custom/PageHeader";
+import EmptyState from "../components/Custom/EmptyState";
+import { Input } from "../components/Custom/Input";
 
 export default function Advertisements() {
   const [products, setProducts] = useState([])
@@ -13,7 +16,7 @@ export default function Advertisements() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/product/get-product",
+        "https://paynet-1.onrender.com/api/payment/save-number/api/product/get-product",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,9 +42,8 @@ export default function Advertisements() {
   const handleSearch = async () => {
     try {
       const token = localStorage.getItem("token");
-      console.log("Searching for:", name);
       const res = await axios.get(
-        `https://paynet-1.onrender.com/api/product/search-product?name=${name}`,
+        `https://paynet-1.onrender.com/api/payment/save-number/api/product/search-product?name=${name}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -69,20 +71,19 @@ export default function Advertisements() {
     <ScreenWrapper>
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-bold m-6 text-gray-800 p-3 flex flex-col items-center gap-2 transition-all duration-300 ease-out hover:-translate-y-2  hover:text-gray-900">
-            🛒 البضائع
-            <span className="w-full h-[4px] bg-gray-200 rounded"></span>
-          </h1>
-          <input
+          <PageHeader title="البضائع" description="ابحث عن المنتجات المتاحة واطلبها مباشرة عبر واتساب." />
+          <Input
+            id="product-search"
             type="text"
+            label="البحث"
             placeholder="ابحث عن منتج..."
-            className="w-full  p-2 border border-gray-300 rounded-lg mb-4 cursor-pointer  text-gray-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+            containerClassName="mb-4"
             value={name}
-
             onChange={(e) => setName(e.target.value)}
-
-
           />
+          {products.length === 0 ? (
+            <EmptyState title="لا توجد منتجات" description="غيّر البحث أو تحقق لاحقا عند إضافة منتجات جديدة." />
+          ) : (
           <div className="
   grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
   gap-6
@@ -105,6 +106,7 @@ export default function Advertisements() {
               />
             ))}
           </div>
+          )}
         </div>
 
 
