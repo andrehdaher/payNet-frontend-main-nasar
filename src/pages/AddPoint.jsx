@@ -11,6 +11,7 @@ import PageHeader from "../components/Custom/PageHeader";
 import ConfirmDialog from "../components/Custom/ConfirmDialog";
 import PromptDialog from "../components/Custom/PromptDialog";
 import Alert from "../components/Custom/Alert";
+import { apiUrl } from "../config/api";
 
 export default function AddPoint() {
   const navigate = useNavigate()
@@ -48,7 +49,7 @@ export default function AddPoint() {
 
     try {
       const res = await axios.get(
-        `https://paynet-1.onrender.com/api/payment/save-number/api/point/add-point?email=${decoded.email}`
+        apiUrl(`/api/point/add-point?email=${decoded.email}`)
       );
       setFormData(res.data);
     } catch (err) {
@@ -66,7 +67,7 @@ export default function AddPoint() {
 
     try {
       await axios.put(
-        `https://paynet-1.onrender.com/api/payment/save-number/api/point/add-balance/${id}`,
+        apiUrl(`/api/point/add-balance/${id}`),
         { amount, email, username, owner }
       );
       setMessage({ type: "success", text: "تمت إضافة الرصيد بنجاح." });
@@ -81,7 +82,7 @@ export default function AddPoint() {
   const handelDelete = async (id) => {
     try {
       await axios.delete(
-        `https://paynet-1.onrender.com/api/payment/save-number/api/point/delete/${id}`
+        apiUrl(`/api/point/delete/${id}`)
       );
       setMessage({ type: "success", text: "تم حذف النقطة." });
       getPoint();

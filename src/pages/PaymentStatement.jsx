@@ -28,7 +28,7 @@ export default function FinancialStatement() {
 
   const paymentsQuery = useQuery({
     queryKey: paymentQueryKeys.userBalance(queryParams),
-    queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/saveBalance/all", queryParams),
+    queryFn: () => fetchPaginated("/api/saveBalance/all", queryParams),
     placeholderData: keepPreviousData,
   });
 
@@ -50,7 +50,7 @@ export default function FinancialStatement() {
       const nextParams = { ...queryParams, page: currentPage + 1 };
       queryClient.prefetchQuery({
         queryKey: paymentQueryKeys.userBalance(nextParams),
-        queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/saveBalance/all", nextParams),
+        queryFn: () => fetchPaginated("/api/saveBalance/all", nextParams),
       });
     }
   }, [currentPage, pagination.totalPages, queryClient, queryParams]);

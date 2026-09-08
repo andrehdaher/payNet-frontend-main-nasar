@@ -11,6 +11,7 @@ import {
   getCurrentEmail,
   paymentQueryKeys,
 } from "../api/paymentQueries";
+import { apiUrl } from "../config/api";
 
 export default function AddSaveNum({ onClose, onSuccess }) {
   const toast = useToast();
@@ -64,7 +65,7 @@ export default function AddSaveNum({ onClose, onSuccess }) {
   const saveMutation = useMutation({
     mutationFn: () =>
       axios.post(
-        "https://paynet-1.onrender.com/api/payment/save-number/api/payment/save-number",
+        apiUrl("/api/payment/save-number"),
         { ...formData, email },
         authConfig(),
       ),

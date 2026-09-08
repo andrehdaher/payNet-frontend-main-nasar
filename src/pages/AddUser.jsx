@@ -6,6 +6,7 @@ import { Button } from "../components/Custom/Button";
 import { Input } from "../components/Custom/Input";
 import FormSection from "../components/Custom/FormSection";
 import Footer from "../components/Footer";
+import { apiUrl } from "../config/api";
 
 export default function AddUser() {
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ export default function AddUser() {
     setMessage(null);
 
     try {
-      const res = await fetch("https://paynet-1.onrender.com/api/payment/save-number/api/user", {
+      const res = await fetch(apiUrl("/api/user"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

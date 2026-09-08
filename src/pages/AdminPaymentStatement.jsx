@@ -14,6 +14,7 @@ import {
   getApiErrorMessage,
   paymentQueryKeys,
 } from "../api/paymentQueries";
+import { apiUrl } from "../config/api";
 
 export default function PaymentStatement() {
   const queryClient = useQueryClient();
@@ -25,7 +26,7 @@ export default function PaymentStatement() {
   const paymentsQuery = useQuery({
     queryKey: paymentQueryKeys.adminBalance({ page: currentPage, limit: itemsPerPage }),
     queryFn: () =>
-      fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/saveBalance/all-admin", {
+      fetchPaginated("/api/saveBalance/all-admin", {
         page: currentPage,
         limit: itemsPerPage,
       }),
@@ -40,7 +41,7 @@ export default function PaymentStatement() {
       const nextParams = { page: currentPage + 1, limit: itemsPerPage };
       queryClient.prefetchQuery({
         queryKey: paymentQueryKeys.adminBalance(nextParams),
-        queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/saveBalance/all-admin", nextParams),
+        queryFn: () => fetchPaginated("/api/saveBalance/all-admin", nextParams),
       });
     }
   }, [currentPage, pagination.totalPages, queryClient]);
@@ -48,7 +49,7 @@ export default function PaymentStatement() {
   const confirmMutation = useMutation({
     mutationFn: (payment) =>
       axios.post(
-        "https://paynet-1.onrender.com/api/payment/save-number/api/admin/confirm-payment",
+        apiUrl("/api/admin/confirm-payment"),
         {
           id: payment._id,
           email: payment.name,
@@ -85,7 +86,7 @@ export default function PaymentStatement() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (payment) => axios.delete(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/delete/${payment._id}`, authConfig()),
+    mutationFn: (payment) => axios.delete(apiUrl(`/api/admin/delete/${payment._id}`), authConfig()),
     onSuccess: () => {
       setMessage({ type: "success", text: "تم حذف الدفعة بنجاح." });
       setDialog(null);

@@ -13,6 +13,7 @@ import { Input } from "../components/Custom/Input";
 import { Button } from "../components/Custom/Button";
 import qrImage from "../assets/QRcode.png";
 import { useToast } from "../context/ToastContext";
+import { apiUrl } from "../config/api";
 
 const SERVICE_CONFIG = {
   HARAM: {
@@ -198,7 +199,7 @@ export default function TransferForm() {
       };
 
       const res = await axios.post(
-        "https://paynet-1.onrender.com/api/payment/save-number/api/saveBalance/haram",
+        apiUrl("/api/saveBalance/haram"),
         payload,
         {
           headers: {

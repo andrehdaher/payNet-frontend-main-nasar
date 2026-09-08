@@ -12,6 +12,11 @@ import { internetDetails } from "../components/payInternet/internetDetails";
 import PageHeader from "../components/Custom/PageHeader";
 import FormSection from "../components/Custom/FormSection";
 import { authConfig, getApiErrorMessage, getCurrentEmail } from "../api/paymentQueries";
+import { apiUrl } from "../config/api";
+import {
+  buildProWaveDirectTopUpRouteState,
+  getProWaveDirectTopUpGameByAlias,
+} from "../config/prowaveGames";
 
 const SUCCESS_ALERT_DURATION = 4000;
 
@@ -113,16 +118,26 @@ export default function PayInternet() {
     locationState && typeof locationState === "object"
       ? locationState.formType
       : locationState;
+  const legacyDirectTopUpGame = getProWaveDirectTopUpGameByAlias(formType);
   const prefilledLandline =
     locationState && typeof locationState === "object" ? locationState.landline || "" : "";
   const prefilledCompany =
     locationState && typeof locationState === "object" ? locationState.selectedCompany || "" : "";
-  const config = internetDetails[formType] || {};
+  const config = legacyDirectTopUpGame ? {} : internetDetails[formType] || {};
   const multiplier = config.multiplier || 1;
   const calculatedAmount = amountToPay ? (amountToPay * multiplier).toFixed(2) : "";
   const companies = config.companies || [];
   const speeds = Array.isArray(config.speeds) ? config.speeds : [];
   const title = config.title || "تنفيذ عملية دفع";
+
+  useEffect(() => {
+    if (!legacyDirectTopUpGame) return;
+
+    navigate("/payapp", {
+      replace: true,
+      state: buildProWaveDirectTopUpRouteState(legacyDirectTopUpGame),
+    });
+  }, [legacyDirectTopUpGame, navigate]);
 
   useEffect(() => {
     if (speedlessTypes.includes(formType)) setSelectedSpeed("0");
@@ -169,7 +184,7 @@ export default function PayInternet() {
   const paymentMutation = useMutation({
     mutationFn: () =>
       axios.post(
-        "https://paynet-1.onrender.com/api/payment/save-number/api/payment/internet-full",
+        apiUrl("/api/payment/internet-full"),
         {
           landline,
           company: selectedCompany,
@@ -211,6 +226,8 @@ export default function PayInternet() {
         ? "يرجى إدخال رقم الحساب"
         : "رقم الاشتراك / العداد";
 
+  if (legacyDirectTopUpGame) return null;
+
   return (
     <ScreenWrapper>
       <PaymentMessagePopup message={message} onClose={() => setMessage(null)} />
@@ -233,8 +250,8 @@ export default function PayInternet() {
               aria-busy={paymentMutation.isPending}
             >
               <FormSection
-                // title="بيانات العملية"
-                // description="أدخل معلومات الحساب أو الرقم المطلوب تسديده."
+              // title="بيانات العملية"
+              // description="أدخل معلومات الحساب أو الرقم المطلوب تسديده."
               >
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <Input

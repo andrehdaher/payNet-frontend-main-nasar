@@ -30,7 +30,7 @@ export default function AdminFinancialStatement() {
 
   const confirmedQuery = useQuery({
     queryKey: paymentQueryKeys.adminConfirmed(queryParams),
-    queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/admin/user/allconfirmed", queryParams),
+    queryFn: () => fetchPaginated("/api/admin/user/allconfirmed", queryParams),
     placeholderData: keepPreviousData,
   });
 
@@ -46,7 +46,7 @@ export default function AdminFinancialStatement() {
       const nextParams = { ...queryParams, page: currentPage + 1 };
       queryClient.prefetchQuery({
         queryKey: paymentQueryKeys.adminConfirmed(nextParams),
-        queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/admin/user/allconfirmed", nextParams),
+        queryFn: () => fetchPaginated("/api/admin/user/allconfirmed", nextParams),
       });
     }
   }, [currentPage, pagination.totalPages, queryClient, queryParams]);

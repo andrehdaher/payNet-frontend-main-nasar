@@ -9,6 +9,7 @@ import ConfirmDialog from "../components/Custom/ConfirmDialog";
 import PromptDialog from "../components/Custom/PromptDialog";
 import Alert from "../components/Custom/Alert";
 import Footer from "../components/Footer";
+import { apiUrl } from "../config/api";
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
@@ -21,7 +22,7 @@ export default function UsersTable() {
   const fetchUsers = () => {
     setLoading(true);
     axios
-      .get("https://paynet-1.onrender.com/api/payment/save-number/api/admin/all-user")
+      .get(apiUrl("/api/admin/all-user"))
       .then((res) => setUsers(res.data))
       .catch((err) => {
         console.error(err);
@@ -117,7 +118,7 @@ export default function UsersTable() {
         tone="danger"
         loading={actionLoading}
         onClose={() => setDialog(null)}
-        onConfirm={() => runAction(() => axios.delete(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/deleteuser/${selected._id}`), "تم حذف المستخدم.")}
+        onConfirm={() => runAction(() => axios.delete(apiUrl(`/api/admin/deleteuser/${selected._id}`)), "تم حذف المستخدم.")}
       />
 
       <PromptDialog
@@ -134,7 +135,7 @@ export default function UsersTable() {
         onConfirm={(value) => {
           const amount = parseFloat(value);
           if (Number.isNaN(amount)) return;
-          runAction(() => axios.put(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/addbatch/${selected._id}`, { amount }), "تمت إضافة الدفعة بنجاح.");
+          runAction(() => axios.put(apiUrl(`/api/admin/addbatch/${selected._id}`), { amount }), "تمت إضافة الدفعة بنجاح.");
         }}
       />
       <Footer />

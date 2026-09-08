@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, LogOut, Home, Users, WalletCards, FileText, PackagePlus } from "lucide-react";
+import { Menu, X, LogOut, Home, Users, WalletCards, FileText, PackagePlus, RefreshCw, Activity, Tags } from "lucide-react";
 
 const navItems = [
   { to: "/adminpending", label: "العمليات المعلقة", icon: Home, group: "المدفوعات" },
   { to: "/adminfinancial", label: "بيان التسديد", icon: FileText, group: "المدفوعات" },
   { to: "/adminPaymentStatement", label: "بيان الدفعات", icon: WalletCards, group: "المالية" },
   { to: "/admindaen", label: "الديون", icon: WalletCards, group: "المالية" },
+  { to: "/adminExchangeRate", label: "سعر الصرف", icon: RefreshCw, group: "المالية" },
+  { to: "/adminProWavePrices", label: "أسعار ProWave", icon: Tags, group: "المالية" },
+  { to: "/adminProWaveReconciliation", label: "مطابقة المزوّد", icon: Activity, group: "المالية" },
   { to: "/adminAddUser", label: "إضافة مستخدم", icon: Users, group: "المستخدمون" },
   { to: "/allUser", label: "عرض المستخدمين", icon: Users, group: "المستخدمون" },
   { to: "/productUpload", label: "إضافة منتج", icon: PackagePlus, group: "المنتجات" },

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { io } from "socket.io-client";
+import { RefreshCw } from "lucide-react";
 import Navbar from "../components/NavbarAdmin";
 import PageHeader from "../components/Custom/PageHeader";
 import DataTable from "../components/Custom/DataTable";
@@ -17,6 +18,8 @@ import {
   getApiErrorMessage,
   paymentQueryKeys,
 } from "../api/paymentQueries";
+import { apiUrl } from "../config/api";
+import { ENABLE_ALESO_PRODUCTS } from "../config/features";
 
 export default function AdminPending() {
   const queryClient = useQueryClient();
@@ -32,7 +35,7 @@ export default function AdminPending() {
 
   const pendingQuery = useQuery({
     queryKey: paymentQueryKeys.adminPending(queryParams),
-    queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/admin/pending", queryParams),
+    queryFn: () => fetchPaginated("/api/admin/pending", queryParams),
     placeholderData: keepPreviousData,
   });
 
@@ -43,7 +46,7 @@ export default function AdminPending() {
   );
 
   useEffect(() => {
-    const newSocket = io("https://paynet-1.onrender.com/api/payment/save-number");
+    const newSocket = io(apiUrl(""));
     newSocket.on("pendingPaymentsUpdate", (updatedPayments) => {
       queryClient.setQueryData(paymentQueryKeys.adminPending(queryParams), (current) => ({
         data: Array.isArray(updatedPayments) ? updatedPayments : current?.data || [],
@@ -61,7 +64,7 @@ export default function AdminPending() {
       const nextParams = { ...queryParams, page: currentPage + 1 };
       queryClient.prefetchQuery({
         queryKey: paymentQueryKeys.adminPending(nextParams),
-        queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/admin/pending", nextParams),
+        queryFn: () => fetchPaginated("/api/admin/pending", nextParams),
       });
     }
   }, [currentPage, pagination.totalPages, queryClient, queryParams]);
@@ -69,13 +72,13 @@ export default function AdminPending() {
   const actionMutation = useMutation({
     mutationFn: async ({ type, payment, reason }) => {
       if (type === "confirm") {
-        return axios.patch(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/confirm/${payment._id}`, null, authConfig());
+        return axios.patch(apiUrl(`/api/admin/confirm/${payment._id}`), null, authConfig());
       }
       if (type === "start") {
-        return axios.patch(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/start/${payment._id}`, null, authConfig());
+        return axios.patch(apiUrl(`/api/admin/start/${payment._id}`), null, authConfig());
       }
       return axios.post(
-        `https://paynet-1.onrender.com/api/payment/save-number/api/admin/reject/${payment._id}`,
+        apiUrl(`/api/admin/reject/${payment._id}`),
         {
           email: payment.email,
           amount: payment.amount,
@@ -99,6 +102,25 @@ export default function AdminPending() {
       setMessage({
         type: "error",
         text: getApiErrorMessage(error, "حدث خطأ أثناء تنفيذ العملية."),
+      });
+    },
+  });
+
+  const refreshAlesoMutation = useMutation({
+    mutationFn: () => axios.post(apiUrl("/api/aleso/refresh-pending"), {}, authConfig()),
+    onSuccess: (response) => {
+      const checked = response.data?.data?.checked ?? 0;
+      const updated = response.data?.data?.updated ?? 0;
+      setMessage({
+        type: "success",
+        text: `تم تحديث طلبات Aleso المعلقة. تم فحص ${checked} طلب وتحديث ${updated}.`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["payments", "admin-pending"] });
+    },
+    onError: (error) => {
+      setMessage({
+        type: "error",
+        text: getApiErrorMessage(error, "تعذر تحديث طلبات Aleso المعلقة."),
       });
     },
   });
@@ -141,6 +163,17 @@ export default function AdminPending() {
         <PageHeader
           title="عمليات قيد الترحيل"
           description="راجع العمليات الواردة، ابدأ التنفيذ، ثم أكد التسديد أو ارفض العملية مع سبب واضح."
+          actions={ENABLE_ALESO_PRODUCTS &&
+            <Button
+              type="button"
+              variant="outline"
+              loading={refreshAlesoMutation.isPending}
+              onClick={() => refreshAlesoMutation.mutate()}
+            >
+              <RefreshCw className="h-4 w-4" aria-hidden="true" />
+              تحديث Aleso
+            </Button>
+          }
           stats={[
             { label: "إجمالي العمليات", value: payments.length },
             { label: "قيد المتابعة", value: payments.filter((p) => p.status !== "تم التسديد").length },

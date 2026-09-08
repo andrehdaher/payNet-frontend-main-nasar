@@ -15,7 +15,7 @@ export default function PendingPayments() {
 
   const pendingQuery = useQuery({
     queryKey: paymentQueryKeys.userPending(),
-    queryFn: () => fetchList("https://paynet-1.onrender.com/api/payment/save-number/api/admin/user/pending"),
+    queryFn: () => fetchList("/api/admin/user/pending"),
     placeholderData: keepPreviousData,
   });
 

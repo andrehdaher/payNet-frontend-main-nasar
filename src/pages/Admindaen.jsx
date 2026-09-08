@@ -9,6 +9,7 @@ import ConfirmDialog from "../components/Custom/ConfirmDialog";
 import { Button } from "../components/Custom/Button";
 import { LoadingSkeleton } from "../components/Custom/LoadingSkeleton";
 import { authConfig, fetchList, getApiErrorMessage, paymentQueryKeys } from "../api/paymentQueries";
+import { apiUrl } from "../config/api";
 
 export default function PaymentStatement() {
   const queryClient = useQueryClient();
@@ -17,7 +18,7 @@ export default function PaymentStatement() {
 
   const paymentsQuery = useQuery({
     queryKey: paymentQueryKeys.adminDaen(),
-    queryFn: () => fetchList("https://paynet-1.onrender.com/api/payment/save-number/api/admin/daen"),
+    queryFn: () => fetchList("/api/admin/daen"),
   });
 
   const payments = paymentsQuery.data || [];
@@ -25,7 +26,7 @@ export default function PaymentStatement() {
   const confirmMutation = useMutation({
     mutationFn: (payment) =>
       axios.post(
-        "https://paynet-1.onrender.com/api/payment/save-number/api/admin/confirm-daen",
+        apiUrl("/api/admin/confirm-daen"),
         {
           id: payment._id,
           email: payment.name,
@@ -55,7 +56,7 @@ export default function PaymentStatement() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (payment) => axios.delete(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/delete/${payment._id}`, authConfig()),
+    mutationFn: (payment) => axios.delete(apiUrl(`/api/admin/delete/${payment._id}`), authConfig()),
     onSuccess: () => {
       setMessage({ type: "success", text: "تم حذف الدفعة بنجاح." });
       setDialog(null);

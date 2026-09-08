@@ -15,6 +15,7 @@ import {
   getCurrentEmail,
   paymentQueryKeys,
 } from "../api/paymentQueries";
+import { normalizePaymentStatusLabel } from "../utils/paymentStatus";
 
 export default function FinancialStatement() {
   const queryClient = useQueryClient();
@@ -22,6 +23,7 @@ export default function FinancialStatement() {
   const itemsPerPage = 10;
   const location = useLocation();
   const pointData = location.state;
+  const pointUsername = pointData?.username || "";
   const [searchDate, setSearchDate] = useState("");
   const [searchLandline, setSearchLandline] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
@@ -37,21 +39,26 @@ export default function FinancialStatement() {
       date: searchDate || undefined,
       status: searchStatus || undefined,
       paymentType: paymentFilter || undefined,
-      emailPoint: email,
+      pointUsername: pointUsername || undefined,
     }),
-    [currentPage, email, searchLandline, searchDate, searchStatus, paymentFilter],
+    [currentPage, pointUsername, searchLandline, searchDate, searchStatus, paymentFilter],
+  );
+  const queryKeyParams = useMemo(
+    () => ({ ...queryParams, ownerEmail: email }),
+    [email, queryParams],
   );
 
   const confirmedQuery = useQuery({
-    queryKey: paymentQueryKeys.pointConfirmed(queryParams),
+    queryKey: paymentQueryKeys.pointConfirmed(queryKeyParams),
     queryFn: () =>
-      fetchPaginated(`https://paynet-1.onrender.com/api/payment/save-number/api/point/user/confirmed/point?emailPoint=${email}`, {
+      fetchPaginated("/api/point/user/confirmed/point", {
         page: currentPage,
         limit: itemsPerPage,
         search: searchLandline || undefined,
         date: searchDate || undefined,
         status: searchStatus || undefined,
         paymentType: paymentFilter || undefined,
+        pointUsername: pointUsername || undefined,
       }),
     enabled: Boolean(email),
     placeholderData: keepPreviousData,
@@ -68,24 +75,31 @@ export default function FinancialStatement() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchLandline, searchDate, searchStatus, paymentFilter]);
+  }, [pointUsername, searchLandline, searchDate, searchStatus, paymentFilter]);
 
   useEffect(() => {
     if (email && currentPage < (pagination.totalPages || 1)) {
       const nextParams = { ...queryParams, page: currentPage + 1 };
       queryClient.prefetchQuery({
-        queryKey: paymentQueryKeys.pointConfirmed(nextParams),
+        queryKey: paymentQueryKeys.pointConfirmed({ ...nextParams, ownerEmail: email }),
         queryFn: () =>
-          fetchPaginated(`https://paynet-1.onrender.com/api/payment/save-number/api/point/user/confirmed/point?emailPoint=${email}`, {
-            ...nextParams,
-            emailPoint: undefined,
-          }),
+          fetchPaginated("/api/point/user/confirmed/point", nextParams),
       });
     }
   }, [currentPage, email, pagination.totalPages, queryClient, queryParams]);
 
   const columns = useMemo(
     () => [
+      {
+        key: "pointUsername",
+        label: "النقطة",
+        render: (p) => p.pointUsername || p.email || "-",
+      },
+      {
+        key: "pointOwner",
+        label: "صاحب النقطة",
+        render: (p) => p.pointOwner || "-",
+      },
       { key: "landline", label: "رقم أرضي" },
       { key: "company", label: "الشركة" },
       { key: "speed", label: "السرعة" },
@@ -93,16 +107,20 @@ export default function FinancialStatement() {
       {
         key: "status",
         label: "الحالة",
-        render: (p) => (
-          <span
-            className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
-              p.status === "تم التسديد" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"
-            }`}
-          >
-            {p.status === "تم التسديد" && <CheckCircle className="h-3.5 w-3.5" aria-hidden="true" />}
-            {p.status}
-          </span>
-        ),
+        render: (p) => {
+          const displayStatus = normalizePaymentStatusLabel(p.status);
+
+          return (
+            <span
+              className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
+                displayStatus === "تم التسديد" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"
+              }`}
+            >
+              {displayStatus === "تم التسديد" && <CheckCircle className="h-3.5 w-3.5" aria-hidden="true" />}
+              {displayStatus}
+            </span>
+          );
+        },
       },
       {
         key: "date",
@@ -122,11 +140,15 @@ export default function FinancialStatement() {
     [],
   );
 
+  const title = pointData?.owner
+    ? `البيان المالي لـ ${pointData.owner}`
+    : "البيان المالي للنقاط الفرعية";
+
   return (
     <ScreenWrapper>
       <PageHeader
-        title={`البيان المالي ${pointData?.owner ? `لـ ${pointData.owner}` : ""}`}
-        description="راجع عمليات النقطة الفرعية مع فلاتر البحث والحالة."
+        title={title}
+        description={pointUsername ? "راجع عمليات هذه النقطة الفرعية." : "راجع عمليات كل النقاط الفرعية التابعة لحسابك."}
       />
       {confirmedQuery.isError && (
         <Alert type="error" className="mb-4">
@@ -136,7 +158,7 @@ export default function FinancialStatement() {
       <Card className="m-6">
         <CardHeader>
           <h2 className="text-center text-3xl font-bold text-gray-700">
-            البيان المالي لـ {pointData?.owner}
+            {title}
           </h2>
         </CardHeader>
         <CardContent>

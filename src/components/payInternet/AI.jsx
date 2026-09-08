@@ -14,7 +14,7 @@ export default function AI() {
 
     const AI = [
         {
-            title: 'CHATGPT',
+            title: 'CHATGPT (يدوي)',
             formType: 'CHATGPT',
             description: 'شحن CHATGPT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
@@ -22,7 +22,7 @@ export default function AI() {
             image: CHATGPT
         },
         {
-            title: 'GEMINI',
+            title: 'GEMINI (يدوي)',
             formType: 'GEMINI',
             description: 'شحن GEMINI بسرعة وأمان',
             buttonText: "عرض التفاصيل",

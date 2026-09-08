@@ -15,6 +15,7 @@ import {
   getCurrentEmail,
   paymentQueryKeys,
 } from "../api/paymentQueries";
+import { apiUrl } from "../config/api";
 
 export default function Notebooks() {
   const queryClient = useQueryClient();
@@ -29,7 +30,7 @@ export default function Notebooks() {
   const savedNumbersQuery = useQuery({
     queryKey: paymentQueryKeys.savedNumbers(email),
     queryFn: async () => {
-      const response = await axios.get(`https://paynet-1.onrender.com/api/payment/save-number/api/payment/save-number?email=${email}`, authConfig());
+      const response = await axios.get(apiUrl(`/api/payment/save-number?email=${email}`), authConfig());
       return response.data || [];
     },
     enabled: Boolean(email),
@@ -44,7 +45,7 @@ export default function Notebooks() {
   const paySelectedMutation = useMutation({
     mutationFn: ({ selectedNumbers, selectedData }) =>
       axios.post(
-        "https://paynet-1.onrender.com/api/payment/save-number/api/payment/pay-selected",
+        apiUrl("/api/payment/pay-selected"),
         {
           email,
           numbers: selectedNumbers,
@@ -68,7 +69,7 @@ export default function Notebooks() {
   const editMutation = useMutation({
     mutationFn: ({ rowId, values }) =>
       axios.put(
-        `https://paynet-1.onrender.com/api/payment/save-number/api/payment/save-number/${rowId}`,
+        apiUrl(`/api/payment/save-number/${rowId}`),
         values,
         authConfig(),
       ),
@@ -85,7 +86,7 @@ export default function Notebooks() {
 
   const deleteMutation = useMutation({
     mutationFn: (row) =>
-      axios.delete(`https://paynet-1.onrender.com/api/payment/save-number/api/payment/save-number/${row._id || row.id}`, {
+      axios.delete(apiUrl(`/api/payment/save-number/${row._id || row.id}`), {
         ...authConfig(),
         data: { email },
       }),
@@ -349,7 +350,7 @@ export default function Notebooks() {
               data={formData}
               currentPage={1}
               totalPages={1}
-              onPageChange={() => {}}
+              onPageChange={() => { }}
               loading={savedNumbersQuery.isLoading}
               updating={savedNumbersQuery.isFetching && !savedNumbersQuery.isLoading}
             />

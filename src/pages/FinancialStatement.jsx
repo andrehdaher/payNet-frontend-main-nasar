@@ -17,6 +17,8 @@ import {
   getCurrentEmail,
   paymentQueryKeys,
 } from "../api/paymentQueries";
+import { apiUrl } from "../config/api";
+import { normalizePaymentStatusLabel } from "../utils/paymentStatus";
 
 function getTodayDate() {
   return new Date().toLocaleDateString("en-CA", {
@@ -27,6 +29,240 @@ function getTodayDate() {
 function getRefusedSeenKey(userEmail, date = getTodayDate()) {
   return `paynet:refused-seen:${userEmail || "anonymous"}:${date}`;
 }
+
+const getPayloadData = (value) => {
+  const candidates = [
+    value?.message?.data,
+    value?.data?.message?.data,
+    value?.data?.data,
+    value?.data,
+    value?.message && typeof value.message === "object" ? value.message : undefined,
+    value,
+  ];
+
+  return candidates.find((item) => item !== undefined && item !== null && item !== "") || {};
+};
+
+const CODE_KEYS = [
+  "code",
+  "pin",
+  "card_number",
+  "cardNumber",
+  "serial",
+  "digital_code",
+  "digitalCode",
+  "voucher",
+  "username",
+  "email",
+  "password",
+  "replay",
+  "reply",
+  "message",
+];
+
+const readPath = (source, path) =>
+  path.reduce(
+    (value, key) => (value && value[key] !== undefined ? value[key] : undefined),
+    source,
+  );
+
+const isObject = (value) =>
+  Boolean(value) && typeof value === "object" && !Array.isArray(value);
+
+const hasCodeFields = (value) =>
+  isObject(value) && CODE_KEYS.some((key) => value[key] !== undefined && value[key] !== null && value[key] !== "");
+
+const normalizeCodeArray = (value) => {
+  if (value === undefined || value === null || value === "") return [];
+  if (Array.isArray(value)) return value.filter((item) => item !== undefined && item !== null && item !== "");
+  if (!isObject(value)) return [value];
+  if (hasCodeFields(value)) return [value];
+
+  return Object.values(value).filter((item) => item !== undefined && item !== null && item !== "");
+};
+
+const getCodeArray = (source) => {
+  if (Array.isArray(source)) return source;
+
+  const payload = getPayloadData(source);
+  const paths = [
+    ["digital_codes"],
+    ["digitalCodes"],
+    ["digital_code"],
+    ["digitalCode"],
+    ["codes"],
+    ["cards"],
+    ["items"],
+    ["replay_api"],
+    ["replayApi"],
+    ["order", "replay_api"],
+    ["order", "replayApi"],
+    ["aleso_order_data", "replay_api"],
+    ["aleso_order_data", "replayApi"],
+    ["aleso_response", "data", "replay_api"],
+    ["prowave_codes_response", "message", "data", "digital_codes"],
+    ["prowave_codes_response", "data", "digital_codes"],
+    ["prowave_codes_response", "digital_codes"],
+    ["prowave_codes_response", "codes"],
+    ["prowave_response", "message", "data", "digital_codes"],
+    ["prowave_response", "data", "digital_codes"],
+    ["prowave_response", "digital_codes"],
+    ["prowave_response", "codes"],
+  ];
+
+  for (const path of paths) {
+    const codes = normalizeCodeArray(readPath(payload, path));
+    if (codes.length) return codes;
+  }
+
+  for (const path of paths) {
+    const codes = normalizeCodeArray(readPath(source, path));
+    if (codes.length) return codes;
+  }
+
+  return hasCodeFields(payload) ? [payload] : [];
+};
+
+const getProWaveCodes = (payment) => {
+  const extra = payment?.extra || {};
+  if (extra.provider !== "prowave") return [];
+
+  const candidates = [
+    getCodeArray(extra.digital_codes),
+    getCodeArray(extra.prowave_purchase_data),
+    getCodeArray(extra.prowave_response),
+    getCodeArray(extra.prowave_codes_response),
+  ];
+
+  return candidates.find((codes) => codes.length > 0) || [];
+};
+
+const isProWaveDirectTopUpPayment = (payment) => {
+  const extra = payment?.extra || {};
+  return (
+    extra.provider === "prowave" &&
+    (extra.operation_type === "direct_topup" ||
+      extra.prowave_operation_type === "direct_topup")
+  );
+};
+
+const formatProWaveCode = (code) => {
+  if (!code || typeof code !== "object") return String(code || "-");
+
+  const codeParts = CODE_KEYS
+    .map((key) => code[key])
+    .filter((value) => value !== undefined && value !== null && value !== "")
+    .map(String);
+
+  return codeParts.length ? codeParts.join(" / ") : JSON.stringify(code);
+};
+
+const renderProWaveDirectTopUp = (payment) => {
+  const extra = payment?.extra || {};
+  const requestName = extra.prowave_request_name || extra.name;
+  const status = normalizePaymentStatusLabel(extra.recharge_status || payment.status);
+  const rejectionReason = extra.rejection_reason || payment.note;
+
+  return (
+    <div className="mx-auto max-w-[240px] space-y-1 whitespace-normal text-right">
+      <div className="rounded-md bg-sky-50 px-2 py-1">
+        <p className="break-words text-xs font-bold text-sky-900">
+          {requestName || "بانتظار اسم الطلب"}
+        </p>
+        {status && (
+          <p className="mt-0.5 text-[11px] font-semibold text-sky-700">
+            {status}
+          </p>
+        )}
+        {rejectionReason && payment.status?.includes("غير") && (
+          <p className="mt-0.5 text-[11px] font-semibold text-red-700">
+            {rejectionReason}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const renderProWaveCodes = (payment) => {
+  if (payment?.extra?.provider !== "prowave") return "-";
+
+  if (isProWaveDirectTopUpPayment(payment)) {
+    return renderProWaveDirectTopUp(payment);
+  }
+
+  const codes = getProWaveCodes(payment);
+  if (!codes.length) {
+    return <span className="text-xs font-semibold text-amber-700">بانتظار الكود</span>;
+  }
+
+  return (
+    <div className="mx-auto max-w-[240px] space-y-1 whitespace-normal text-right">
+      {codes.map((code, index) => (
+        <div key={`${formatProWaveCode(code)}-${index}`} className="rounded-md bg-emerald-50 px-2 py-1">
+          <p className="break-words font-mono text-xs font-bold text-emerald-900">
+            {formatProWaveCode(code)}
+          </p>
+          {code?.status && (
+            <p className="mt-0.5 text-[11px] font-semibold text-emerald-700">{code.status}</p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const formatAlesoReply = (reply) => {
+  if (!reply || typeof reply !== "object") return String(reply || "-");
+
+  const values = CODE_KEYS
+    .map((key) => reply[key])
+    .filter((value) => value !== undefined && value !== null && value !== "")
+    .map((value) => (Array.isArray(value) ? value.join(" / ") : String(value)));
+
+  return values.length ? values.join(" / ") : JSON.stringify(reply);
+};
+
+const renderAlesoOrder = (payment) => {
+  const extra = payment?.extra || {};
+  if (extra.provider !== "aleso") return "-";
+
+  const orderId = extra.aleso_order_id || extra.order_id || extra.order_uuid;
+  const status = normalizePaymentStatusLabel(extra.aleso_status || payment.status);
+  const replies = [
+    ...normalizeCodeArray(extra.replay_api),
+    ...getCodeArray(extra.aleso_order_data),
+    ...getCodeArray(extra.aleso_response),
+  ].filter(Boolean);
+
+  return (
+    <div className="mx-auto max-w-[260px] space-y-1 whitespace-normal text-right">
+      <div className="rounded-md bg-violet-50 px-2 py-1">
+        <p className="break-words text-xs font-bold text-violet-900">
+          {orderId || "بانتظار رقم الطلب"}
+        </p>
+        {status && (
+          <p className="mt-0.5 text-[11px] font-semibold text-violet-700">
+            {status}
+          </p>
+        )}
+      </div>
+      {replies.map((reply, index) => (
+        <div key={`${formatAlesoReply(reply)}-${index}`} className="rounded-md bg-emerald-50 px-2 py-1">
+          <p className="break-words font-mono text-xs font-bold text-emerald-900">
+            {formatAlesoReply(reply)}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const renderProviderResult = (payment) => {
+  if (payment?.extra?.provider === "aleso") return renderAlesoOrder(payment);
+
+  return renderProWaveCodes(payment);
+};
 
 export default function FinancialStatement() {
   const queryClient = useQueryClient();
@@ -60,7 +296,7 @@ export default function FinancialStatement() {
 
   const confirmedQuery = useQuery({
     queryKey,
-    queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/admin/user/confirmed", queryParams),
+    queryFn: () => fetchPaginated("/api/admin/user/confirmed", queryParams),
     placeholderData: keepPreviousData,
   });
 
@@ -87,7 +323,7 @@ export default function FinancialStatement() {
       const nextParams = { ...queryParams, page: currentPage + 1 };
       queryClient.prefetchQuery({
         queryKey: paymentQueryKeys.userConfirmed(nextParams),
-        queryFn: () => fetchPaginated("https://paynet-1.onrender.com/api/payment/save-number/api/admin/user/confirmed", nextParams),
+        queryFn: () => fetchPaginated("/api/admin/user/confirmed", nextParams),
       });
     }
   }, [currentPage, pagination.totalPages, queryClient, queryParams]);
@@ -95,7 +331,7 @@ export default function FinancialStatement() {
   const paymentTypeMutation = useMutation({
     mutationFn: ({ id, newType }) =>
       axios.put(
-        `https://paynet-1.onrender.com/api/payment/save-number/api/admin/payment/${id}`,
+        apiUrl(`/api/admin/payment/${id}`),
         { paymentType: newType },
         authConfig(),
       ),
@@ -135,46 +371,65 @@ export default function FinancialStatement() {
 
   const columns = useMemo(
     () => [
+      {
+        key: "operationType",
+        label: "نوع العملية",
+        render: (p) => p.operationType || (p.source === "batch" ? "تعبئة رصيد" : "تسديد خدمة"),
+      },
+      {
+        key: "operationTarget",
+        label: "الوجهة",
+        render: (p) => p.operationTarget || p.pointUsername || p.email || "-",
+      },
       { key: "landline", label: "رقم أرضي" },
       { key: "company", label: "الشركة" },
       { key: "speed", label: "السرعة" },
       { key: "amount", label: "المبلغ", render: (p) => `${p.amount?.toLocaleString?.() || p.amount} ل.س` },
+      { key: "providerResult", label: "الكود / الطلب", render: renderProviderResult },
       {
         key: "paymentType",
         label: "نوع الدفع",
-        render: (p) => (
-          <select
-            value={p.paymentType || ""}
-            onChange={(e) => setPendingPaymentType({ id: p._id, newType: e.target.value })}
-            disabled={paymentTypeMutation.isPending}
-            className="rounded border border-slate-300 bg-white p-1 text-sm text-slate-900 disabled:opacity-60"
-          >
-            <option value="cash">نقدا</option>
-            <option value="credit">دين</option>
-          </select>
-        ),
+        render: (p) =>
+          p.source === "internet" ? (
+            <select
+              value={p.paymentType || ""}
+              onChange={(e) => setPendingPaymentType({ id: p._id, newType: e.target.value })}
+              disabled={paymentTypeMutation.isPending}
+              className="rounded border border-slate-300 bg-white p-1 text-sm text-slate-900 disabled:opacity-60"
+            >
+              <option value="cash">نقدا</option>
+              <option value="credit">دين</option>
+            </select>
+          ) : (
+            "-"
+          ),
       },
       {
         key: "status",
         label: "الحالة",
-        render: (p) => (
-          <span
-            className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
-              p.status === "تم التسديد"
+        render: (p) => {
+          const displayStatus = normalizePaymentStatusLabel(p.status);
+
+          return (
+            <span
+              className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${displayStatus === "تم التسديد" || displayStatus === "تم التحويل"
                 ? "bg-green-200 text-green-800"
-                : p.status === "غير مسددة"
+                : displayStatus === "غير مسددة"
                   ? "bg-red-200 text-red-800"
-                  : p.status === "جاري التسديد"
-                    ? "bg-yellow-200 text-yellow-800"
-                    : p.status === "بدء التسديد"
-                      ? "bg-blue-200 text-blue-800"
-                      : "bg-gray-200 text-gray-800"
-            }`}
-          >
-            {p.status === "تم التسديد" && <CheckCircle className="h-3.5 w-3.5" aria-hidden="true" />}
-            {p.status}
-          </span>
-        ),
+                  : displayStatus === "غير مؤكد"
+                    ? "bg-amber-100 text-amber-800"
+                    : displayStatus === "جاري التسديد" || displayStatus === "قيد التنفيذ"
+                      ? "bg-yellow-200 text-yellow-800"
+                      : displayStatus === "بدء التسديد"
+                        ? "bg-blue-200 text-blue-800"
+                        : "bg-gray-200 text-gray-800"
+                }`}
+            >
+              {(displayStatus === "تم التسديد" || displayStatus === "تم التحويل") && <CheckCircle className="h-3.5 w-3.5" aria-hidden="true" />}
+              {displayStatus}
+            </span>
+          );
+        },
       },
       {
         key: "date",

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { apiUrl } from "../config/api";
 
 export const paymentQueryKeys = {
   adminConfirmed: (params) => ["payments", "admin-confirmed", params],
@@ -56,7 +57,7 @@ export function normalizePaginated(payload, fallbackPagination = { total: 0, tot
 
 export async function fetchPaginated(url, params = {}, options = {}) {
   const response = await axios.get(
-    url,
+    apiUrl(url),
     authConfig({
       ...options,
       params,
@@ -67,6 +68,6 @@ export async function fetchPaginated(url, params = {}, options = {}) {
 }
 
 export async function fetchList(url, options = {}) {
-  const response = await axios.get(url, authConfig(options));
+  const response = await axios.get(apiUrl(url), authConfig(options));
   return Array.isArray(response.data) ? response.data : response.data?.data || [];
 }

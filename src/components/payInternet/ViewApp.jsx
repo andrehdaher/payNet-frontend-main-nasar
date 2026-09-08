@@ -15,7 +15,7 @@ export default function ViewApp() {
 
     const ViewApp = [
         {
-            title: 'NETFLIX',
+            title: 'NETFLIX (يدوي)',
             formType: 'NETFLIX',
             description: 'شحن NETFLIX بسرعة وأمان',
             buttonText: "عرض التفاصيل",

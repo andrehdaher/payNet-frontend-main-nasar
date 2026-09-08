@@ -13,7 +13,9 @@ import {
   FaTimes,
   FaUser,
   FaStickyNote,
+  FaAd,
 } from "react-icons/fa";
+import { apiUrl } from "../config/api";
 
 const REFUSED_STATUS = "غير مسددة";
 
@@ -60,7 +62,7 @@ const NavBar = () => {
 
     const fetchBalance = async () => {
       try {
-        const res = await axios.get("https://paynet-1.onrender.com/api/payment/save-number/api/user/balance", {
+        const res = await axios.get(apiUrl("/api/user/balance"), {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBalance(res.data.balance);
@@ -71,7 +73,7 @@ const NavBar = () => {
 
     const fetchDaen = async () => {
       try {
-        const res = await axios.get("https://paynet-1.onrender.com/api/payment/save-number/api/user/daen", {
+        const res = await axios.get(apiUrl("/api/user/daen"), {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDaen(res.data.daen);
@@ -88,7 +90,7 @@ const NavBar = () => {
         const seenAt = Number(localStorage.getItem(getRefusedSeenKey(decoded.email, today)) || 0);
         setRefusedTodaySeenAt(seenAt || null);
 
-        const res = await axios.get("https://paynet-1.onrender.com/api/payment/save-number/api/admin/user/confirmed", {
+        const res = await axios.get(apiUrl("/api/admin/user/confirmed"), {
           headers: { Authorization: `Bearer ${token}` },
           params: {
             date: today,
@@ -131,37 +133,48 @@ const NavBar = () => {
     },
     ...(role === "user"
       ? [
-          { to: "/balance", label: "تعبئة رصيد", icon: <FaWallet aria-hidden="true" /> },
-          {
-            to: "/financial-point",
-            label: "البيان المالي للنقاط الفرعية",
-            icon: <FaFileInvoice aria-hidden="true" />,
-          },
-          {
-            to: "/add-point",
-            label: "نقاط البيع الفرعية",
-            icon: <FaUser aria-hidden="true" />,
-          },
-          {
-            to: "/notebooks",
-            label: "الأرقام المحفوظة",
-            icon: <FaStickyNote aria-hidden="true" />,
-          },
-          {
-            external: "https://wa.me/963993822320",
-            label: "واتساب",
-            icon: <FaWhatsapp className="text-green-600" aria-hidden="true" />,
-          },
-        ]
+        { to: "/balance", label: "تعبئة رصيد", icon: <FaWallet aria-hidden="true" /> },
+        {
+          to: "/financial-point",
+          label: "البيان المالي للنقاط الفرعية",
+          icon: <FaFileInvoice aria-hidden="true" />,
+        },
+        {
+          to: "/point-statement",
+          label: "تحويلات رصيد النقاط",
+          icon: <FaWallet aria-hidden="true" />,
+        },
+        {
+          to: "/add-point",
+          label: "نقاط البيع الفرعية",
+          icon: <FaUser aria-hidden="true" />,
+        },
+        {
+          to: "/notebooks",
+          label: "الأرقام المحفوظة",
+          icon: <FaStickyNote aria-hidden="true" />,
+        },
+        {
+          to: "/advertisements",
+          label: "البضائع",
+          icon: <FaAd aria-hidden="true" />,
+        },
+        {
+          external: "https://wa.me/963993822320",
+          label: "واتساب",
+          icon: <FaWhatsapp className="text-green-600" aria-hidden="true" />,
+        },
+      ]
       : []),
     ...(role === "user-point"
       ? [
-          {
-            to: "/PointPayment",
-            label: "البيان المالي للدفعات",
-            icon: <FaFileInvoice aria-hidden="true" />,
-          },
-        ]
+        {
+          to: "/PointPayment",
+          label: "البيان المالي للدفعات",
+          icon: <FaFileInvoice aria-hidden="true" />,
+        },
+
+      ]
       : []),
   ];
 
@@ -221,9 +234,8 @@ const NavBar = () => {
 
       <aside
         dir="rtl"
-        className={`fixed right-0 top-0 z-50 flex h-full w-72 max-w-[85vw] flex-col border-l border-slate-200 bg-white shadow-xl transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed right-0 top-0 z-50 flex h-full w-72 max-w-[85vw] flex-col border-l border-slate-200 bg-white shadow-xl transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         aria-label="القائمة الجانبية"
       >
         <div className="border-b border-slate-200 bg-violet-50 p-4">
@@ -260,11 +272,10 @@ const NavBar = () => {
                 key={i}
                 to={item.to}
                 onClick={() => setIsOpen(false)}
-                className={`relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition-colors ${
-                  isActive(item.to)
-                    ? "bg-violet-700 text-white shadow-sm"
-                    : "text-slate-700 hover:bg-violet-50 hover:text-violet-800"
-                } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500`}
+                className={`relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition-colors ${isActive(item.to)
+                  ? "bg-violet-700 text-white shadow-sm"
+                  : "text-slate-700 hover:bg-violet-50 hover:text-violet-800"
+                  } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500`}
                 aria-current={isActive(item.to) ? "page" : undefined}
               >
                 {item.icon} {item.label}

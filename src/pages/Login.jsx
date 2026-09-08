@@ -5,6 +5,7 @@ import ScreenWrapper from "../components/ScreenWrapper";
 import { Input } from "../components/Custom/Input";
 import { Button } from "../components/Custom/Button";
 import Alert from "../components/Custom/Alert";
+import { apiUrl } from "../config/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ export default function Login() {
     setIsSubmitting(true);
 
     try {
-      const res = await axios.post("https://paynet-1.onrender.com/api/payment/save-number/api/login", {
+      const res = await axios.post(apiUrl("/api/login"), {
         email,
         password,
       });
@@ -36,8 +37,9 @@ export default function Login() {
       setError("");
 
       const token = res.data.token;
+      const userEmail = res.data.email || res.data.user?.email || email;
       localStorage.setItem("token", token);
-      localStorage.setItem("email", res.data.email);
+      localStorage.setItem("email", userEmail);
 
       const payload = parseJwt(token);
 

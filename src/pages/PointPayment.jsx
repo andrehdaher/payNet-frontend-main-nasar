@@ -40,7 +40,7 @@ export default function PaymentStatement() {
   const paymentsQuery = useQuery({
     queryKey: paymentQueryKeys.pointPayments(queryParams),
     queryFn: () =>
-      fetchPaginated(`https://paynet-1.onrender.com/api/payment/save-number/api/point/all-point?email=${email}`, {
+      fetchPaginated(`/api/point/all-point?email=${email}`, {
         page: currentPage,
         limit: 20,
       }),
@@ -57,7 +57,7 @@ export default function PaymentStatement() {
       queryClient.prefetchQuery({
         queryKey: paymentQueryKeys.pointPayments(nextParams),
         queryFn: () =>
-          fetchPaginated(`https://paynet-1.onrender.com/api/payment/save-number/api/point/all-point?email=${email}`, {
+          fetchPaginated(`/api/point/all-point?email=${email}`, {
             page: currentPage + 1,
             limit: 20,
           }),

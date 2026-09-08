@@ -6,6 +6,7 @@ import Alert from "../components/Custom/Alert";
 import { Button } from "../components/Custom/Button";
 import { Input } from "../components/Custom/Input";
 import Footer from "../components/Footer";
+import { apiUrl } from "../config/api";
 
 export default function ProductUpload() {
   const [name, setName] = useState("");
@@ -32,10 +33,9 @@ export default function ProductUpload() {
 
     try {
       setUploading(true);
-      const apiBase = process.env.REACT_APP_API_BASE_URL || "https://paynet-1.onrender.com/api/payment/save-number";
 
       await axios.post(
-        `${apiBase}/api/product/add`,
+        apiUrl("/api/product/add"),
         { name, price, category, description, imageUrl, stock },
         {
           headers: {

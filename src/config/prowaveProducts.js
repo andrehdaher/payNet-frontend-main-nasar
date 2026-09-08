@@ -1,0 +1,225 @@
+import { PROWAVE_GAME_CARD_CATEGORIES } from "./prowaveGames";
+
+const PROWAVE_GAME_CARD_DIGITAL_CATEGORIES = PROWAVE_GAME_CARD_CATEGORIES.filter(
+  (category) => category.itemGroup !== "Roblox USA Cards"
+);
+
+export const PROWAVE_PRODUCT_CATEGORIES = [
+  ...PROWAVE_GAME_CARD_DIGITAL_CATEGORIES,
+  {
+    title: "بطاقات Steam USA",
+    itemGroup: "Steam USA Cards",
+    description: "بطاقات Steam الأمريكية المتاحة.",
+    group: "Steam",
+  },
+  {
+    title: "بطاقات Steam Europe",
+    itemGroup: "Steam European Cards",
+    description: "بطاقات Steam الأوروبية المتاحة.",
+    group: "Steam",
+  },
+  {
+    title: "بطاقات Steam KSA",
+    itemGroup: "Steam KSA Cards",
+    description: "بطاقات Steam السعودية المتاحة.",
+    group: "Steam",
+  },
+  {
+    title: "بطاقات Steam UAE",
+    itemGroup: "Steam UAE Cards",
+    description: "بطاقات Steam الإماراتية المتاحة.",
+    group: "Steam",
+  },
+  {
+    title: "بطاقات iTunes USA",
+    itemGroup: "iTunes USA Cards",
+    description: "بطاقات iTunes الأمريكية المتاحة.",
+    group: "iTunes",
+  },
+  {
+    title: "بطاقات iTunes Germany",
+    itemGroup: "iTunes Germany Cards",
+    description: "بطاقات iTunes الألمانية المتاحة.",
+    group: "iTunes",
+  },
+  {
+    title: "بطاقات iTunes KSA",
+    itemGroup: "iTunes KSA Cards",
+    description: "بطاقات iTunes السعودية المتاحة.",
+    group: "iTunes",
+  },
+  {
+    title: "بطاقات iTunes UAE",
+    itemGroup: "iTunes UAE Cards",
+    description: "بطاقات iTunes الإماراتية المتاحة.",
+    group: "iTunes",
+  },
+  {
+    title: "بطاقات iTunes Turkey",
+    itemGroup: "iTunes Turkey Cards",
+    description: "بطاقات iTunes التركية المتاحة.",
+    group: "iTunes",
+  },
+  {
+    title: "بطاقات PlayStation USA",
+    itemGroup: "PlayStation USA Cards",
+    description: "بطاقات PlayStation الأمريكية المتاحة.",
+    group: "PlayStation",
+  },
+  {
+    title: "بطاقات PlayStation KSA",
+    itemGroup: "PlayStation KSA Cards",
+    description: "بطاقات PlayStation السعودية المتاحة.",
+    group: "PlayStation",
+  },
+  {
+    title: "بطاقات PlayStation UAE",
+    itemGroup: "PlayStation UAE Cards",
+    description: "بطاقات PlayStation الإماراتية المتاحة.",
+    group: "PlayStation",
+  },
+  {
+    title: "بطاقات XBOX USA",
+    itemGroup: "XBOX USA Cards",
+    description: "بطاقات XBOX الأمريكية المتاحة.",
+    group: "XBOX",
+  },
+  {
+    title: "بطاقات XBOX KSA",
+    itemGroup: "XBOX KSA Cards",
+    description: "بطاقات XBOX السعودية المتاحة.",
+    group: "XBOX",
+  },
+  {
+    title: "بطاقات XBOX UAE",
+    itemGroup: "XBOX UAE Cards",
+    description: "بطاقات XBOX الإماراتية المتاحة.",
+    group: "XBOX",
+  },
+  {
+    title: "بطاقات Google Play USA",
+    itemGroup: "Google Play USA cards",
+    description: "بطاقات Google Play الأمريكية المتاحة.",
+    group: "Google Play",
+  },
+  {
+    title: "بطاقات Google Play KSA",
+    itemGroup: "Google Play KSA cards",
+    description: "بطاقات Google Play السعودية المتاحة.",
+    group: "Google Play",
+  },
+  {
+    title: "بطاقات Amazon USA",
+    itemGroup: "Amazon USA Cards",
+    description: "بطاقات Amazon الأمريكية المتاحة.",
+    group: "Amazon",
+  },
+  {
+    title: "بطاقات Amazon KSA",
+    itemGroup: "Amazon KSA Cards",
+    description: "بطاقات Amazon السعودية المتاحة.",
+    group: "Amazon",
+  },
+  {
+    title: "بطاقات Amazon UAE",
+    itemGroup: "Amazon UAE Cards",
+    description: "بطاقات Amazon الإماراتية المتاحة.",
+    group: "Amazon",
+  },
+  {
+    title: "بطاقات Netflix KSA",
+    itemGroup: "Netflix KSA Cards",
+    description: "بطاقات Netflix السعودية المتاحة.",
+    group: "Netflix",
+  },
+  {
+    title: "بطاقات Netflix UAE",
+    itemGroup: "Netflix UAE Cards",
+    description: "بطاقات Netflix الإماراتية المتاحة.",
+    group: "Netflix",
+  },
+  {
+    title: "بطاقات Shahid International",
+    itemGroup: "Shahid International Cards",
+    description: "بطاقات Shahid العالمية المتاحة.",
+    group: "Shahid",
+  },
+  {
+    title: "بطاقات Shahid KSA",
+    itemGroup: "Shahid KSA Cards",
+    description: "بطاقات Shahid السعودية المتاحة.",
+    group: "Shahid",
+  },
+  {
+    title: "بطاقات Shahid UAE",
+    itemGroup: "Shahid UAE Cards",
+    description: "بطاقات Shahid الإماراتية المتاحة.",
+    group: "Shahid",
+  },
+  {
+    title: "بطاقات Nintendo USA",
+    itemGroup: "Nintendo USA Cards",
+    description: "بطاقات Nintendo الأمريكية المتاحة.",
+    group: "Nintendo",
+  },
+  {
+    title: "Spotify USA",
+    itemGroup: "Spotify USA",
+    description: "اشتراكات Spotify الأمريكية المتاحة.",
+    group: "Spotify",
+  },
+  {
+    title: "Razer Gold Global",
+    itemGroup: "Razer Gold Global Cards",
+    description: "بطاقات Razer Gold العالمية المتاحة.",
+    group: "Razer Gold",
+  },
+  {
+    title: "Razer Gold USA",
+    itemGroup: "Razer Gold USA Cards",
+    description: "بطاقات Razer Gold الأمريكية المتاحة.",
+    group: "Razer Gold",
+  },
+  {
+    title: "Noon KSA",
+    itemGroup: "Noon KSA Cards",
+    description: "بطاقات Noon السعودية المتاحة.",
+    group: "Noon",
+  },
+  {
+    title: "Noon UAE",
+    itemGroup: "Noon UAE Cards",
+    description: "بطاقات Noon الإماراتية المتاحة.",
+    group: "Noon",
+  },
+  {
+    title: "EA Play USA",
+    itemGroup: "EA Play USA",
+    description: "بطاقات EA Play الأمريكية المتاحة.",
+    group: "EA Play",
+  },
+  {
+    title: "Anghami Global",
+    itemGroup: "Anghami Global Cards",
+    description: "بطاقات Anghami العالمية المتاحة.",
+    group: "Anghami",
+  },
+  {
+    title: "SHEIN GCC",
+    itemGroup: "SHEIN GCC Cards",
+    description: "بطاقات SHEIN الخليجية المتاحة.",
+    group: "SHEIN",
+  },
+  {
+    title: "Blizzard USA",
+    itemGroup: "Blizzard USA Cards",
+    description: "بطاقات Blizzard الأمريكية المتاحة.",
+    group: "Blizzard",
+  },
+  {
+    title: "Roblox USA",
+    itemGroup: "Roblox USA Cards",
+    description: "بطاقات Roblox الأمريكية المتاحة.",
+    group: "Roblox",
+  },
+];

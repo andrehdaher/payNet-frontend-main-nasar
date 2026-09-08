@@ -3,6 +3,7 @@ import axios from "axios";
 import { useToast } from "../context/ToastContext";
 import { Input } from "./Custom/Input";
 import { Button } from "./Custom/Button";
+import { apiUrl } from "../config/api";
 
 export default function AddPointForm({ onClose }) {
   const toast = useToast();
@@ -49,7 +50,7 @@ export default function AddPointForm({ onClose }) {
   const handelSave = async () => {
     try {
       setLoading(true);
-      await axios.post("https://paynet-1.onrender.com/api/payment/save-number/api/point/add-point", { formData, email });
+      await axios.post(apiUrl("/api/point/add-point"), { formData, email });
       toast.success("تمت إضافة نقطة البيع بنجاح");
     } catch (err) {
       console.error(err);

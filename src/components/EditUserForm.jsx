@@ -3,6 +3,7 @@ import axios from "axios";
 import { useToast } from "../context/ToastContext";
 import { Input } from "./Custom/Input";
 import { Button } from "./Custom/Button";
+import { apiUrl } from "../config/api";
 
 export default function EditUserForm({ userId, onClose, onUpdate }) {
   const toast = useToast();
@@ -16,7 +17,7 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
 
   useEffect(() => {
     axios
-      .get(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/user/${userId}`)
+      .get(apiUrl(`/api/admin/user/${userId}`))
       .then((res) => setUserData(res.data))
       .catch((err) => console.error("حدث خطأ في جلب المستخدم", err));
   }, [userId]);
@@ -30,7 +31,7 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
     e.preventDefault();
     try {
       setIsSubmitting(true);
-      await axios.put(`https://paynet-1.onrender.com/api/payment/save-number/api/admin/updateuser/${userId}`, userData);
+      await axios.put(apiUrl(`/api/admin/updateuser/${userId}`), userData);
       toast.success("تم التعديل بنجاح");
       onUpdate();
       onClose();
