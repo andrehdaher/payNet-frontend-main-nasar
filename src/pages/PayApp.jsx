@@ -713,14 +713,18 @@ export default function PayApp() {
   const remainingCardsCount = Math.max(filteredCards.length - visibleCards.length, 0);
   const hasActiveFilters = Boolean(searchTerm.trim()) || availabilityFilter !== "all";
   const pageTitle =
-    routeState?.title ||
-    config.title ||
-    (isProWaveDirectTopUpRoute
-      ? "الشحن المباشر"
-      : useProWaveProducts
-        ? "المنتجات الرقمية"
-        : "المنتجات");
-  const pageDescription = isAlesoRoute
+    isAlesoDisabledRoute
+      ? "المنتجات غير متاحة"
+      : routeState?.title ||
+        config.title ||
+        (isProWaveDirectTopUpRoute
+          ? "الشحن المباشر"
+          : useProWaveProducts
+            ? "المنتجات الرقمية"
+            : "المنتجات");
+  const pageDescription = isAlesoDisabledRoute
+    ? "هذا القسم غير متاح حاليا."
+    : isAlesoRoute
     ? "اختر المنتج المناسب من Aleso ثم أدخل البيانات المطلوبة لإرسال الطلب مباشرة."
     : isProWaveDirectTopUpRoute
       ? "اختر فئة الشحن المناسبة، ثم أدخل بيانات اللاعب لإرسال طلب الشحن."
