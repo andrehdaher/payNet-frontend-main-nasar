@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Copy, X } from "lucide-react";
 import { Button } from "../Custom/Button";
 import { writeClipboardText } from "../../utils/clipboard";
 import { normalizePaymentStatusLabel } from "../../utils/paymentStatus";
+import { getProWaveDirectTopUpRequestResult } from "../../api/prowaveApi";
 
 const DATA_PATHS = [
   ["response", "data"],
@@ -52,6 +53,30 @@ const formatValue = (value) => {
   return String(value);
 };
 
+const normalizeStatusText = (value) =>
+  String(value || "").trim().toLowerCase().replace(/[_-]+/g, " ");
+
+const isTerminalStatus = (status, invoiceName) => {
+  if (invoiceName) return true;
+
+  const normalized = normalizeStatusText(status);
+  return [
+    "completed",
+    "complete",
+    "success",
+    "successful",
+    "done",
+    "paid",
+    "rejected",
+    "reject",
+    "failed",
+    "failure",
+    "canceled",
+    "cancelled",
+    "declined",
+  ].some((value) => normalized.includes(value));
+};
+
 export default function ProWaveDirectTopUpResultModal({
   open,
   onClose,
@@ -59,11 +84,22 @@ export default function ProWaveDirectTopUpResultModal({
   title = "نتيجة الشحن المباشر",
 }) {
   const [copied, setCopied] = useState(false);
-  const payload = useMemo(() => extractPayload(result?.response || result), [result]);
+  const [liveResult, setLiveResult] = useState(result);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const activeResult = liveResult || result;
+  const payload = useMemo(() => extractPayload(activeResult?.response || activeResult), [activeResult]);
   const request = useMemo(() => extractRequest(payload), [payload]);
   const requestName = pick(request.name, request.request_name, payload.name, payload.request_name);
+  const invoiceName = pick(request.sales_invoice, payload.sales_invoice);
   const status = normalizePaymentStatusLabel(
-    pick(request.recharge_status, request.status, payload.recharge_status)
+    pick(
+      payload.customer_status,
+      payload.payment_status,
+      payload.payment?.status,
+      request.recharge_status,
+      request.status,
+      payload.recharge_status
+    )
   );
   const rejectionReason = pick(
     request.rejection_reason,
@@ -81,6 +117,48 @@ export default function ProWaveDirectTopUpResultModal({
     ["الرصيد الجديد", payload.newBalance !== undefined ? `${payload.newBalance} ل.س` : ""],
     ["سبب الرفض", rejectionReason],
   ].filter(([, value]) => value !== undefined && value !== null && value !== "");
+
+  useEffect(() => {
+    setLiveResult(result);
+  }, [result]);
+
+  useEffect(() => {
+    if (!open || !requestName || isTerminalStatus(status, invoiceName)) return undefined;
+
+    let cancelled = false;
+    let attempts = 0;
+    let intervalId;
+
+    const refreshStatus = async () => {
+      if (cancelled || attempts >= 12) return;
+      attempts += 1;
+      setIsRefreshing(true);
+
+      try {
+        const response = await getProWaveDirectTopUpRequestResult({ name: requestName });
+        if (!cancelled) {
+          setLiveResult((current) => ({
+            ...(current || result || {}),
+            response,
+          }));
+        }
+      } catch {
+        // Backend scheduled refresh continues to check the request; keep transient polling errors quiet.
+      } finally {
+        if (!cancelled) setIsRefreshing(false);
+        if (attempts >= 12 && intervalId) window.clearInterval(intervalId);
+      }
+    };
+
+    const timeoutId = window.setTimeout(refreshStatus, 5000);
+    intervalId = window.setInterval(refreshStatus, 10000);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+      window.clearInterval(intervalId);
+    };
+  }, [invoiceName, open, requestName, result, status]);
 
   const copyRequestName = async () => {
     if (!requestName) return;
@@ -113,6 +191,7 @@ export default function ProWaveDirectTopUpResultModal({
             className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg border border-slate-200 bg-white p-5 text-slate-900 shadow-2xl"
             role="dialog"
             aria-modal="true"
+            aria-busy={isRefreshing}
             aria-labelledby="prowave-direct-topup-result-title"
           >
             <button

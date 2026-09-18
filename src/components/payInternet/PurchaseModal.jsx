@@ -12,6 +12,12 @@ const toNumber = (value, fallback = 0) => {
 const formatPrice = (value) =>
   `${toNumber(value).toLocaleString("en-US", { maximumFractionDigits: 2 })} ل.س`;
 
+const createClientRequestId = () => {
+  if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+
+  return `req_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+};
+
 export default function PurchaseModal({
   open,
   onClose,
@@ -56,6 +62,7 @@ export default function PurchaseModal({
   const [passwordValue, setPasswordValue] = useState("");
   const [dynamicValues, setDynamicValues] = useState({});
   const [quantityValue, setQuantityValue] = useState(String(quantityDefault || 1));
+  const [clientRequestId, setClientRequestId] = useState("");
   const [internalLoading, setInternalLoading] = useState(false);
   const needsPassword = showMainInput && name && name.includes("oldAccount");
   const loading = externalLoading || internalLoading;
@@ -85,6 +92,7 @@ export default function PurchaseModal({
     setMainValue("");
     setPasswordValue("");
     setQuantityValue(String(quantityDefault || 1));
+    setClientRequestId(createClientRequestId());
     setDynamicValues(
       normalizedFields.reduce((values, field) => {
         values[field.name] = "";
@@ -127,6 +135,7 @@ export default function PurchaseModal({
           : {}),
         ...(showQuantity ? { quantity: numericQuantity } : {}),
         ...(normalizedFields.length ? { params: dynamicValues } : {}),
+        clientRequestId: clientRequestId || createClientRequestId(),
       };
 
       await onConfirm(dataToSend);

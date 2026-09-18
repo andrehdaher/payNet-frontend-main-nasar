@@ -239,6 +239,7 @@ const buildProWaveDirectTopUpPayload = ({ product, extra = {}, email, paymentTyp
     currency: "USD",
     email,
     paymentType,
+    client_request_id: extra.clientRequestId,
   });
 };
 

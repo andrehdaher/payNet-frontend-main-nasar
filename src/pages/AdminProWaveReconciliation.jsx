@@ -39,6 +39,20 @@ const statusLabel = {
   refunded: "مرجعة",
 };
 
+const needsProviderReview = (row = {}) =>
+  row.internalReviewStatus === "needs_review" ||
+  row.invoiceMatchStatus === "mismatch" ||
+  row.invoiceMatchStatus === "missing" ||
+  row.providerBalanceStatus === "mismatch";
+
+const getReconciliationStatusLabel = (row = {}) => {
+  if (needsProviderReview(row)) return "Ù…Ø±Ø§Ø¬Ø¹Ø©";
+  return statusLabel[row.status] || row.status;
+};
+
+const getReconciliationStatusValue = (row = {}) =>
+  needsProviderReview(row) ? "mismatch" : row.status;
+
 export default function AdminProWaveReconciliation() {
   const toast = useToast();
   const queryClient = useQueryClient();
@@ -114,7 +128,11 @@ export default function AdminProWaveReconciliation() {
       {
         key: "status",
         label: "الحالة",
-        render: (row) => <StatusBadge value={row.status}>{statusLabel[row.status] || row.status}</StatusBadge>,
+        render: (row) => (
+          <StatusBadge value={getReconciliationStatusValue(row)}>
+            {getReconciliationStatusLabel(row)}
+          </StatusBadge>
+        ),
       },
       {
         key: "userEmail",
