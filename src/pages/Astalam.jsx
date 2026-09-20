@@ -21,28 +21,21 @@ const SOCKET_URL = "https://daherserver-zgmy.onrender.com";
 
 const COMPANIES = [
   "",
-  "برونت",
   "اينت",
   "رنت",
   "الكم",
   "ليما",
   "سوا",
-  "اية",
   "يارا",
   "بطاقات",
   "هايبر",
-  "ويف",
   "امنية",
   "فيو",
   "ليزر",
   "متس",
-  "سما",
-  "زاد",
-  "دنيا",
   "هاي فاي",
   "تكامل",
   "لاين",
-  "الجمعية",
 ];
 
 export default function Astalam() {
