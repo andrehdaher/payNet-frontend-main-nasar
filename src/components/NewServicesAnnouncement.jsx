@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Gamepad2, Sparkles, Ticket, X, Zap } from "lucide-react";
+import { History, ReceiptText, Search, Sparkles, X } from "lucide-react";
 import { Button } from "./Custom/Button";
 
-const ANNOUNCEMENT_STARTED_AT_KEY = "paynet:new-services-announcement:2026-09-games-digital:started-at";
-const ANNOUNCEMENT_SESSION_DISMISSED_KEY = "paynet:new-services-announcement:2026-09-games-digital:dismissed-session";
+const ANNOUNCEMENT_STARTED_AT_KEY = "paynet:new-services-announcement:2026-09-inquiry:started-at";
+const ANNOUNCEMENT_SESSION_DISMISSED_KEY = "paynet:new-services-announcement:2026-09-inquiry:dismissed-session";
 const ANNOUNCEMENT_DURATION_MS = 24 * 60 * 60 * 1000;
 
 const getAnnouncementStartedAt = () => {
@@ -86,6 +86,11 @@ export default function NewServicesAnnouncement() {
     navigate("/internet", { state: section });
   };
 
+  const goToInquiry = () => {
+    closeAnnouncement();
+    navigate("/astalam");
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -118,9 +123,9 @@ export default function NewServicesAnnouncement() {
               <Sparkles className="h-5 w-5" aria-hidden="true" />
             </span>
             <div>
-              <p className="text-xs font-bold text-violet-700">خدمات جديدة</p>
+              <p className="text-xs font-bold text-violet-700">خدمة جديدة</p>
               <h2 id="new-services-announcement-title" className="text-xl font-bold text-slate-950">
-                تحديث مهم في PayNet
+                الاستعلام الجديد متاح الآن
               </h2>
             </div>
           </div>
@@ -128,35 +133,35 @@ export default function NewServicesAnnouncement() {
 
         <div className="space-y-4 p-5">
           <p id="new-services-announcement-description" className="text-base font-semibold leading-8 text-slate-800">
-            أصبح شحن لعبتي PUBG Mobile و Free Fire فوريًا مع الشركة مباشرة، ويمكنك الآن شراء أكواد لألعاب مختلفة بشكل فوري من قسم المنتجات الرقمية، بالإضافة إلى الكثير من التطبيقات والخدمات الجديدة.
+            يمكنك الآن الاستعلام عن فاتورة الإنترنت مباشرة من PayNet قبل التسديد، مع عرض تفاصيل الفاتورة وحفظ سجل الاستعلامات للرجوع إليها لاحقًا.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <Gamepad2 className="mb-2 h-5 w-5 text-violet-700" aria-hidden="true" />
-              <p className="text-sm font-bold text-slate-900">شحن فوري للألعاب</p>
-              <p className="mt-1 text-xs leading-5 text-slate-600">PUBG Mobile و Free Fire مباشرة.</p>
+              <Search className="mb-2 h-5 w-5 text-violet-700" aria-hidden="true" />
+              <p className="text-sm font-bold text-slate-900">استعلام فوري</p>
+              <p className="mt-1 text-xs leading-5 text-slate-600">اعرف قيمة الفاتورة قبل التسديد.</p>
             </div>
             <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <Ticket className="mb-2 h-5 w-5 text-emerald-700" aria-hidden="true" />
-              <p className="text-sm font-bold text-slate-900">أكواد رقمية</p>
-              <p className="mt-1 text-xs leading-5 text-slate-600">ألعاب ومنصات متنوعة بشكل فوري.</p>
+              <ReceiptText className="mb-2 h-5 w-5 text-emerald-700" aria-hidden="true" />
+              <p className="text-sm font-bold text-slate-900">تفاصيل واضحة</p>
+              <p className="mt-1 text-xs leading-5 text-slate-600">عرض بيانات الفاتورة بشكل مرتب.</p>
             </div>
             <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <Zap className="mb-2 h-5 w-5 text-amber-600" aria-hidden="true" />
-              <p className="text-sm font-bold text-slate-900">خدمات أكثر</p>
-              <p className="mt-1 text-xs leading-5 text-slate-600">تطبيقات وخيارات جديدة داخل حسابك.</p>
+              <History className="mb-2 h-5 w-5 text-amber-600" aria-hidden="true" />
+              <p className="text-sm font-bold text-slate-900">سجل محفوظ</p>
+              <p className="mt-1 text-xs leading-5 text-slate-600">ارجع إلى استعلاماتك السابقة بسهولة.</p>
             </div>
           </div>
 
           <div className="grid gap-2 pt-2 sm:grid-cols-3">
-            <Button type="button" className="sm:col-span-1" onClick={() => goToSection("play")}>
-              <Gamepad2 className="h-4 w-4" aria-hidden="true" />
-              قسم الألعاب
+            <Button type="button" className="sm:col-span-1" onClick={goToInquiry}>
+              <Search className="h-4 w-4" aria-hidden="true" />
+              ابدأ الاستعلام
             </Button>
-            <Button type="button" variant="outline" className="sm:col-span-1" onClick={() => goToSection("prowave-products")}>
-              <Ticket className="h-4 w-4" aria-hidden="true" />
-              المنتجات الرقمية
+            <Button type="button" variant="outline" className="sm:col-span-1" onClick={() => goToSection("ADSL")}>
+              <ReceiptText className="h-4 w-4" aria-hidden="true" />
+              قسم الإنترنت
             </Button>
             <Button type="button" variant="ghost" className="sm:col-span-1" onClick={closeAnnouncement}>
               لاحقًا

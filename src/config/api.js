@@ -10,7 +10,7 @@ const configuredApiUrl =
 
 export const API_BASE_URL = stripTrailingSlash(
   configuredApiUrl ||
-    (process.env.NODE_ENV === "development"
+    (!process.env.NODE_ENV === "development"
       ? DEFAULT_LOCAL_API_URL
       : DEFAULT_PRODUCTION_API_URL)
 );

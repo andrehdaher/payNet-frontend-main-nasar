@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import tasded from "../assets/tasded.png";
 import iptv from "../assets/iptv.png";
 import baka from "../assets/baka.png";
-import astfham from "../assets/astfham.png";
+import astfham from "../assets/astfham.webp";
 import astalam from "../assets/astalam.png";
 import ADSL from "../assets/tasded.png";
 import elictric from "../assets/electric.png";
@@ -237,15 +237,6 @@ export default function Internet() {
   const serviceCollections = {
     ADSL: decorateServices([
       {
-        title: "تسديد فاتورة",
-        formType: "ADSL",
-        description: "تسديد فاتورة إنترنت وإضافة رصيد.",
-        buttonText: "تسديد فاتورة",
-        Action: (formType) => navigate("/payinternet", { state: formType }),
-        image: tasded,
-        group: "فواتير",
-      },
-      {
         title: "استعلام عن فاتورة",
         formType: "astalam",
         description: "استعلام عن قيمة فاتورة الإنترنت قبل التسديد.",
@@ -253,6 +244,15 @@ export default function Internet() {
         Action: (formType) => navigate("/astalam", { state: formType }),
         image: astfham,
         group: "استعلام",
+      },
+      {
+        title: "تسديد فاتورة",
+        formType: "ADSL",
+        description: "تسديد فاتورة إنترنت وإضافة رصيد.",
+        buttonText: "تسديد فاتورة",
+        Action: (formType) => navigate("/payinternet", { state: formType }),
+        image: tasded,
+        group: "فواتير",
       },
       {
         title: "تسديد IPTV",
