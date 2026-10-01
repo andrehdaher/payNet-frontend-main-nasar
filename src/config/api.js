@@ -1,4 +1,4 @@
-const DEFAULT_LOCAL_API_URL = "http://127.0.0.1:5000";
+const DEFAULT_LOCAL_API_URL = "https://paynet-1.onrender.com";
 const DEFAULT_PRODUCTION_API_URL = "https://paynet-1.onrender.com";
 
 const stripTrailingSlash = (value = "") => String(value).replace(/\/+$/, "");

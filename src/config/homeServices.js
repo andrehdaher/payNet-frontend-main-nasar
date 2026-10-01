@@ -7,6 +7,8 @@ import SYR from "../assets/SYR.png";
 import AI from "../assets/AI.jpeg";
 import viewapp from "../assets/viewapp.jpeg";
 import inv from "../assets/inv.jpeg";
+import application from "../assets/application.jpeg";
+import { ENABLE_ALRAGHEB_PRODUCTS } from "./features";
 import { PROWAVE_PRODUCT_SECTION_IMAGE } from "./prowaveImages";
 
 export const HOME_SERVICE_GROUPS = [
@@ -19,6 +21,18 @@ export const HOME_SERVICE_GROUPS = [
 ];
 
 export const HOME_SERVICES = [
+  {
+    title: "تطبيقات الدردشة",
+    service: "application",
+    image: application,
+    buttonText: "عرض التطبيقات",
+    cardKey: "cardapplication",
+    route: ENABLE_ALRAGHEB_PRODUCTS ? "/chat-apps" : "/internet",
+    group: "تطبيقات",
+    tag: "دردشة",
+    meta: "تطبيقات وباقات شحن",
+    priority: 4,
+  },
   {
     title: "فواتير الإنترنت",
     service: "ADSL",
