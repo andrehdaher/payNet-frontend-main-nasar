@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Navbar from "../components/NavBar";
 import ScreenWrapper from "../components/ScreenWrapper";
@@ -28,7 +28,7 @@ export default function PendingPayments() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "https://paynet-1.onrender.com/api/admin/user/pending", // نفس API البيان المالي
+        "https://paynet-main-nasar.onrender.com/api/admin/user/pending", // نفس API البيان المالي
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -49,8 +49,8 @@ export default function PendingPayments() {
     const landlineMatch = p.landline.includes(searchLandline);
     const dateMatch = searchDate
       ? new Date(p.updatedAt || p.createdAt)
-          .toISOString()
-          .split("T")[0] === searchDate
+        .toISOString()
+        .split("T")[0] === searchDate
       : true;
 
     return landlineMatch && dateMatch;
@@ -65,7 +65,7 @@ export default function PendingPayments() {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  
+
   const PinColumns = [
     { key: "landline", label: "رقم أرضي" },
     { key: "company", label: "الشركة" },
@@ -91,7 +91,7 @@ export default function PendingPayments() {
             عمليات قيد التسديد
           </h2>
         </CardHeader>
-        <CardContent>     
+        <CardContent>
           {/* واجهة البحث */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             <Input
@@ -110,7 +110,7 @@ export default function PendingPayments() {
               onChange={(e) => setSearchDate(e.target.value)}
             />
           </div>
-          <DataTable 
+          <DataTable
             columns={PinColumns}
             data={currentItems}
             currentPage={currentPage}

@@ -1,31 +1,31 @@
 // components/AddPointForm.jsx
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function AddPointForm({ onClose }) {
-    const [email, setEmail] = useState("");
-      const [loading, setLoading] = useState(false); // ✅ حالة التحميل
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ حالة التحميل
 
-    function parseJwt(token) {
-      try {
-        return JSON.parse(atob(token.split(".")[1]));
-      } catch (e) {
-        return null;
-      }
+  function parseJwt(token) {
+    try {
+      return JSON.parse(atob(token.split(".")[1]));
+    } catch (e) {
+      return null;
     }
-  useEffect(()=>{
-        const token = localStorage.getItem("token");
-      if (!token) return;
-  
-      const decoded = parseJwt(token);
-      if (decoded?.email) setEmail(decoded.email);
-  } , [])
+  }
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const decoded = parseJwt(token);
+    if (decoded?.email) setEmail(decoded.email);
+  }, [])
   const [formData, setFormData] = useState({
     username: "",
     agent: "",
     owner: "",
     password: "",
-    nember : "",
+    nember: "",
     createdAt: new Date().toISOString().split("T")[0],
   });
 
@@ -40,14 +40,14 @@ export default function AddPointForm({ onClose }) {
     e.preventDefault();
     onClose(); // إغلاق الفورم بعد الحفظ
   };
-  
-  const handelSave = async ()=>{
-    try{
-            setLoading(true); // ✅ بدء التحميل
-    await axios.post("https://paynet-1.onrender.com/api/point/add-point" , {formData , email})
-    alert("تم اضافة نقطة البيع بنجاح")
+
+  const handelSave = async () => {
+    try {
+      setLoading(true); // ✅ بدء التحميل
+      await axios.post("https://paynet-main-nasar.onrender.com/api/point/add-point", { formData, email })
+      alert("تم اضافة نقطة البيع بنجاح")
     }
-    catch(err){
+    catch (err) {
       console.log(err)
       alert("الايميل موجود مسبقا")
 

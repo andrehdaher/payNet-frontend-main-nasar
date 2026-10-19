@@ -1,5 +1,6 @@
 import React from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
+import react from "react";
 
 const Login = React.lazy(() => import("./pages/Login"));
 const Home = React.lazy(() => import("./pages/Home"));
@@ -21,6 +22,11 @@ const Haram = React.lazy(() => import("./pages/Haram"));
 const PaymentStatement = React.lazy(() => import("./pages/PaymentStatement"));
 const FinancialPoint = React.lazy(() => import("./pages/FinancialPoint"));
 const Notebooks = React.lazy(() => import("./pages/Notebooks"));
+// const ProductUpload = react.lazy(()=> import('./pages/ProductUpload') )
+// const MaintenancePage = react.lazy(()=> import('./pages/MaintenancePage') )
+const PointPayment = react.lazy(()=> import('./pages/PointPayment') )
+const Play = react.lazy(()=> import('./pages/Play') )
+const PayApp = react.lazy(()=> import('./pages/PayApp') )
 
 
 export const routesConfig = [
@@ -28,15 +34,19 @@ export const routesConfig = [
   { path: "/", element: <ProtectedRoute><Home /></ProtectedRoute> },
   { path: "/add-point", element: <ProtectedRoute><AddPoint /></ProtectedRoute> },
   { path: "/HomePoint", element: <ProtectedRoute><HomePoint /></ProtectedRoute> },
-  
+  {path : '/PointPayment' , element : <ProtectedRoute><PointPayment/></ProtectedRoute>},
+  { path: "/play", element: <ProtectedRoute><Play /></ProtectedRoute> },
   { path: "/internet", element: <ProtectedRoute><Internet /></ProtectedRoute> },
   { path: "/payinternet", element: <ProtectedRoute><PayInternet /></ProtectedRoute> },
+  { path: "/payapp", element: <ProtectedRoute><PayApp /></ProtectedRoute> },
   { path: "/astalam", element: <ProtectedRoute><Astalam /></ProtectedRoute> },
 
   { path: "/balance", element: <ProtectedRoute><Balance /></ProtectedRoute> },
   { path: "/financial", element: <ProtectedRoute><FinancialStatement /></ProtectedRoute> },
-  { path: "/pending", element: <ProtectedRoute><PendingPayments /></ProtectedRoute> },
+  // { path: "/pending", element: <ProtectedRoute><PendingPayments /></ProtectedRoute> },
   { path: "/notebooks", element: <ProtectedRoute><Notebooks /></ProtectedRoute> },
+  { path: "/astalam", element: <ProtectedRoute><Astalam /></ProtectedRoute> },
+
 
   { path: "/adminpending", element: <ProtectedRoute allowedRoles={["admin"]}><AdminPending /></ProtectedRoute> },
   { path: "/allUser", element: <ProtectedRoute allowedRoles={["admin"]}><GetUser /></ProtectedRoute> },
@@ -46,7 +56,7 @@ export const routesConfig = [
   { path: "/adminAddUser", element: <ProtectedRoute allowedRoles={["admin"]}><AddUser /></ProtectedRoute> },
 
   { path: "/haram", element: <ProtectedRoute><Haram /></ProtectedRoute> },
-  { path: "/PaymentStatement", element: <ProtectedRoute><PaymentStatement /></ProtectedRoute> },
+  // { path: "/PaymentStatement", element: <ProtectedRoute><PaymentStatement /></ProtectedRoute> },
   { path: "/financial-point", element: <ProtectedRoute><FinancialPoint /></ProtectedRoute> },
 
   { path: "*", element: <Home /> },

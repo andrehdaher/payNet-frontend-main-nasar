@@ -42,7 +42,7 @@ export default function AddPoint() {
 
     try {
       const res = await axios.get(
-        `https://paynet-1.onrender.com/api/point/add-point?email=${decoded.email}`
+        `https://paynet-main-nasar.onrender.com/api/point/add-point?email=${decoded.email}`
       );
       setFormData(res.data);
     } catch (err) {
@@ -61,7 +61,7 @@ export default function AddPoint() {
 
     try {
       await axios.put(
-        `https://paynet-1.onrender.com/api/point/add-balance/${id}`,
+        `https://paynet-main-nasar.onrender.com/api/point/add-balance/${id}`,
         { amount, email, username, owner }
       );
       alert("تمت إضافة الرصيد بنجاح ✅");
@@ -78,7 +78,7 @@ export default function AddPoint() {
 
     try {
       await axios.delete(
-        `https://paynet-1.onrender.com/api/point/delete/${id}`
+        `https://paynet-main-nasar.onrender.com/api/point/delete/${id}`
       );
       alert("تم حذف النقطة ✅");
       getPoint();
@@ -107,12 +107,12 @@ export default function AddPoint() {
             size="sm"
             onClick={(e) => {
               e.stopPropagation()
-                handelAddBalance(
-                  row._id,
-                  row.username,
-                  row.owner
-                )
-              }
+              handelAddBalance(
+                row._id,
+                row.username,
+                row.owner
+              )
+            }
             }
           >
             إضافة رصيد
@@ -154,7 +154,7 @@ export default function AddPoint() {
             data={formData}
             pageSize={10}
             onRowClick={row => {
-              navigate('/financial-point', {state: row})
+              navigate('/financial-point', { state: row })
             }}
           />
         </CardContent>

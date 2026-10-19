@@ -12,79 +12,79 @@ export default function UsersTable() {
 
   const navigate = useNavigate()
 
-const fetchUsers = () => {
-  axios.get("https://paynet-1.onrender.com/api/admin/all-user")
-    .then(res => setUsers(res.data))
-    .catch(err => console.error(err));
-};
-useEffect(() => {
-  fetchUsers();
-}, []);
+  const fetchUsers = () => {
+    axios.get("https://paynet-main-nasar.onrender.com/api/admin/all-user")
+      .then(res => setUsers(res.data))
+      .catch(err => console.error(err));
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
 
   const deleteUser = async (id) => {
-          const confirmed = window.confirm("هل انت متاكد من حذف المستخدم");
+    const confirmed = window.confirm("هل انت متاكد من حذف المستخدم");
     if (!confirmed) return;
     try {
-      await axios.delete(`https://paynet-1.onrender.com/api/admin/deleteuser/${id}`);
+      await axios.delete(`https://paynet-main-nasar.onrender.com/api/admin/deleteuser/${id}`);
       setUsers(users.filter(user => user._id !== id));
       alert("تم حذف المستخدم")
-      
+
     } catch (err) {
       console.error("خطأ في الحذف", err);
     }
   };
 
- 
+
 
   const addBatch = async (id) => {
-  const input = prompt("ادخل الدفعة التي تريد إضافتها");
+    const input = prompt("ادخل الدفعة التي تريد إضافتها");
 
-  if (!input) return; // المستخدم ضغط إلغاء
+    if (!input) return; // المستخدم ضغط إلغاء
 
-  const amount = parseFloat(input);
+    const amount = parseFloat(input);
 
-  if (isNaN(amount)) {
-    alert("الرجاء إدخال رقم صحيح");
-    return;
-  }
+    if (isNaN(amount)) {
+      alert("الرجاء إدخال رقم صحيح");
+      return;
+    }
 
-  try {
-    
-    await axios.put(`https://paynet-1.onrender.com/api/admin/addbatch/${id}`, {
-      amount, // إرسال القيمة بعد التحويل لرقم
-    });
-    alert("تمت إضافة الدفعة بنجاح ✅");
-    fetchUsers(); // ⬅️ هذا السطر يُعيد تحميل القائمة
+    try {
+
+      await axios.put(`https://paynet-main-nasar.onrender.com/api/admin/addbatch/${id}`, {
+        amount, // إرسال القيمة بعد التحويل لرقم
+      });
+      alert("تمت إضافة الدفعة بنجاح ✅");
+      fetchUsers(); // ⬅️ هذا السطر يُعيد تحميل القائمة
 
 
-  } catch (err) {
-    console.error(err);
-    alert(err);
-  }
-};
+    } catch (err) {
+      console.error(err);
+      alert(err);
+    }
+  };
 
-const updateHandle = (id) => {
-  setEditUserId(id);
-};
+  const updateHandle = (id) => {
+    setEditUserId(id);
+  };
 
 
 
   const totalBalance = users.reduce((sum, user) => sum + (user.balance || 0), 0);
 
   return (
-    
+
     <div className="container mx-auto p-4">
-{editUserId && (
-  <EditUserForm
-    userId={editUserId}
-    onClose={() => setEditUserId(null)}
-    onUpdate={fetchUsers}
-  />
-)}
+      {editUserId && (
+        <EditUserForm
+          userId={editUserId}
+          onClose={() => setEditUserId(null)}
+          onUpdate={fetchUsers}
+        />
+      )}
 
 
-      <NavbarAdmin/>
+      <NavbarAdmin />
       <h2 className="text-xl font-bold mb-4">قائمة المستخدمين</h2>
       <table className="min-w-full bg-white border text-center">
         <thead>

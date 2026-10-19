@@ -29,7 +29,7 @@ const Navbar = () => {
     const fetchBalance = async () => {
       try {
         const res = await axios.get(
-          "https://paynet-1.onrender.com/api/user/balance",
+          "https://paynet-main-nasar.onrender.com/api/user/balance",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -88,8 +88,8 @@ const Navbar = () => {
               className="hover:text-white hover:bg-blue-600 px-3 py-1 rounded transition"
             >
               ديون
-  
-              </Link>
+
+            </Link>
           </li>
           <li>
             <Link
@@ -97,15 +97,15 @@ const Navbar = () => {
               className="hover:text-white hover:bg-blue-600 px-3 py-1 rounded transition"
             >
               اضافة مستخدم
-  
-              </Link>
+
+            </Link>
           </li>
           <li>
             <Link
               to="/allUser"
               className="hover:text-white hover:bg-blue-600 px-3 py-1 rounded transition"
             >
-              عرض المستخدمين            
+              عرض المستخدمين
             </Link>
           </li>
         </ul>
@@ -155,19 +155,19 @@ const Navbar = () => {
             to="/admindaen"
             className="block py-2 px-3 hover:bg-blue-100 rounded"
           >
-الديون
+            الديون
           </Link>
           <Link
             to="/adminAddUser"
             className="block py-2 px-3 hover:bg-blue-100 rounded"
           >
-اضافة مستخدم
+            اضافة مستخدم
           </Link>
           <Link
             to="/allUser"
             className="block py-2 px-3 hover:bg-blue-100 rounded"
           >
-عرض المستخدمين          </Link>
+            عرض المستخدمين          </Link>
 
           <button
             onClick={handleLogout}

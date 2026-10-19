@@ -3,17 +3,17 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import axios from 'axios';
 export default function AddSaveNum({ onClose }) {
 
-  function parseJwt (token){
-    try{
+  function parseJwt(token) {
+    try {
       return JSON.parse(atob(token.split(".")[1]));
-    }catch{
+    } catch {
       return null;
     }
   }
   const token = localStorage.getItem('token')
-    const decoded = parseJwt(token);
-    const email = decoded?.email;
-  
+  const decoded = parseJwt(token);
+  const email = decoded?.email;
+
 
 
   const [formData, setFormData] = useState({
@@ -71,14 +71,14 @@ export default function AddSaveNum({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios.post('https://paynet-1.onrender.com/api/payment/save-number' ,
-     
-      formData , {
-        headers:{
-          Authorization: `Bearer ${token}`,
+    const res = await axios.post('https://paynet-main-nasar.onrender.com/api/payment/save-number',
 
-        }
+      formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+
       }
+    }
     )
     alert('تم حفظ الرقم بنجاح')
     setFormData({
@@ -88,22 +88,22 @@ export default function AddSaveNum({ onClose }) {
       date: "",
       amount: "",
     })
-    
+
 
   };
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50"
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-white p-6 rounded-xl shadow-md w-96 z-[10000]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-black font-bold text-lg">اضافة رقم</h1>
-          <AiOutlineCloseCircle 
+          <AiOutlineCloseCircle
             className="text-gray-500 hover:text-gray-700 cursor-pointer text-xl"
             onClick={onClose}
           />

@@ -44,7 +44,7 @@ const NavBar = () => {
     const fetchBalance = async () => {
       try {
         const res = await axios.get(
-          "https://paynet-1.onrender.com/api/user/balance",
+          "https://paynet-main-nasar.onrender.com/api/user/balance",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setBalance(res.data.balance);
@@ -63,55 +63,61 @@ const NavBar = () => {
 
   const menuItems = [
     { to: "/", label: "الصفحة الرئيسية", icon: <FaHome /> },
+    // {
+    //   to: "/financial",
+    //   label: "البيان المالي للتسديد",
+    //   icon: <FaMoneyBill />,
+    //   badge: hasNewUnpaid,
+    // },
+    // { to: "/pending", label: "عمليات قيد الترحيل", icon: <FaExchangeAlt /> },
     {
       to: "/financial",
-      label: "البيان المالي للتسديد",
+      label: "البيان المالي ",
       icon: <FaMoneyBill />,
       badge: hasNewUnpaid,
     },
-    { to: "/pending", label: "عمليات قيد الترحيل", icon: <FaExchangeAlt /> },
 
     // خيارات للمستخدم العادي
     ...(role === "user"
       ? [
-          { to: "/balance", label: "تعبئة رصيد", icon: <FaWallet /> },
-          {
-            to: "/PaymentStatement",
-            label: "البيان المالي للدفعات",
-            icon: <FaFileInvoice />,
-          },
-          {
-            to: "/financial-point",
-            label: "البيان المالي للنقاط الفرعية",
-            icon: <FaFileInvoice />,
-          },
-          {
-            to: "/add-point",
-            label: "نقاط البيع الفرعية",
-            icon: <FaUser />,
-          },
-          {
-            to: "/notebooks",
-            label: "الارقام المحفوظة",
-            icon: <FaStickyNote />,
-          },
-          {
-            external: "https://wa.me/963993822320",
-            label: "واتساب",
-            icon: <FaWhatsapp className="text-green-500" />,
-          },
-        ]
+        { to: "/balance", label: "تعبئة رصيد", icon: <FaWallet /> },
+        // {
+        //   to: "/PaymentStatement",
+        //   label: "البيان المالي للدفعات",
+        //   icon: <FaFileInvoice />,
+        // },
+        {
+          to: "/financial-point",
+          label: "البيان المالي للنقاط الفرعية",
+          icon: <FaFileInvoice />,
+        },
+        {
+          to: "/add-point",
+          label: "نقاط البيع الفرعية",
+          icon: <FaUser />,
+        },
+        // {
+        //   to: "/notebooks",
+        //   label: "الارقام المحفوظة",
+        //   icon: <FaStickyNote />,
+        // },
+        {
+          external: "https://wa.me/963959762701",
+          label: "واتساب",
+          icon: <FaWhatsapp className="text-green-500" />,
+        },
+      ]
       : []),
 
     // خيارات لنقاط البيع
     ...(role === "user-point"
       ? [
-          {
-            to: "/PointPayment",
-            label: "البيان المالي للدفعات",
-            icon: <FaFileInvoice />,
-          },
-        ]
+        {
+          to: "/PointPayment",
+          label: "البيان المالي للدفعات",
+          icon: <FaFileInvoice />,
+        },
+      ]
       : []),
   ];
 
@@ -124,7 +130,7 @@ const NavBar = () => {
           <span className="font-bold text-violet-700">{email || "جاري التحميل..."}</span>
           <span className="text-sm text-gray-600">
             الرصيد الحالي:
-            {balance !== null ? ` ${balance.toFixed(2)} ل.س` : "جاري التحميل..."}
+            {balance !== null ? ` ${balance.toFixed(2)}  ل.س جديدة` : "جاري التحميل..."}
           </span>
         </div>
         <button
@@ -132,9 +138,8 @@ const NavBar = () => {
           className="h-fit my-auto text-violet-600 p-2 rounded-md hover:bg-violet-200 transition"
         >
           <span
-            className={`inline-block transition-transform duration-300 ease-in-out ${
-              isOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"
-            }`}
+            className={`inline-block transition-transform duration-300 ease-in-out ${isOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"
+              }`}
           >
             {!isOpen ? <FaBars size={20} /> : <FaTimes size={20} />}
           </span>

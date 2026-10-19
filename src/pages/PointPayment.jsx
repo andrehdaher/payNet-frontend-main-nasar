@@ -1,13 +1,13 @@
-import React, { useEffect, useState , useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navbar from "../components/NavBar";
 import axios from "axios";
 
 export default function PaymentStatement() {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
-        const vantaRef = useRef(null);
-      const [vantaEffect, setVantaEffect] = useState(null);
-              function parseJwt(token) {
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
+  function parseJwt(token) {
     try {
       return JSON.parse(atob(token.split(".")[1]));
     } catch (e) {
@@ -18,33 +18,33 @@ export default function PaymentStatement() {
   const token = localStorage.getItem("token");
   const decoded = parseJwt(token);
   const email = decoded?.email;
-  
 
-    
-      useEffect(() => {
-        if (!vantaEffect && window.VANTA) {
-          setVantaEffect(
-            window.VANTA.NET({
-              el: vantaRef.current,
+
+
+  useEffect(() => {
+    if (!vantaEffect && window.VANTA) {
+      setVantaEffect(
+        window.VANTA.NET({
+          el: vantaRef.current,
           color: 0x0f172a,
           backgroundColor: 0xeaeaea,
           points: 8.0,
           maxDistance: 20.0,
           spacing: 15.0,
-            })
-          );
-        }
-        return () => {
-          if (vantaEffect) vantaEffect.destroy();
-        };
-      }, [vantaEffect]);
+        })
+      );
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
 
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`https://paynet-1.onrender.com5000/api/point/all-point?email=${email}`, {
+        const res = await axios.get(`https://paynet-main-nasar.onrender.com5000/api/point/all-point?email=${email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -65,9 +65,9 @@ export default function PaymentStatement() {
       <Navbar />
       <div ref={vantaRef} className="p-6 bg-gray-100 min-h-screen relative" dir="rtl">
         <div className="relative z-10">
-          
+
           <h2 className="text-3xl font-bold mb-6 text-black text-center">البيان المالي للدفعات</h2>
-          
+
           {loading ? (
             <p className="text-center text-gray-500">جاري تحميل البيانات...</p>
           ) : payments.length === 0 ? (
@@ -102,7 +102,7 @@ export default function PaymentStatement() {
               </table>
             </div>
           )}
-          
+
         </div>      </div>
     </div>
   );

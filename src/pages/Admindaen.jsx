@@ -7,28 +7,28 @@ export default function PaymentStatement() {
   const [loading, setLoading] = useState(true);
   const [confirmedPayments, setConfirmedPayments] = useState({});
 
-    const fetchPayments = async () => {
-      try {
-        const res = await axios.get(
-          "https://paynet-1.onrender.com/api/admin/daen"
-        );
-        setPayments(res.data);
-      } catch (error) {
-        console.error("فشل في جلب الدفعات:", error);
-      } finally {
-        setLoading(false);
-      }
+  const fetchPayments = async () => {
+    try {
+      const res = await axios.get(
+        "https://paynet-main-nasar.onrender.com/api/admin/daen"
+      );
+      setPayments(res.data);
+    } catch (error) {
+      console.error("فشل في جلب الدفعات:", error);
+    } finally {
+      setLoading(false);
     }
-useEffect(() => {
-  fetchPayments();
-}, []);
+  }
+  useEffect(() => {
+    fetchPayments();
+  }, []);
 
 
   const confirmPaymentInBackend = async (payment) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "https://paynet-1.onrender.com/api/admin/confirm-daen",
+        "https://paynet-main-nasar.onrender.com/api/admin/confirm-daen",
         {
           id: payment._id,
           email: payment.name, // أو يمكن تغيير الحقل حسب اسم الحقل الحقيقي للبريد
@@ -56,20 +56,19 @@ useEffect(() => {
   };
 
   const deleterecharge = async (id) => {
-      const confirmed = window.confirm("هل أنت متأكد أنك تريد حذف هذه الدفعة؟ لا يمكن التراجع بعد ذلك.");
+    const confirmed = window.confirm("هل أنت متأكد أنك تريد حذف هذه الدفعة؟ لا يمكن التراجع بعد ذلك.");
     if (!confirmed) return;
 
-    try{
-    await axios.delete(`https://paynet-1.onrender.com/api/admin/delete/${id}`)
-    alert("تم حذف الدفعة بنجاح")
-    fetchPayments();
+    try {
+      await axios.delete(`https://paynet-main-nasar.onrender.com/api/admin/delete/${id}`)
+      alert("تم حذف الدفعة بنجاح")
+      fetchPayments();
 
 
-    }catch(err)
-    {
+    } catch (err) {
       console.log(err)
     }
-    
+
   };
 
   return (
@@ -116,18 +115,19 @@ useEffect(() => {
                       <button
                         onClick={() => handleConfirm(payment, index)}
                         disabled={payment.status}
-                        className={`px-3 py-1 rounded text-white font-medium ${
-                          (payment.status) ? "bg-green-600" : "bg-red-600"
-                        }`}
+                        className={`px-3 py-1 rounded text-white font-medium ${(payment.status) ? "bg-green-600" : "bg-red-600"
+                          }`}
                       >
                         {payment.status ? "تم التسديد" : "دين"}
                       </button>
+                      <button className="bg-yellow-500 text-white px-2 py-1 rounded mx-2">الغاء الدين</button>
                       <button
-                        onClick={()=>{deleterecharge(payment._id)}}
+                        onClick={() => { deleterecharge(payment._id) }}
                         className="bg-red-700 text-white px-2 py-1 rounded mx-2"
                       >
                         حذف الدفعة
                       </button>
+
                     </td>
                   </tr>
                 ))}
