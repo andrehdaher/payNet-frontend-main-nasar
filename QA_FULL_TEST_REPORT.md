@@ -6,7 +6,7 @@ Date: 2026-07-29
 
 Verdict: FAIL - FINANCIAL RISK, partially mitigated during this session.
 
-The project can run locally when the frontend points to `https://paynet-1.onrender.com`. Login with the provided PayNet test account succeeds, ProWave read endpoints work locally, and ProWave availability returns successfully for at least one product.
+The project can run locally when the frontend points to `http://127.0.0.1:5000`. Login with the provided PayNet test account succeeds, ProWave read endpoints work locally, and ProWave availability returns successfully for at least one product.
 
 Critical financial risk found: the ProWave purchase endpoint originally trusted the amount sent by the frontend for PayNet balance deduction. This allowed a tampered client request to attempt a purchase while deducting a manipulated SYP amount. This was fixed by calculating the PayNet SYP amount on the backend from the ProWave item price and backend exchange rate.
 
@@ -20,7 +20,7 @@ Live ProWave purchase was not executed because it may deduct real ProWave balanc
 | Node.js | v22.19.0 |
 | npm | 10.9.3 |
 | Frontend URL | http://127.0.0.1:3000 |
-| Backend URL | https://paynet-1.onrender.com |
+| Backend URL | http://127.0.0.1:5000 |
 | Production backend checked | https://paynet-1.onrender.com |
 | Test account | Provided by user; password omitted from report |
 | External provider | ProWave |
@@ -29,7 +29,7 @@ Important environment finding:
 
 - `localhost:5000` resolves to a different Node service on IPv6 and returns `404` for PayNet routes.
 - `127.0.0.1:5000` reaches PayNet backend correctly.
-- `.env.local` was pointing to `http://127.0.0.1:5001`; it was changed to `https://paynet-1.onrender.com`.
+- `.env.local` was pointing to `http://127.0.0.1:5001`; it was changed to `http://127.0.0.1:5000`.
 
 ## 3. Architecture Summary
 
@@ -139,7 +139,7 @@ Location:
 
 Expected:
 
-- Frontend should call PayNet backend at `https://paynet-1.onrender.com`.
+- Frontend should call PayNet backend at `http://127.0.0.1:5000`.
 
 Actual:
 
@@ -147,7 +147,7 @@ Actual:
 
 Fix applied:
 
-- Changed `.env.local` to `REACT_APP_API_URL=https://paynet-1.onrender.com`.
+- Changed `.env.local` to `REACT_APP_API_URL=http://127.0.0.1:5000`.
 - Restarted React dev server.
 
 ### BUG-002: `localhost:5000` can hit the wrong server
@@ -157,7 +157,7 @@ Severity: High
 Evidence:
 
 - `http://localhost:5000/api/prowave/balance` returned `404`.
-- `https://paynet-1.onrender.com/api/prowave/balance` returned `200`.
+- `http://127.0.0.1:5000/api/prowave/balance` returned `200`.
 - Another Node service was listening on IPv6 `::5000`.
 
 Suggested fix:

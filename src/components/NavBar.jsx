@@ -116,8 +116,6 @@ const NavBar = () => {
     fetchDaen();
     fetchBalance();
     fetchTodayRefused();
-    window.addEventListener('paynet:wallet-changed', fetchBalance);
-    return () => window.removeEventListener('paynet:wallet-changed', fetchBalance);
   }, [setHasUnseenRefusedToday, setRefusedTodaySeenAt]);
 
   const handleLogout = () => {

@@ -9,18 +9,10 @@ const navItems = [
   { to: "/admindaen", label: "الديون", icon: WalletCards, group: "المالية" },
   { to: "/adminExchangeRate", label: "سعر الصرف", icon: RefreshCw, group: "المالية" },
   { to: "/adminProWavePrices", label: "أسعار ProWave", icon: Tags, group: "المالية" },
-  {
-    to: "/adminAlraghebPrices",
-    label: "أسعار alragheb",
-    icon: Tags,
-    group: "المالية"
-  },
-
   { to: "/adminProWaveReconciliation", label: "مطابقة المزوّد", icon: Activity, group: "المالية" },
   { to: "/adminAddUser", label: "إضافة مستخدم", icon: Users, group: "المستخدمون" },
   { to: "/allUser", label: "عرض المستخدمين", icon: Users, group: "المستخدمون" },
   { to: "/productUpload", label: "إضافة منتج", icon: PackagePlus, group: "المنتجات" },
-
 ];
 
 export default function NavbarAdmin() {
@@ -59,10 +51,11 @@ export default function NavbarAdmin() {
             key={item.to}
             to={item.to}
             onClick={() => setIsOpen(false)}
-            className={`inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 ${active
+            className={`inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 ${
+              active
                 ? "bg-violet-700 text-white shadow-sm"
                 : "text-slate-700 hover:bg-violet-50 hover:text-violet-800"
-              } ${mobile ? "w-full" : ""}`}
+            } ${mobile ? "w-full" : ""}`}
             aria-current={active ? "page" : undefined}
           >
             <Icon className="h-4 w-4" aria-hidden="true" />

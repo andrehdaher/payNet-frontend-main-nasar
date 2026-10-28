@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import tasded from "../assets/tasded.png";
 import iptv from "../assets/iptv.png";
 import baka from "../assets/baka.png";
@@ -28,7 +28,7 @@ import Usdtpay from "../components/payInternet/Usdtpay";
 import ViewApp from "../components/payInternet/ViewApp";
 import AI from "../components/payInternet/AI";
 import programes from "../components/payInternet/programes";
-import { ENABLE_ALESO_PRODUCTS, ENABLE_ALRAGHEB_PRODUCTS } from "../config/features";
+import { ENABLE_ALESO_PRODUCTS } from "../config/features";
 
 const ITEMS_PER_LOAD = 12;
 
@@ -173,14 +173,6 @@ const createAlesoServiceCard = ({
 const optionalAlesoCard = (card) => (ENABLE_ALESO_PRODUCTS ? [card] : []);
 
 export default function Internet() {
-  const location = useLocation();
-  if (location.state === "application" && ENABLE_ALRAGHEB_PRODUCTS) {
-    return <Navigate to="/chat-apps" replace />;
-  }
-  return <LegacyInternet />;
-}
-
-function LegacyInternet() {
   const navigate = useNavigate();
   const location = useLocation();
   const serviceType = typeof location.state === "string" ? location.state : "";

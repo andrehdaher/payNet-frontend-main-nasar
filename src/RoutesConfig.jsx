@@ -27,9 +27,6 @@ const Advertisements = react.lazy(()=> import('./pages/Advertisements') )
 const ProductUpload = react.lazy(()=> import('./pages/ProductUpload') )
 const MaintenancePage = react.lazy(()=> import('./pages/MaintenancePage') )
 const PointPayment = react.lazy(()=> import('./pages/PointPayment') )
-const AdminAlraghebPrices = react.lazy(()=> import('./pages/AdminAlraghebPrices') )
-const AlraghebChatApps = React.lazy(() => import('./pages/AlraghebChatApps'));
-const AlraghebProductDetails = React.lazy(() => import('./pages/AlraghebProductDetails'));
 const Play = react.lazy(()=> import('./pages/Play') )
 const PayApp = react.lazy(()=> import('./pages/PayApp') )
 const AdminExchangeRate = react.lazy(()=> import('./pages/AdminExchangeRate') )
@@ -48,8 +45,6 @@ export const routesConfig = [
   { path: "/internet", element: <ProtectedRoute><Internet /></ProtectedRoute> },
   { path: "/payinternet", element: <ProtectedRoute><PayInternet /></ProtectedRoute> },
   { path: "/payapp", element: <ProtectedRoute><PayApp /></ProtectedRoute> },
-  { path: "/chat-apps", element: <ProtectedRoute><AlraghebChatApps /></ProtectedRoute> },
-  { path: "/chat-apps/products/:productId", element: <ProtectedRoute><AlraghebProductDetails /></ProtectedRoute> },
   { path: "/astalam", element: <ProtectedRoute><Astalam /></ProtectedRoute> },
 
   { path: "/balance", element: <ProtectedRoute><Balance /></ProtectedRoute> },
@@ -67,8 +62,6 @@ export const routesConfig = [
   { path: "/adminExchangeRate", element: <ProtectedRoute allowedRoles={["admin"]}><AdminExchangeRate /></ProtectedRoute> },
   { path: "/adminProWavePrices", element: <ProtectedRoute allowedRoles={["admin"]}><AdminProWavePrices /></ProtectedRoute> },
   { path: "/adminProWaveReconciliation", element: <ProtectedRoute allowedRoles={["admin"]}><AdminProWaveReconciliation /></ProtectedRoute> },
-  { path: "/adminAlraghebPrices", element: <ProtectedRoute allowedRoles={["admin"]}><AdminAlraghebPrices /></ProtectedRoute> },
-
 
   { path: "/haram", element: <ProtectedRoute><Haram /></ProtectedRoute> },
   // { path: "/PaymentStatement", element: <ProtectedRoute><PaymentStatement /></ProtectedRoute> },
