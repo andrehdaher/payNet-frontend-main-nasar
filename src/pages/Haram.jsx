@@ -21,7 +21,7 @@ export default function TransferForm() {
   const mtnNumbers = ["0968711645", "0957631500", "0957773023", "0946158361"];
   const serviceType = location.state
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({ 
     name: "",
     destination: serviceType == "HARAM" ? "لانا تمام شاهين - سلمية - هرم " : serviceType == 'SYRMTN' ? "الشركة السريتيل و MTN" : serviceType == "SHAMKASH" ? "alfanet" : "لانا تمام شاهين - سلمية " ,
     number: serviceType == "FOAD" ? "0968711645" : "0968711645",
