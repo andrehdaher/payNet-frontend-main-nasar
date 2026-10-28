@@ -1,144 +1,138 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import NavbarAdmin from "../components/NavbarAdmin";
+import NavbarAdmin from '../components/NavbarAdmin'
+import { useNavigate } from "react-router-dom";
 import EditUserForm from "../components/EditUserForm";
-import PageHeader from "../components/Custom/PageHeader";
-import DataTable from "../components/Custom/DataTable";
-import { Button } from "../components/Custom/Button";
-import ConfirmDialog from "../components/Custom/ConfirmDialog";
-import PromptDialog from "../components/Custom/PromptDialog";
-import Alert from "../components/Custom/Alert";
-import Footer from "../components/Footer";
-import { apiUrl } from "../config/api";
+
+
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
   const [editUserId, setEditUserId] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState(null);
-  const [dialog, setDialog] = useState(null);
-  const [actionLoading, setActionLoading] = useState(false);
+
+  const navigate = useNavigate()
 
   const fetchUsers = () => {
-    setLoading(true);
-    axios
-      .get(apiUrl("/api/admin/all-user"))
-      .then((res) => setUsers(res.data))
-      .catch((err) => {
-        console.error(err);
-        setMessage({ type: "error", text: "تعذر تحميل المستخدمين." });
-      })
-      .finally(() => setLoading(false));
+    axios.get("https://paynet-main-nasar.onrender.com/api/admin/all-user")
+      .then(res => setUsers(res.data))
+      .catch(err => console.error(err));
   };
-
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  const runAction = async (callback, successText) => {
+
+  const deleteUser = async (id) => {
+    const confirmed = window.confirm("هل انت متاكد من حذف المستخدم");
+    if (!confirmed) return;
     try {
-      setActionLoading(true);
-      setMessage(null);
-      await callback();
-      setMessage({ type: "success", text: successText });
-      fetchUsers();
-      setDialog(null);
+      await axios.delete(`https://paynet-main-nasar.onrender.com/api/admin/deleteuser/${id}`);
+      setUsers(users.filter(user => user._id !== id));
+      alert("تم حذف المستخدم")
+
     } catch (err) {
-      console.error(err);
-      setMessage({ type: "error", text: "تعذر تنفيذ العملية." });
-    } finally {
-      setActionLoading(false);
+      console.error("خطأ في الحذف", err);
     }
   };
 
-  const totalBalance = users.reduce((sum, user) => sum + (user.balance || 0), 0);
-  const selected = dialog?.user;
 
-  const columns = useMemo(
-    () => [
-      { key: "name", label: "الاسم" },
-      { key: "email", label: "البريد" },
-      { key: "number", label: "رقم الهاتف" },
-      { key: "role", label: "النوع" },
-      { key: "balance", label: "الرصيد", render: (user) => `${user.balance || 0}` },
-      {
-        key: "actions",
-        label: "إجراءات",
-        render: (user) => (
-          <div className="flex flex-wrap justify-center gap-2">
-            <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); setEditUserId(user._id); }}>
-              تعديل
-            </Button>
-            <Button size="sm" variant="success" onClick={(e) => { e.stopPropagation(); setDialog({ type: "batch", user }); }}>
-              إضافة دفعة
-            </Button>
-            <Button size="sm" variant="danger" onClick={(e) => { e.stopPropagation(); setDialog({ type: "delete", user }); }}>
-              حذف
-            </Button>
-          </div>
-        ),
-      },
-    ],
-    []
-  );
+
+  const addBatch = async (id) => {
+    const input = prompt("ادخل الدفعة التي تريد إضافتها");
+
+    if (!input) return; // المستخدم ضغط إلغاء
+
+    const amount = parseFloat(input);
+
+    if (isNaN(amount)) {
+      alert("الرجاء إدخال رقم صحيح");
+      return;
+    }
+
+    try {
+
+      await axios.put(`https://paynet-main-nasar.onrender.com/api/admin/addbatch/${id}`, {
+        amount, // إرسال القيمة بعد التحويل لرقم
+      });
+      alert("تمت إضافة الدفعة بنجاح ✅");
+      fetchUsers(); // ⬅️ هذا السطر يُعيد تحميل القائمة
+
+
+    } catch (err) {
+      console.error(err);
+      alert(err);
+    }
+  };
+
+  const updateHandle = (id) => {
+    setEditUserId(id);
+  };
+
+
+
+  const totalBalance = users.reduce((sum, user) => sum + (user.balance || 0), 0);
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-16" dir="rtl">
-      <NavbarAdmin />
+
+    <div className="container mx-auto p-4">
       {editUserId && (
-        <EditUserForm userId={editUserId} onClose={() => setEditUserId(null)} onUpdate={fetchUsers} />
+        <EditUserForm
+          userId={editUserId}
+          onClose={() => setEditUserId(null)}
+          onUpdate={fetchUsers}
+        />
       )}
 
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <PageHeader
-          title="قائمة المستخدمين"
-          description="إدارة المستخدمين والأرصدة والدفعات من مكان واحد."
-          stats={[
-            { label: "عدد المستخدمين", value: users.length },
-            { label: "مجموع الرصيد", value: `${totalBalance}$` },
-          ]}
-        />
 
-        {message && <Alert type={message.type} className="mb-4">{message.text}</Alert>}
+      <NavbarAdmin />
+      <h2 className="text-xl font-bold mb-4">قائمة المستخدمين</h2>
+      <table className="min-w-full bg-white border text-center">
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="border px-4 py-2">الاسم</th>
+            <th className="border px-4 py-2">البريد</th>
+            <th className="border px-4 py-2">رقم الهاتف</th>
+            <th className="border px-4 py-2">النوع</th>
+            <th className="border px-4 py-2">الرصيد</th>
+            <th className="border px-4 py-2">إجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map(user => (
+            <tr key={user._id}>
+              <td className="border px-4 py-2">{user.name}</td>
+              <td className="border px-4 py-2">{user.email}</td>
+              <td className="border px-4 py-2">{user.number}</td>
+              <td className="border px-4 py-2">{user.role}</td>
+              <td className="border px-4 py-2">{user.balance}</td>
+              <td className="border px-4 py-2 space-x-1">
+                <button
+                  className="bg-blue-500 text-white px-2 py-1 rounded"
+                  onClick={() => (updateHandle(user._id))}
+                >
+                  تعديل
+                </button>
+                <button
+                  className="bg-red-500 text-white px-2 py-1 rounded"
+                  onClick={() => deleteUser(user._id)}
+                >
+                  حذف
+                </button>
+                <button
+                  className="bg-green-500 text-white px-2 py-1 rounded"
+                  onClick={() => addBatch(user._id)}
+                >
+                  إضافة دفعة
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-        <DataTable
-          columns={columns}
-          data={users}
-          loading={loading}
-          emptyTitle="لا يوجد مستخدمون"
-          emptyDescription="ستظهر الحسابات هنا بعد إضافتها."
-        />
-      </main>
-
-      <ConfirmDialog
-        open={dialog?.type === "delete"}
-        title="حذف المستخدم"
-        description={selected ? `هل تريد حذف المستخدم ${selected.email}؟ لا يمكن التراجع عن هذه العملية.` : ""}
-        confirmText="حذف"
-        tone="danger"
-        loading={actionLoading}
-        onClose={() => setDialog(null)}
-        onConfirm={() => runAction(() => axios.delete(apiUrl(`/api/admin/deleteuser/${selected._id}`)), "تم حذف المستخدم.")}
-      />
-
-      <PromptDialog
-        open={dialog?.type === "batch"}
-        title="إضافة دفعة"
-        description={selected ? `إضافة دفعة إلى حساب ${selected.email}.` : ""}
-        label="قيمة الدفعة"
-        inputType="number"
-        placeholder="أدخل المبلغ"
-        confirmText="إضافة"
-        tone="success"
-        loading={actionLoading}
-        onClose={() => setDialog(null)}
-        onConfirm={(value) => {
-          const amount = parseFloat(value);
-          if (Number.isNaN(amount)) return;
-          runAction(() => axios.put(apiUrl(`/api/admin/addbatch/${selected._id}`), { amount }), "تمت إضافة الدفعة بنجاح.");
-        }}
-      />
-      <Footer />
+      <div className="text-right font-bold mt-4">
+        مجموع الرصيد: {totalBalance}$
+      </div>
     </div>
   );
 }

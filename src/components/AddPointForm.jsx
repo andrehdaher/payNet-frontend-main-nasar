@@ -1,14 +1,10 @@
+// components/AddPointForm.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useToast } from "../context/ToastContext";
-import { Input } from "./Custom/Input";
-import { Button } from "./Custom/Button";
-import { apiUrl } from "../config/api";
 
 export default function AddPointForm({ onClose }) {
-  const toast = useToast();
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // ✅ حالة التحميل
 
   function parseJwt(token) {
     try {
@@ -17,15 +13,13 @@ export default function AddPointForm({ onClose }) {
       return null;
     }
   }
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     const decoded = parseJwt(token);
     if (decoded?.email) setEmail(decoded.email);
-  }, []);
-
+  }, [])
   const [formData, setFormData] = useState({
     username: "",
     agent: "",
@@ -44,82 +38,90 @@ export default function AddPointForm({ onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onClose();
+    onClose(); // إغلاق الفورم بعد الحفظ
   };
 
   const handelSave = async () => {
     try {
-      setLoading(true);
-      await axios.post(apiUrl("/api/point/add-point"), { formData, email });
-      toast.success("تمت إضافة نقطة البيع بنجاح");
-    } catch (err) {
-      console.error(err);
-      toast.error("البريد الإلكتروني موجود مسبقاً");
-    } finally {
-      setLoading(false);
+      setLoading(true); // ✅ بدء التحميل
+      await axios.post("https://paynet-main-nasar.onrender.com/api/point/add-point", { formData, email })
+      alert("تم اضافة نقطة البيع بنجاح")
     }
-  };
+    catch (err) {
+      console.log(err)
+      alert("الايميل موجود مسبقا")
+
+    }
+    finally {
+      setLoading(false); // ✅ إيقاف التحميل بعد انتهاء العملية
+    }
+
+  }
 
   return (
-    <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
-      dir="rtl"
-      role="presentation"
-    >
-      <div
-        className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 shadow-2xl"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="add-point-title"
-      >
-        <h2 id="add-point-title" className="mb-4 text-center text-xl font-bold text-slate-900">
-          إضافة نقطة بيع
-        </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-3" aria-busy={loading}>
-          <Input
-            id="point-username"
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+      <div className="bg-white rounded-lg p-6 w-[400px] shadow-lg">
+        <h2 className="text-xl font-bold mb-4 text-center">إضافة نقطة بيع</h2>
+
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <input
+            type="text"
             name="username"
-            label="اسم المستخدم"
+            placeholder="اسم المستخدم"
             value={formData.username}
             onChange={handleChange}
+            className="w-full border px-3 py-2 rounded"
           />
-          <Input
-            id="point-password"
+          <input
+            type="text"
             name="password"
-            label="كلمة المرور"
+            placeholder="كلمة المرور"
             value={formData.password}
             onChange={handleChange}
+            className="w-full border px-3 py-2 rounded"
           />
-          <Input
-            id="point-number"
+          <input
+            type="text"
             name="number"
-            label="رقم الخليوي"
+            placeholder="رقم الخليوي"
             value={formData.number}
             onChange={handleChange}
+            className="w-full border px-3 py-2 rounded"
           />
-          <Input
-            id="point-agent"
+          <input
+            type="text"
             name="agent"
-            label="الوكيل"
+            placeholder="الوكيل"
             value={email}
             onChange={handleChange}
-          />
-          <Input
-            id="point-owner"
-            name="owner"
-            label="صاحب النقطة"
-            value={formData.owner}
-            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded"
           />
 
-          <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row">
-            <Button type="button" onClick={onClose} variant="outline" className="flex-1">
+          <input
+            type="text"
+            name="owner"
+            placeholder="صاحب النقطة"
+            value={formData.owner}
+            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded"
+          />
+
+          <div className="flex justify-between mt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-gray-500 text-white px-4 py-2 rounded"
+            >
               إلغاء
-            </Button>
-            <Button type="submit" className="flex-1" onClick={handelSave} loading={loading}>
+            </button>
+            <button
+              type="submit"
+              className="bg-violet-600 text-white px-4 py-2 rounded"
+              onClick={handelSave}
+            >
               {loading ? "جاري الحفظ..." : "حفظ"}
-            </Button>
+            </button>
           </div>
         </form>
       </div>

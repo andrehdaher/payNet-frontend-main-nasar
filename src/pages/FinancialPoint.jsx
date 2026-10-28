@@ -1,190 +1,169 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import Navbar from "../components/NavBar";
 import { useNotification } from "../context/NotificationContext";
 import ScreenWrapper from "../components/ScreenWrapper";
 import DataTable from "../components/Custom/DataTable";
 import { Input } from "../components/Custom/Input";
-import { Card, CardContent, CardHeader } from "../components/Custom/Card";
-import PageHeader from "../components/Custom/PageHeader";
-import Alert from "../components/Custom/Alert";
-import {
-  fetchPaginated,
-  getApiErrorMessage,
-  getCurrentEmail,
-  paymentQueryKeys,
-} from "../api/paymentQueries";
-import { normalizePaymentStatusLabel } from "../utils/paymentStatus";
+import { Card, CardCon, CardContent, CardHeader } from "../components/Custom/Card";
+import { useLocation } from "react-router-dom";
+
+
 
 export default function FinancialStatement() {
-  const queryClient = useQueryClient();
+  const [confirmedPayments, setConfirmedPayments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const location = useLocation();
-  const pointData = location.state;
-  const pointUsername = pointData?.username || "";
+  const location = useLocation()
+  const pointData = location.state
+
+  // فلاتر البحث
   const [searchDate, setSearchDate] = useState("");
   const [searchLandline, setSearchLandline] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("");
-  const { setHasNewUnpaid } = useNotification();
-  const email = getCurrentEmail();
+  const { hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
 
-  const queryParams = useMemo(
-    () => ({
-      page: currentPage,
-      limit: itemsPerPage,
-      search: searchLandline || undefined,
-      date: searchDate || undefined,
-      status: searchStatus || undefined,
-      paymentType: paymentFilter || undefined,
-      pointUsername: pointUsername || undefined,
-    }),
-    [currentPage, pointUsername, searchLandline, searchDate, searchStatus, paymentFilter],
-  );
-  const queryKeyParams = useMemo(
-    () => ({ ...queryParams, ownerEmail: email }),
-    [email, queryParams],
-  );
+  useEffect(() => {
+    fetchConfirmed();
+  }, []);
 
-  const confirmedQuery = useQuery({
-    queryKey: paymentQueryKeys.pointConfirmed(queryKeyParams),
-    queryFn: () =>
-      fetchPaginated("/api/point/user/confirmed/point", {
-        page: currentPage,
-        limit: itemsPerPage,
-        search: searchLandline || undefined,
-        date: searchDate || undefined,
-        status: searchStatus || undefined,
-        paymentType: paymentFilter || undefined,
-        pointUsername: pointUsername || undefined,
-      }),
-    enabled: Boolean(email),
-    placeholderData: keepPreviousData,
+  function parseJwt(token) {
+    try {
+      return JSON.parse(atob(token.split(".")[1]));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const token = localStorage.getItem("token");
+  const decoded = parseJwt(token);
+  const email = decoded?.email;
+
+  useEffect(() => {
+    // عند تغيير البحث نعود للصفحة الأولى
+    setCurrentPage(1);
+  }, [searchLandline, searchDate, searchStatus, paymentFilter]);
+
+  const fetchConfirmed = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get(
+        `https://paynet-main-nasar.onrender.com/api/point/user/confirmed/point?emailPoint=${email}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setConfirmedPayments(res.data);
+      setHasNewUnpaid(false);
+
+    } catch (err) {
+      console.error("فشل في جلب البيانات:", err);
+    }
+  };
+
+
+  // تصفية البيانات حسب الفلاتر
+  const filteredPayments = confirmedPayments.filter((p) => {
+    const pointname = p.email.includes(pointData?.owner);
+    const landlineMatch = p.landline.includes(searchLandline);
+    const statusMatch = searchStatus ? p.status === searchStatus : true;
+    const statusPayment = paymentFilter
+      ? p.paymentType === paymentFilter
+      : true;
+    const dateMatch = searchDate
+      ? new Date(p.updatedAt || p.createdAt).toISOString().split("T")[0] ===
+      searchDate
+      : true;
+
+    return pointname && landlineMatch && statusMatch && dateMatch && statusPayment;
   });
 
-  const confirmedPayments = confirmedQuery.data?.data || [];
-  const pagination = confirmedQuery.data?.pagination || { total: 0, totalPages: 1 };
-
-  useEffect(() => {
-    if (confirmedQuery.isSuccess) {
-      setHasNewUnpaid(false);
-    }
-  }, [confirmedQuery.isSuccess, setHasNewUnpaid]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [pointUsername, searchLandline, searchDate, searchStatus, paymentFilter]);
-
-  useEffect(() => {
-    if (email && currentPage < (pagination.totalPages || 1)) {
-      const nextParams = { ...queryParams, page: currentPage + 1 };
-      queryClient.prefetchQuery({
-        queryKey: paymentQueryKeys.pointConfirmed({ ...nextParams, ownerEmail: email }),
-        queryFn: () =>
-          fetchPaginated("/api/point/user/confirmed/point", nextParams),
-      });
-    }
-  }, [currentPage, email, pagination.totalPages, queryClient, queryParams]);
-
-  const columns = useMemo(
-    () => [
-      {
-        key: "pointUsername",
-        label: "النقطة",
-        render: (p) => p.pointUsername || p.email || "-",
-      },
-      {
-        key: "pointOwner",
-        label: "صاحب النقطة",
-        render: (p) => p.pointOwner || "-",
-      },
-      { key: "landline", label: "رقم أرضي" },
-      { key: "company", label: "الشركة" },
-      { key: "speed", label: "السرعة" },
-      { key: "amount", label: "المبلغ", render: (p) => `${p.amount?.toLocaleString?.() || p.amount} ل.س` },
-      {
-        key: "status",
-        label: "الحالة",
-        render: (p) => {
-          const displayStatus = normalizePaymentStatusLabel(p.status);
-
-          return (
-            <span
-              className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
-                displayStatus === "تم التسديد" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"
-              }`}
-            >
-              {displayStatus === "تم التسديد" && <CheckCircle className="h-3.5 w-3.5" aria-hidden="true" />}
-              {displayStatus}
-            </span>
-          );
-        },
-      },
-      {
-        key: "date",
-        label: "تاريخ التسديد",
-        render: (p) =>
-          new Date(p.updatedAt || p.createdAt).toLocaleString("ar-SY", {
-            dateStyle: "medium",
-            timeStyle: "short",
-          }),
-      },
-      {
-        key: "note",
-        label: "ملاحظات",
-        render: (p) => (p.status === "غير مسددة" ? p.note || "-" : "-"),
-      },
-    ],
-    [],
+  // حساب الصفحات الحالية بعد التصفية
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredPayments.slice(
+    indexOfFirstItem,
+    indexOfLastItem
   );
+  const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
 
-  const title = pointData?.owner
-    ? `البيان المالي لـ ${pointData.owner}`
-    : "البيان المالي للنقاط الفرعية";
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+
+  const FinColumns = [
+    { key: "landline", label: "رقم أرضي" },
+    { key: "company", label: "الشركة" },
+    { key: "speed", label: "السرعة" },
+    { key: "amount", label: "المبلغ", render: (p) => `${p.amount.toLocaleString()} ل.س` },
+    {
+      key: "status",
+      label: "الحالة",
+      render: (p) => (
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-semibold ${p.status === "تم التسديد"
+            ? "bg-green-200 text-green-800"
+            : "bg-red-200 text-red-800"
+            }`}
+        >
+          {p.status}
+        </span>
+      ),
+    },
+    {
+      key: "date",
+      label: "تاريخ التسديد",
+      render: (p) =>
+        new Date(p.updatedAt || p.createdAt).toLocaleString("ar-SY", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }),
+    },
+    {
+      key: "note",
+      label: "ملاحظات",
+      render: (p) => (p.status === "غير مسددة" ? p.note || "—" : "—"),
+    },
+  ];
 
   return (
     <ScreenWrapper>
-      <PageHeader
-        title={title}
-        description={pointUsername ? "راجع عمليات هذه النقطة الفرعية." : "راجع عمليات كل النقاط الفرعية التابعة لحسابك."}
-      />
-      {confirmedQuery.isError && (
-        <Alert type="error" className="mb-4">
-          {getApiErrorMessage(confirmedQuery.error, "تعذر تحميل بيان النقطة المالي.")}
-        </Alert>
-      )}
       <Card className="m-6">
         <CardHeader>
-          <h2 className="text-center text-3xl font-bold text-gray-700">
-            {title}
+          <h2 className="text-3xl font-bold text-center text-gray-700">
+            البيان المالي ل{pointData?.owner}
           </h2>
         </CardHeader>
         <CardContent>
-          <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {/* واجهة البحث */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 ">
             <Input
-              id="point-financial-search-landline"
-              label="بحث"
+              label={'بحث'}
               type="text"
               placeholder="بحث برقم الهاتف الأرضي"
+              className="p-2 border bg-[#00000045] placeholder:text-white text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-none text-base"
               value={searchLandline}
               onChange={(e) => setSearchLandline(e.target.value)}
             />
             <Input
-              id="point-financial-search-date"
-              label="تاريخ"
+              label={'تاريخ'}
               type="date"
+              className="p-2 border bg-[#00000045] placeholder:text-white text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-none text-base"
               value={searchDate}
               onChange={(e) => setSearchDate(e.target.value)}
             />
             <div>
-              <label htmlFor="point-financial-search-status" className="mb-1 block text-sm font-semibold text-slate-700">
+              <label className="block mb-1 mr-3 text-sm font-medium text-foreground">
                 حالة التسديد
               </label>
               <select
-                id="point-financial-search-status"
-                className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-slate-900 outline-none transition-colors focus:border-violet-500 focus:ring-2 focus:ring-violet-500"
+                className="peer h-10 w-full text-foreground px-2 bg-foreground/10 border rounded-md border-foreground/50 outline-none"
                 value={searchStatus}
                 onChange={(e) => setSearchStatus(e.target.value)}
               >
@@ -194,30 +173,29 @@ export default function FinancialStatement() {
               </select>
             </div>
             <div>
-              <label htmlFor="point-financial-payment-filter" className="mb-1 block text-sm font-semibold text-slate-700">
+              <label className="block mb-1 mr-3 text-sm font-medium text-foreground">
                 حالة الدفع
               </label>
               <select
-                id="point-financial-payment-filter"
-                className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-slate-900 outline-none transition-colors focus:border-violet-500 focus:ring-2 focus:ring-violet-500"
+                className="peer h-10 w-full text-foreground px-2 bg-foreground/10 border rounded-md border-foreground/50 outline-none"
                 value={paymentFilter}
                 onChange={(e) => setPaymentFilter(e.target.value)}
               >
                 <option value="">كل الحالات</option>
-                <option value="cash">نقدا</option>
+                <option value="cash">نقداً</option>
                 <option value="credit">دين</option>
               </select>
             </div>
           </div>
           <DataTable
-            columns={columns}
-            data={confirmedPayments}
+            columns={FinColumns}
+            data={currentItems}
             currentPage={currentPage}
-            totalPages={pagination.totalPages}
-            onPageChange={setCurrentPage}
-            pageSize={itemsPerPage}
-            loading={confirmedQuery.isLoading}
-            updating={confirmedQuery.isFetching && !confirmedQuery.isLoading}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            onRowClick={(r) => {
+              console.log(r)
+            }}
           />
         </CardContent>
       </Card>

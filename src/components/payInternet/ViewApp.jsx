@@ -15,7 +15,7 @@ export default function ViewApp() {
 
     const ViewApp = [
         {
-            title: 'NETFLIX (يدوي)',
+            title: 'NETFLIX',
             formType: 'NETFLIX',
             description: 'شحن NETFLIX بسرعة وأمان',
             buttonText: "عرض التفاصيل",
@@ -32,8 +32,8 @@ export default function ViewApp() {
         },
         {
             title: 'LOOK 4K',
-            formType: 'LOOK 4K',
-            description: 'شحن LOOK 4K بسرعة وأمان',
+            formType: 'LOOK4K',
+            description: 'شحن SHAMNA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,
             image: LOOK4K
@@ -56,7 +56,7 @@ export default function ViewApp() {
         },
         {
             title: 'ZAIN TV',
-            formType: 'ZAIN TV',
+            formType: 'ZAINTV',
             description: 'شحن ZAIN TV بسرعة وأمان',
             buttonText: "عرض التفاصيل",
             Action: Action,

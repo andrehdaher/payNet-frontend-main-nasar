@@ -6,20 +6,17 @@ function cn(...classes) {
 }
 
 const Button = React.forwardRef(
-  ({ className = "", variant = "default", size = "default", loading = false, children, disabled, ...props }, ref) => {
+  ({ className = "", variant = "default", size = "default", ...props }, ref) => {
     const base =
-      "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60";
+      "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
     const variants = {
-      default: "bg-violet-700 text-white shadow-sm hover:bg-violet-800",
-      accent: "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700",
-      success: "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700",
+      default: "bg-violet-700 text-primary-foreground hover:bg-violet-700/90",
+      accent: "bg-accent text-accent-foreground hover:bg-accent/90",
       destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-      danger: "bg-red-600 text-white shadow-sm hover:bg-red-700",
-      warning: "bg-amber-500 text-white shadow-sm hover:bg-amber-600",
-      outline: "border border-slate-300 bg-white text-slate-800 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-800",
+      outline: "border border-input bg-background hover:bg-violet-700 hover:text-white",
       secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-      ghost: "text-slate-700 hover:bg-slate-100",
+      ghost: "hover:bg-accent hover:text-accent-foreground",
       link: "text-primary underline-offset-4 hover:underline",
     };
 
@@ -34,17 +31,8 @@ const Button = React.forwardRef(
       <button
         ref={ref}
         className={cn(base, variants[variant], sizes[size], className)}
-        disabled={disabled || loading}
         {...props}
-      >
-        {loading && (
-          <span
-            className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
-            aria-hidden="true"
-          />
-        )}
-        {children}
-      </button>
+      />
     );
   }
 );

@@ -1,22 +1,21 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { useToast } from "../context/ToastContext";
-import { Input } from "./Custom/Input";
-import { Button } from "./Custom/Button";
-import {
-  authConfig,
-  getApiErrorMessage,
-  getCurrentEmail,
-  paymentQueryKeys,
-} from "../api/paymentQueries";
-import { apiUrl } from "../config/api";
+import axios from 'axios';
+export default function AddSaveNum({ onClose }) {
 
-export default function AddSaveNum({ onClose, onSuccess }) {
-  const toast = useToast();
-  const queryClient = useQueryClient();
-  const email = getCurrentEmail();
+  function parseJwt(token) {
+    try {
+      return JSON.parse(atob(token.split(".")[1]));
+    } catch {
+      return null;
+    }
+  }
+  const token = localStorage.getItem('token')
+  const decoded = parseJwt(token);
+  const email = decoded?.email;
+
+
+
   const [formData, setFormData] = useState({
     name: "",
     number: "",
@@ -27,7 +26,7 @@ export default function AddSaveNum({ onClose, onSuccess }) {
     email,
   });
 
-  const companies = [
+  const company = [
     "ناس",
     "برونت",
     "اينت",
@@ -53,7 +52,7 @@ export default function AddSaveNum({ onClose, onSuccess }) {
     "الجمعية",
   ];
 
-  const speeds = [
+  const speed = [
     "512 Mbps   السعر 14000",
     "1 Mbps     السعر 18500",
     "2 Mbps     السعر 24000",
@@ -61,35 +60,6 @@ export default function AddSaveNum({ onClose, onSuccess }) {
     "8 Mbps     السعر 64000",
     "16 Mbps   السعر  83000",
   ];
-
-  const saveMutation = useMutation({
-    mutationFn: () =>
-      axios.post(
-        apiUrl("/api/payment/save-number"),
-        { ...formData, email },
-        authConfig(),
-      ),
-    onSuccess: () => {
-      toast.success("تم حفظ الرقم بنجاح");
-      queryClient.invalidateQueries({ queryKey: paymentQueryKeys.savedNumbers(email) });
-      setFormData({
-        name: "",
-        number: "",
-        company: "",
-        date: "",
-        amount: "",
-        speed: "",
-        email,
-      });
-      onSuccess?.();
-    },
-    onError: (error) => {
-      toast.error(getApiErrorMessage(error, "تعذر حفظ الرقم."));
-    },
-  });
-
-  const selectClass =
-    "h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition-colors focus:border-violet-500 focus:ring-2 focus:ring-violet-500";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -99,78 +69,121 @@ export default function AddSaveNum({ onClose, onSuccess }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    saveMutation.mutate();
+    const res = await axios.post('https://paynet-main-nasar.onrender.com/api/payment/save-number',
+
+      formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+
+      }
+    }
+    )
+    alert('تم حفظ الرقم بنجاح')
+    setFormData({
+      name: "",
+      number: "",
+      company: "",
+      date: "",
+      amount: "",
+    })
+
+
   };
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
-      onClick={saveMutation.isPending ? undefined : onClose}
-      dir="rtl"
-      role="presentation"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50"
+      onClick={onClose}
     >
       <div
-        className="z-[10000] w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 shadow-2xl"
+        className="bg-white p-6 rounded-xl shadow-md w-96 z-[10000]"
         onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="add-save-number-title"
       >
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <h1 id="add-save-number-title" className="text-lg font-bold text-slate-900">
-            إضافة رقم
-          </h1>
-          <button
-            type="button"
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-black font-bold text-lg">اضافة رقم</h1>
+          <AiOutlineCloseCircle
+            className="text-gray-500 hover:text-gray-700 cursor-pointer text-xl"
             onClick={onClose}
-            disabled={saveMutation.isPending}
-            className="rounded-md p-1 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 disabled:opacity-60"
-            aria-label="إغلاق النافذة"
-          >
-            <AiOutlineCloseCircle className="text-xl" aria-hidden="true" />
-          </button>
+          />
         </div>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            className="w-full border p-2 rounded"
+            placeholder="الاسم"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="number"
+            className="w-full border p-2 rounded"
+            placeholder="الرقم"
+            value={formData.number}
+            onChange={handleChange}
+            required
+          />
 
-        <form className="space-y-4" onSubmit={handleSubmit} aria-busy={saveMutation.isPending}>
-          <Input id="saved-name" name="name" label="الاسم" value={formData.name} onChange={handleChange} required />
-          <Input id="saved-number" name="number" type="number" label="الرقم" value={formData.number} onChange={handleChange} required />
+          {/* اختيار الشركة */}
+          <select
+            name="company"
+            className="w-full border p-2 rounded"
+            required
+            value={formData.company}
+            onChange={handleChange}
+          >
+            <option value="">اختر الشركة</option>
+            {company.map((c, i) => (
+              <option key={i} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
 
-          <div className="space-y-1 text-right">
-            <label htmlFor="saved-company" className="block text-sm font-semibold text-slate-700">
-              الشركة
-            </label>
-            <select id="saved-company" name="company" className={selectClass} required value={formData.company} onChange={handleChange}>
-              <option value="">اختر الشركة</option>
-              {companies.map((company) => (
-                <option key={company} value={company}>
-                  {company}
-                </option>
-              ))}
-            </select>
-          </div>
+          <input
+            type="date"
+            name="date"
+            className="w-full border p-2 rounded"
+            required
+            value={formData.date}
+            onChange={handleChange}
+          />
+          <input
+            type="number"
+            name="amount"
+            required
+            className="w-full border p-2 rounded"
+            placeholder="المبلغ"
+            value={formData.amount}
+            onChange={handleChange}
+          />
 
-          <Input id="saved-date" name="date" type="date" label="تاريخ التسديد" value={formData.date} onChange={handleChange} required />
-          <Input id="saved-amount" name="amount" type="number" label="المبلغ" value={formData.amount} onChange={handleChange} required />
+          {/* اختيار السرعة */}
+          <select
+            name="speed"
+            className="w-full border p-2 rounded"
+            required
+            value={formData.speed}
+            onChange={handleChange}
+          >
+            <option value="">اختر السرعة</option>
+            {speed.map((s, i) => (
+              <option key={i} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
 
-          <div className="space-y-1 text-right">
-            <label htmlFor="saved-speed" className="block text-sm font-semibold text-slate-700">
-              السرعة
-            </label>
-            <select id="saved-speed" name="speed" className={selectClass} required value={formData.speed} onChange={handleChange}>
-              <option value="">اختر السرعة</option>
-              {speeds.map((speed) => (
-                <option key={speed} value={speed}>
-                  {speed}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <Button type="submit" className="w-full" variant="success" loading={saveMutation.isPending}>
+          <button
+            type="submit"
+            className="w-full bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700 transition"
+          >
             حفظ
-          </Button>
+          </button>
         </form>
       </div>
     </div>

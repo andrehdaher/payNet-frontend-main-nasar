@@ -7,19 +7,12 @@ import DataTable from "../components/Custom/DataTable"; // ✅ تأكد إن ا�
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../components/Custom/Card";
 import { Button } from "../components/Custom/Button";
 import { useNavigate } from "react-router-dom";
-import PageHeader from "../components/Custom/PageHeader";
-import ConfirmDialog from "../components/Custom/ConfirmDialog";
-import PromptDialog from "../components/Custom/PromptDialog";
-import Alert from "../components/Custom/Alert";
-import { apiUrl } from "../config/api";
 
 export default function AddPoint() {
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [formData, setFormData] = useState([]);
   const [AddPointFormId, setAddPointFormId] = useState(false);
-  const [dialog, setDialog] = useState(null);
-  const [message, setMessage] = useState(null);
 
   // ✅ فك JWT
   function parseJwt(token) {
@@ -49,7 +42,7 @@ export default function AddPoint() {
 
     try {
       const res = await axios.get(
-        apiUrl(`/api/point/add-point?email=${decoded.email}`)
+        `https://paynet-main-nasar.onrender.com/api/point/add-point?email=${decoded.email}`
       );
       setFormData(res.data);
     } catch (err) {
@@ -62,33 +55,36 @@ export default function AddPoint() {
   }, []);
 
   // ✅ إضافة رصيد
-  const handelAddBalance = async (id, username, owner, amount) => {
+  const handelAddBalance = async (id, username, owner) => {
+    const amount = prompt("ادخل قيمة الرصيد المطلوب إضافتها   (سيتم شحن رصيده من رصيدك):");
     if (!amount) return;
 
     try {
       await axios.put(
-        apiUrl(`/api/point/add-balance/${id}`),
+        `https://paynet-main-nasar.onrender.com/api/point/add-balance/${id}`,
         { amount, email, username, owner }
       );
-      setMessage({ type: "success", text: "تمت إضافة الرصيد بنجاح." });
+      alert("تمت إضافة الرصيد بنجاح ✅");
       getPoint();
     } catch (err) {
       console.error(err);
-      setMessage({ type: "error", text: "حدث خطأ أثناء إضافة الرصيد." });
+      alert("حدث خطأ أثناء إضافة الرصيد ❌");
     }
   };
 
   // ✅ حذف نقطة
   const handelDelete = async (id) => {
+    if (!window.confirm("هل أنت متأكد من الحذف؟")) return;
+
     try {
       await axios.delete(
-        apiUrl(`/api/point/delete/${id}`)
+        `https://paynet-main-nasar.onrender.com/api/point/delete/${id}`
       );
-      setMessage({ type: "success", text: "تم حذف النقطة." });
+      alert("تم حذف النقطة ✅");
       getPoint();
     } catch (err) {
       console.error(err);
-      setMessage({ type: "error", text: "حدث خطأ أثناء الحذف." });
+      alert("حدث خطأ أثناء الحذف ❌");
     }
   };
 
@@ -111,7 +107,11 @@ export default function AddPoint() {
             size="sm"
             onClick={(e) => {
               e.stopPropagation()
-              setDialog({ type: "balance", row })
+              handelAddBalance(
+                row._id,
+                row.username,
+                row.owner
+              )
             }
             }
           >
@@ -122,7 +122,7 @@ export default function AddPoint() {
             variant="destructive"
             onClick={(e) => {
               e.stopPropagation()
-              setDialog({ type: "delete", row })
+              handelDelete(row._id)
             }}
           >
             حذف
@@ -134,12 +134,6 @@ export default function AddPoint() {
 
   return (
     <ScreenWrapper>
-      <PageHeader
-        title="نقاط البيع الفرعية"
-        description="إدارة نقاط البيع التابعة لك، إضافة رصيد، ومراجعة البيان المالي لكل نقطة."
-        actions={<Button onClick={() => setAddPointFormId(true)}>إضافة نقطة بيع</Button>}
-      />
-      {message && <Alert type={message.type} className="mb-4">{message.text}</Alert>}
       {/* ✅ نافذة إضافة نقطة */}
       {AddPointFormId && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -165,35 +159,6 @@ export default function AddPoint() {
           />
         </CardContent>
       </Card>
-      <PromptDialog
-        open={dialog?.type === "balance"}
-        title="إضافة رصيد"
-        description="سيتم شحن النقطة من رصيد حسابك."
-        label="قيمة الرصيد"
-        inputType="number"
-        placeholder="أدخل المبلغ"
-        confirmText="إضافة"
-        tone="success"
-        onClose={() => setDialog(null)}
-        onConfirm={(amount) => {
-          const row = dialog?.row;
-          if (!row) return;
-          handelAddBalance(row._id, row.username, row.owner, amount);
-          setDialog(null);
-        }}
-      />
-      <ConfirmDialog
-        open={dialog?.type === "delete"}
-        title="حذف نقطة البيع"
-        description="هل أنت متأكد من حذف هذه النقطة؟"
-        confirmText="حذف"
-        tone="danger"
-        onClose={() => setDialog(null)}
-        onConfirm={() => {
-          handelDelete(dialog?.row?._id);
-          setDialog(null);
-        }}
-      />
     </ScreenWrapper>
   );
 }

@@ -217,7 +217,6 @@ export const internetDetails = {
         multiplier: 1.05,
         min: 1
     },
-    
     pubg: {
         companies: [
             '',
@@ -312,7 +311,7 @@ export const internetDetails = {
     clashclans: {
         companies: [
             '',
-                '80 DIAMOND ( السعر 161 ل.س ) clash of clans',
+            '80 DIAMOND ( السعر 161 ل.س ) clash of clans',
             '250 DIAMOND ( السعر 645 ل.س ) clash of clans',
             '1200 DIAMOND ( السعر 1326 ل.س ) clash of clans',
             'التذكرة الذهبية ( السعر 917 ل.س ) clash of clans',

@@ -1,18 +1,22 @@
-import React from "react";
-import { Button } from "./Custom/Button";
+import React from 'react';
 
-const CardComponent = ({ title, description, buttonText, onClick, image }) => {
+const CardComponent = ({ title, description, buttonText, onClick , image}) => {
   return (
-    <div className="m-2 flex max-w-xs flex-col rounded-lg border border-slate-200 bg-white p-6 text-slate-900 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
-      <img src={image} alt={title || ""} className="mx-auto h-32 w-32 rounded-full object-cover" />
+    <div className="max-w-xs transform transition-transform duration-300 hover:translate-y-2 hover:scale-105 hover:shadow-xl  p-6 rounded-md shadow-md  bg-[#00000050]  text-[#ffffffd3] border-none m-2">
+      	<img src={image} 
+        alt="" 
+        className="w-32 h-32 mx-auto rounded-full dark:bg-gray-500 aspect-square" />
 
-      <div className="mb-4 mt-4">
-        <h2 className="text-center text-2xl font-bold tracking-wide font-arabic">{title}</h2>
+      <div className="mb-4">
+        <h2 className="text-2xl text-center font-semibold tracking-wide font-arabic">{title}</h2>
       </div>
-      <p className="mb-6 text-center text-sm leading-6 text-slate-700">{description}</p>
-      <Button type="button" className="mt-auto w-full" onClick={onClick}>
+      <p className="text-[#ffffffed] text-center mb-6">{description}</p>
+      <button
+        className="w-full bg-violet-700 text-white py-3 rounded-lg hover:bg-purple-800 transition duration-300 text-lg"
+        onClick={onClick}
+      >
         {buttonText}
-      </Button>
+      </button>
     </div>
   );
 };
