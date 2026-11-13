@@ -1,5 +1,4 @@
 import label from "daisyui/components/label";
-import { min } from "three/tsl";
 
 
 

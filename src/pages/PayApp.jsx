@@ -1,3 +1,5 @@
+import { PAYNET_BASE_URL } from "../api";
+import { useToast } from "../context/ToastContext";
 import React from 'react'
 import { useLocation } from "react-router-dom";
 import { appDetails } from '../components/payInternet/appDetails';
@@ -8,6 +10,7 @@ import axios from 'axios';
 
 
 export default function PayApp() {
+  const toast = useToast();
     const location = useLocation()
     const formType = location.state
     const config = appDetails[formType] || []
@@ -56,7 +59,7 @@ export default function PayApp() {
         const email = decoded?.email;
 
         if (!email) {
-            alert("الرجاء تسجيل الدخول");
+            toast.warning("الرجاء تسجيل الدخول");
             return;
         }
 
@@ -66,7 +69,7 @@ export default function PayApp() {
 
         try {
             const res = await axios.post(
-                "https://paynet-main-nasar.onrender.com/api/payment/internet-full",
+                `${PAYNET_BASE_URL}/api/payment/internet-full`,
                 {
                     landline: data.name,
                     company: data.title,
@@ -86,7 +89,7 @@ export default function PayApp() {
                 }
             );
 
-            alert(
+            toast.success(
                 "تم التسديد بنجاح.\nسوف تصلكم معلومات الاشتراك برسالة واتساب"
             );
 
@@ -95,7 +98,7 @@ export default function PayApp() {
             setChatPassword("");
 
         } catch (err) {
-            alert(err.response?.data?.message || "حدث خطأ");
+            toast.error(err.response?.data?.message || "حدث خطأ");
         }
     };
 
@@ -103,8 +106,8 @@ export default function PayApp() {
     return (
         <>
             {showChatGPTForm && (
-                <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-xl p-6 w-full max-w-sm space-y-4">
+                <div className="fixed inset-0 p-4 bg-black/60 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-xl p-6 paynet-modal-panel space-y-4">
                         <h3 className="text-lg font-bold text-center">
                             بيانات الحساب
                         </h3>

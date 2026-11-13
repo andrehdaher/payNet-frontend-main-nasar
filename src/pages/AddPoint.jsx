@@ -1,17 +1,22 @@
+import { PAYNET_BASE_URL } from "../api";
+import { useToast } from "../context/ToastContext";
+import DataFeedback from "../components/DataFeedback";
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/NavBar";
 import AddPointForm from "../components/AddPointForm";
 import axios from "axios";
 import ScreenWrapper from "../components/ScreenWrapper";
 import DataTable from "../components/Custom/DataTable"; // ✅ تأكد إن المسار صحيح
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../components/Custom/Card";
+import { Card, CardContent, CardHeader } from "../components/Custom/Card";
 import { Button } from "../components/Custom/Button";
 import { useNavigate } from "react-router-dom";
 
 export default function AddPoint() {
+  const toast = useToast();
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [formData, setFormData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [AddPointFormId, setAddPointFormId] = useState(false);
 
   // ✅ فك JWT
@@ -38,15 +43,23 @@ export default function AddPoint() {
     if (!token) return;
 
     const decoded = parseJwt(token);
-    if (!decoded?.email) return;
+    if (!decoded?.email) {
+      setLoading(false);
+      setLoadError(true);
+      return;
+    }
+
+    setLoadError(false);
 
     try {
       const res = await axios.get(
-        `https://paynet-main-nasar.onrender.com/api/point/add-point?email=${decoded.email}`
+        `${PAYNET_BASE_URL}/api/point/add-point?email=${decoded.email}`
       );
       setFormData(res.data);
-    } catch (err) {
-      console.error(err);
+    } catch {
+      setLoadError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,14 +74,14 @@ export default function AddPoint() {
 
     try {
       await axios.put(
-        `https://paynet-main-nasar.onrender.com/api/point/add-balance/${id}`,
+        `${PAYNET_BASE_URL}/api/point/add-balance/${id}`,
         { amount, email, username, owner }
       );
-      alert("تمت إضافة الرصيد بنجاح ✅");
+      toast.success("تمت إضافة الرصيد بنجاح ✅");
       getPoint();
     } catch (err) {
       console.error(err);
-      alert("حدث خطأ أثناء إضافة الرصيد ❌");
+      toast.error("حدث خطأ أثناء إضافة الرصيد ❌");
     }
   };
 
@@ -78,13 +91,13 @@ export default function AddPoint() {
 
     try {
       await axios.delete(
-        `https://paynet-main-nasar.onrender.com/api/point/delete/${id}`
+        `${PAYNET_BASE_URL}/api/point/delete/${id}`
       );
-      alert("تم حذف النقطة ✅");
+      toast.success("تم حذف النقطة ✅");
       getPoint();
     } catch (err) {
       console.error(err);
-      alert("حدث خطأ أثناء الحذف ❌");
+      toast.error("حدث خطأ أثناء الحذف ❌");
     }
   };
 
@@ -136,27 +149,27 @@ export default function AddPoint() {
     <ScreenWrapper>
       {/* ✅ نافذة إضافة نقطة */}
       {AddPointFormId && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <AddPointForm onClose={() => setAddPointFormId(false)} />
-        </div>
+        <AddPointForm onClose={() => setAddPointFormId(false)} />
       )}
 
       {/* ✅ DataTable */}
-      <Card className={'m-6'}>
+      <Card className="min-w-0">
         <CardHeader>
-          <CardTitle>
+          <h1 className="page-title mb-0">
             نقاط البيع الفرعية
-          </CardTitle>
+          </h1>
         </CardHeader>
         <CardContent>
-          <DataTable
-            columns={columns}
-            data={formData}
-            pageSize={10}
-            onRowClick={row => {
-              navigate('/financial-point', { state: row })
-            }}
-          />
+          <DataFeedback loading={loading} error={loadError}>
+            <DataTable
+              columns={columns}
+              data={formData}
+              pageSize={10}
+              onRowClick={row => {
+                navigate('/financial-point', { state: row })
+              }}
+            />
+          </DataFeedback>
         </CardContent>
       </Card>
     </ScreenWrapper>

@@ -1,25 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
+import { PAYNET_BASE_URL } from "../api";
+import React, { useEffect } from "react";
 import ServiceCard from "../components/Card";
-import { data, useNavigate } from "react-router-dom";
-import ADSL from "../assets/ADSL.png";
-import elecandwater from "../assets/elecandwater.png";
-import ARDE1 from "../assets/ARDE1.png"
+import ADSL from "../assets/ADSL.webp";
+import elecandwater from "../assets/elecandwater.webp";
+import ARDE1 from "../assets/ARDE1.webp"
 import { useNotification } from "../context/NotificationContext";
-import NavBar from "../components/NavBar";
 import { io } from "socket.io-client";
 
 
 
 const HomePoint = () => {
-  const navigate = useNavigate();
-  const vantaRef = useRef(null);
-  const [vantaEffect, setVantaEffect] = useState(null);
-  const { hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
-  const [socket, setSocket] = useState(null);
+  const { setHasNewUnpaid } = useNotification(); // ✅ Context
 
 
   useEffect(() => {
-    const newSocket = io("https://paynet-main-nasar.onrender.com");
+    const newSocket = io(PAYNET_BASE_URL);
 
     newSocket.on("connect", () => {
       console.log('تم الاتصال بالسيرفر')
@@ -35,26 +30,9 @@ const HomePoint = () => {
       newSocket.disconnect();
     };
 
-  }, []);
+  }, [setHasNewUnpaid]);
 
 
-  useEffect(() => {
-    if (!vantaEffect && window.VANTA) {
-      setVantaEffect(
-        window.VANTA.NET({
-          el: vantaRef.current,
-          color: 0x0f172a,
-          backgroundColor: 0xeaeaea,
-          points: 8.0,
-          maxDistance: 20.0,
-          spacing: 15.0,
-        })
-      );
-    }
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
-  }, [vantaEffect]);
 
   const services = [
     {
@@ -62,39 +40,37 @@ const HomePoint = () => {
       description: "ادفع فواتير الإنترنت الخاصة بك بسرعة وأمان.",
       image: ADSL,
       buttonText: "سدد الآن",
-      route: "/internet",
+      service: "ADSL",
     },
     {
       title: "تسديد فواتير الارضي",
       description: "ادفع فواتير الارضي الخاصة بك بسرعة وأمان.",
       image: ARDE1,
       buttonText: "سدد الآن",
-      route: "/phone",
+      service: "PHONE",
     },
     {
       title: "تسديد كهرباء ومياه",
       description: "إدارة فواتير الكهرباء والمياه بكل سهولة وأمان.",
       image: elecandwater,
       buttonText: "سدد الآن",
-      route: "/utilities",
+      service: "ELEC",
     },
   ];
 
   return (
-    <div ref={vantaRef} className="min-h-screen w-full text-white relative">
-      <NavBar />
-      <div
-        className="grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 place-items-center"
-        dir="rtl"
-      >
-        {services.map((service, idx) => (
+    <div className="paynet-point-surface">
+      <h1 className="page-title">خدمات نقطة البيع</h1>
+      <div className="service-grid">
+        {services.map((service) => (
           <ServiceCard
-            key={idx}
+            key={service.service}
             title={service.title}
             description={service.description}
             image={service.image}
             buttonText={service.buttonText}
-            onClick={() => navigate(service.route)}
+            to="/internet"
+            state={service.service}
           />
         ))}
       </div>

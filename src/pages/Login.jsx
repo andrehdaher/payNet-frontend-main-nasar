@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { PAYNET_BASE_URL } from "../api";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import ScreenWrapper from "../components/ScreenWrapper";
 import { Input } from "../components/Custom/Input";
 import { Button } from "../components/Custom/Button";
 
@@ -10,9 +10,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-
-
 
   const navigate = useNavigate();
 
@@ -31,11 +28,13 @@ export default function Login() {
     setIsSubmitting(true);
 
     try {
-
-      const res = await axios.post("https://paynet-main-nasar.onrender.com/api/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${PAYNET_BASE_URL}/api/login`,
+        {
+          email,
+          password,
+        },
+      );
       setError("");
 
       const token = res.data.token;
@@ -49,19 +48,14 @@ export default function Login() {
       } else {
         navigate("/");
       }
-
-      console.log("تم تسجيل الدخول:", res.data);
-      setError("");
     } catch (err) {
       setError(err.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول");
-    }
-    finally {
+    } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <ScreenWrapper withNav={false} className={'flex items-center justify-center'}>
       <form
         onSubmit={handleSubmit}
         className="bg-card px-5 py-8 border border-border rounded-xl shadow-xl w-full max-w-md space-y-4"
@@ -70,11 +64,12 @@ export default function Login() {
           PayNet
         </h1>
 
-        {error && (
-          <p className="text-red-500 text-sm text-center">{error}</p>
-        )}
+        {error && <p role="alert" className="text-red-500 text-sm text-center">{error}</p>}
         <Input
-          label={'اسم المستخدم'}
+          label={"اسم المستخدم"}
+          id="login-email"
+          autoComplete="username"
+          dir="ltr"
           type="text"
           placeholder="Daher.Net"
           value={email}
@@ -85,7 +80,10 @@ export default function Login() {
         />
 
         <Input
-          label={'كلمة المرور'}
+          label={"كلمة المرور"}
+          id="login-password"
+          autoComplete="current-password"
+          dir="ltr"
           type="password"
           placeholder="Daher.Net"
           value={password}
@@ -95,13 +93,9 @@ export default function Login() {
           error={error}
         />
 
-        <Button
-          type="submit"
-          className="w-full mt-8"
-        >
+        <Button type="submit" className="w-full mt-8">
           {isSubmitting ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
         </Button>
       </form>
-    </ScreenWrapper>
   );
 }

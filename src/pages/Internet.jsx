@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import tasded from "../assets/tasded.png";
 import iptv from "../assets/iptv.png";
 import baka from "../assets/baka.png";
-import astfham from "../assets/astfham.png";
+import astfham from "../assets/astfham.webp";
 import ScreenWrapper from "../components/ScreenWrapper";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/Custom/Card";
+import ServiceCard from "../components/Card";
 import { Button } from "../components/Custom/Button";
-import astalam from '../assets/astalam.png'
+import astalam from '../assets/astalam.webp'
 import ADSL from '../assets/tasded.png'
-import elictric from '../assets/electric.png'
-import water from '../assets/water.png'
+import elictric from '../assets/electric.webp'
+import water from '../assets/water.webp'
 import SYRIATEL from '../assets/SYRIATEL.jpeg'
 import MTN from '../assets/MTN.jpeg'
 import PlayDetails from "../components/payInternet/PlayDetails";
@@ -21,7 +21,6 @@ import AI from "../components/payInternet/AI";
 const Home = () => {
 
 
-  const navigate = useNavigate();
   const [cardKey, setCardKey] = useState([]);
 
   function parseJwt(token) {
@@ -48,7 +47,7 @@ const Home = () => {
       formType: "ADSL",
       description: "تسديد فاتورة انترنت واضافة رصيد",
       buttonText: "تسديد فاتورة",
-      Action: (formType) => { navigate('/payinternet', { state: formType }) },
+      route: "/payinternet",
       image: tasded
     },
     {
@@ -56,7 +55,7 @@ const Home = () => {
       formType: "astalam",
       description: "استعلام عن قيمة فاتورة انترنت ",
       buttonText: "استعلام عن فاتورة",
-      Action: (formType) => { navigate('/astalam', { state: formType }) },
+      route: "/astalam",
       image: astfham
     },
     {
@@ -64,7 +63,7 @@ const Home = () => {
       formType: "IPTV",
       description: " تسديد خدمة  بسرعة وامانIPTV",
       buttonText: "اضافة رصيد",
-      Action: (formType) => { navigate('/payinternet', { state: formType }) },
+      route: "/payinternet",
       image: iptv
     },
     {
@@ -72,7 +71,7 @@ const Home = () => {
       formType: "RECHARGE",
       description: "شحن باقة انترنت بسرعة وامان",
       buttonText: "شحن باقة",
-      Action: (formType) => { navigate('/payinternet', { state: formType }) },
+      route: "/payinternet",
       image: baka
     },
   ] : serviceType == 'PHONE' ? [
@@ -81,14 +80,14 @@ const Home = () => {
       formType: "PHONE",
       description: "تسديد  فاتورة الارضي بسرعة وامان ",
       buttonText: "تسديد فاتورة الارضي",
-      Action: (formType) => { navigate('/payinternet', { state: formType }) },
+      route: "/payinternet",
       image: ADSL
     },
     {
       title: "استعلام عن الفاتورة",
       description: "استعلام عن  الفاتورة قبل التسديد",
       buttonText: "استعلام عن الفاتورة",
-      Action: () => window.open('http://tarassul.sy/#BPKCMCOF', '_blank'),
+      externalUrl: "http://tarassul.sy/#BPKCMCOF",
       image: astalam
     },
   ] : serviceType == 'ELEC' ? [
@@ -97,7 +96,7 @@ const Home = () => {
       formType: "ELEC",
       description: "تسديد فاتورة الكهرباء في جميع المحافظات",
       buttonText: "تسديد فاتورة",
-      Action: (formType) => { navigate('/payinternet', { state: formType }) },
+      route: "/payinternet",
       image: elictric
     },
     {
@@ -105,7 +104,7 @@ const Home = () => {
       formType: 'WATER',
       description: "تسديد فاتورة المياه في جميع المحافظات",
       buttonText: "تسديد فاتورة",
-      Action: (formType) => { navigate('/payinternet', { state: formType }) },
+      route: "/payinternet",
       image: water
     },
 
@@ -115,7 +114,7 @@ const Home = () => {
       formType: 'SYR',
       description: "تحويل وحدات وفواتير سريتل وسريتل كاش",
       buttonText: "تسديد فاتورة",
-      Action: (formType) => { navigate('/payinternet', { state: formType }) },
+      route: "/payinternet",
       image: SYRIATEL
     },
     {
@@ -123,7 +122,7 @@ const Home = () => {
       formType: 'MTN',
       description: "تحويل وحدات وفواتير MTN MTN كاش",
       buttonText: "تسديد فاتورة",
-      Action: (formType) => { navigate('/payinternet', { state: formType }) },
+      route: "/payinternet",
       image: MTN
     }
   ] :
@@ -158,40 +157,24 @@ const Home = () => {
 
   return (
     <ScreenWrapper>
-      <div
-        className="grid gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:gap-12 lg:grid-cols-4 place-items-center"
-        dir="rtl"
-      >
+      <h1 className="page-title">خدمات الدفع</h1>
+      {!services.length && <p className="page-message">اختر قسمًا من <Link className="text-violet-700 underline" to="/">الصفحة الرئيسية</Link>.</p>}
+      <div className="service-grid">
 
-        {
-          visibleServices.map((service, idx) => {
-            return <Card key={idx} className="w-72 h-[22rem] hover:shadow-lg hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out">
-              <CardContent>
-                <img className="w-40 h-40 mx-auto object-cover" src={service.image} alt="" />
-              </CardContent>
-
-              <CardHeader>
-                <CardTitle>{service.title}</CardTitle>
-                <CardDescription>{service.description}</CardDescription>
-              </CardHeader>
-
-              <CardFooter>
-                <Button
-                  className={'ml-auto'}
-                  variant="outline"
-                  onClick={() => service.Action(service.formType)}
-                >{service.buttonText}</Button>
-              </CardFooter>
-            </Card>
-
-          })
-
-        }
+        {visibleServices.map((service, idx) => (
+          <ServiceCard
+            key={service.formType ?? service.title}
+            {...service}
+            to={service.route}
+            state={service.formType}
+            eager={idx < 3}
+          />
+        ))}
       </div>
       {visibleCount < services.length && (
         <div className="flex justify-center  mt-6">
           <Button
-            className='w-80'
+            className='w-full max-w-xs'
             onClick={() => setVisibleCount(prev => prev + ITEMS_PER_LOAD)}
           >
             تحميل المزيد

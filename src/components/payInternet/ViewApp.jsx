@@ -1,5 +1,4 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
 import NETFLIX from '../../assets/NETFLIX.jpeg'
 import SHAMNA from '../../assets/SHAMNA.jpeg'
 import LOOK4K from '../../assets/LOOK4K.jpeg'
@@ -8,10 +7,6 @@ import IPTV from '../../assets/IPTV.jpeg'
 import ZAINTV from '../../assets/ZAINTV.jpeg'
 
 export default function ViewApp() {
-    const navigate = useNavigate();
-    const Action = (formType) => {
-        navigate('/payapp', { state: formType });
-    };
 
     const ViewApp = [
         {
@@ -19,7 +14,7 @@ export default function ViewApp() {
             formType: 'NETFLIX',
             description: 'شحن NETFLIX بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payapp",
             image: NETFLIX
         },
         {
@@ -27,7 +22,7 @@ export default function ViewApp() {
             formType: 'SHAMNA',
             description: 'شحن SHAMNA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payapp",
             image: SHAMNA
         },
         {
@@ -35,7 +30,7 @@ export default function ViewApp() {
             formType: 'LOOK4K',
             description: 'شحن SHAMNA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payapp",
             image: LOOK4K
         },
         {
@@ -43,7 +38,7 @@ export default function ViewApp() {
             formType: 'SHAHID',
             description: 'شحن SHAHID بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payapp",
             image: SHAHID
         },
         {
@@ -51,7 +46,7 @@ export default function ViewApp() {
             formType: 'IPTV',
             description: 'شحن IPTV بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payapp",
             image: IPTV
         },
         {
@@ -59,7 +54,7 @@ export default function ViewApp() {
             formType: 'ZAINTV',
             description: 'شحن ZAIN TV بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payapp",
             image: ZAINTV
         },
 

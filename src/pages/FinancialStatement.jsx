@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import { PAYNET_BASE_URL } from "../api";
+import { useToast } from "../context/ToastContext";
+import DataFeedback from "../components/DataFeedback";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "../components/NavBar";
 import { useNotification } from "../context/NotificationContext";
 import ScreenWrapper from "../components/ScreenWrapper";
 import DataTable from "../components/Custom/DataTable";
@@ -10,7 +12,10 @@ import { Card, CardCon, CardContent, CardHeader } from "../components/Custom/Car
 
 
 export default function FinancialStatement() {
+  const toast = useToast();
   const [confirmedPayments, setConfirmedPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -19,8 +24,7 @@ export default function FinancialStatement() {
   const [searchLandline, setSearchLandline] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("");
-  const vantaRef = useRef(null);
-  const { hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
+  const { setHasNewUnpaid } = useNotification(); // ✅ Context
 
   useEffect(() => {
     fetchConfirmed();
@@ -36,7 +40,7 @@ export default function FinancialStatement() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "https://paynet-main-nasar.onrender.com/api/admin/user/confirmed",
+        `${PAYNET_BASE_URL}/api/admin/user/confirmed`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,7 +52,9 @@ export default function FinancialStatement() {
       setHasNewUnpaid(false);
 
     } catch (err) {
-      console.error("فشل في جلب البيانات:", err);
+      setLoadError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,7 +64,7 @@ export default function FinancialStatement() {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `https://paynet-main-nasar.onrender.com/api/admin/payment/${id}`,
+        `${PAYNET_BASE_URL}/api/admin/payment/${id}`,
         { paymentType: newType },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -69,7 +75,7 @@ export default function FinancialStatement() {
       );
     } catch (err) {
       console.error("فشل في تعديل نوع الدفع:", err);
-      alert("حدث خطأ أثناء تعديل نوع الدفع");
+      toast.error("حدث خطأ أثناء تعديل نوع الدفع");
     }
   };
 
@@ -159,15 +165,15 @@ export default function FinancialStatement() {
 
   return (
     <ScreenWrapper>
-      <Card className="m-6">
+      <Card className="min-w-0">
         <CardHeader>
-          <h2 className="text-3xl font-bold text-center text-gray-700">
+          <h1 className="page-title">
             البيان المالي
-          </h2>
+          </h1>
         </CardHeader>
         <CardContent>
           {/* واجهة البحث */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6 ">
             <Input
               label={'بحث'}
               type="text"
@@ -212,15 +218,17 @@ export default function FinancialStatement() {
               </select>
             </div>
           </div>
-          <DataTable
-            columns={FinColumns}
-            data={currentItems}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            pageSize={itemsPerPage}
-            onPageSizeChange={(size) => { setItemsPerPage(size); setCurrentPage(1); }}
-          />
+          <DataFeedback loading={loading} error={loadError}>
+            <DataTable
+              columns={FinColumns}
+              data={currentItems}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              pageSize={itemsPerPage}
+              onPageSizeChange={(size) => { setItemsPerPage(size); setCurrentPage(1); }}
+            />
+          </DataFeedback>
         </CardContent>
       </Card>
     </ScreenWrapper>

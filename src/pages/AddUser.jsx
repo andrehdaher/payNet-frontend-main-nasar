@@ -1,5 +1,5 @@
+import { PAYNET_BASE_URL } from "../api";
 import { useState } from "react";
-import Navbar from "../components/NavbarAdmin";
 
 export default function AddUser() {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ export default function AddUser() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://paynet-main-nasar.onrender.com/api/user", {
+      const res = await fetch(`${PAYNET_BASE_URL}/api/user`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -49,13 +49,12 @@ export default function AddUser() {
 
   return (
     <div>
-      <Navbar />
       <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
         <form
           onSubmit={handleSubmit}
           className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg"
         >
-          <h2 className="text-2xl font-bold mb-4 text-center">إضافة مستخدم جديد</h2>
+          <h1 className="page-title">إضافة مستخدم جديد</h1>
 
           {message && <div className="mb-4 text-center text-sm">{message}</div>}
 

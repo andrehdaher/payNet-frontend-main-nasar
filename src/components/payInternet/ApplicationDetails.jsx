@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import SOULHILLCRYSTAL from '../../assets/SOULHILLCRYSTAL.jpeg'
 import LIKEELIVE from '../../assets/LIKEELIVE.jpeg'
 import YOHO from '../../assets/YOHO.jpeg'
@@ -121,10 +120,6 @@ import YOPARTI from '../../assets/YOPARTI.jpeg'
 import SODFACHAT from '../../assets/SODFACHAT.jpeg'
 
 export default function ApplicationDetails() {
-    const navigate = useNavigate();
-    const Action = (formType) => {
-        navigate('/payinternet', { state: formType });
-    };
 
 
     const ApplicationDetails = [
@@ -133,7 +128,7 @@ export default function ApplicationDetails() {
             formType: 'SOULHILLCRYSTAL',
             description: 'شحن موقع SOULHILL CRYSTAL بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SOULHILLCRYSTAL
         },
         {
@@ -141,7 +136,7 @@ export default function ApplicationDetails() {
             formType: 'LIKEELIVE',
             description: 'شحن موقع LIKEE LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: LIKEELIVE,
         },
         {
@@ -149,7 +144,7 @@ export default function ApplicationDetails() {
             formType: 'YOHO',
             description: 'شحن موقع YOHO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: YOHO,
         },
         {
@@ -157,7 +152,7 @@ export default function ApplicationDetails() {
             formType: 'AHLANCHAT',
             description: 'شحن موقع AHLAN CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: AHLANCHAT,
         },
         {
@@ -165,7 +160,7 @@ export default function ApplicationDetails() {
             formType: 'SOULSTAR',
             description: 'شحن موقع SOUL STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SOULSTAR,
         },
         {
@@ -173,7 +168,7 @@ export default function ApplicationDetails() {
             formType: 'HONEYJAR',
             description: 'شحن موقع HONEY JAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: HONEYJAR,
         },
         {
@@ -181,7 +176,7 @@ export default function ApplicationDetails() {
             formType: 'BIGOLIVE',
             description: 'شحن موقع BIGO LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: BIGOLIVE,
         },
         {
@@ -189,7 +184,7 @@ export default function ApplicationDetails() {
             formType: 'PARTYSTAR',
             description: 'شحن موقع PARTY STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: PARTYSTAR,
         },
         {
@@ -197,7 +192,7 @@ export default function ApplicationDetails() {
             formType: '4FUNCHAT',
             description: 'شحن موقع 4FUN CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: FUNCHAT,
         },
         {
@@ -205,7 +200,7 @@ export default function ApplicationDetails() {
             formType: 'LIGHTCHAT',
             description: 'شحن موقع LIGHT CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: LIGHTCHAT,
         },
         {
@@ -213,7 +208,7 @@ export default function ApplicationDetails() {
             formType: 'YOYO',
             description: 'شحن موقع YOYO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: YOYO,
         },
         {
@@ -221,7 +216,7 @@ export default function ApplicationDetails() {
             formType: 'ZAAR',
             description: 'شحن موقع ZAAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: ZAAR,
         },
         {
@@ -229,7 +224,7 @@ export default function ApplicationDetails() {
             formType: 'COCCO',
             description: 'شحن موقع COCCO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: COCCO,
         },
         {
@@ -237,7 +232,7 @@ export default function ApplicationDetails() {
             formType: 'POPPOLLIVE',
             description: 'شحن موقع POPPO LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: POPPOLLIVE
         },
         {
@@ -245,7 +240,7 @@ export default function ApplicationDetails() {
             formType: 'LAMA',
             description: 'شحن موقع LAMA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: LAMA,
         },
         {
@@ -253,7 +248,7 @@ export default function ApplicationDetails() {
             formType: 'WAHO',
             description: 'شحن موقع WAHO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: WAHO,
         },
         {
@@ -261,7 +256,7 @@ export default function ApplicationDetails() {
             formType: 'MEYO',
             description: 'شحن موقع MEYO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: MEYO,
         },
         {
@@ -269,7 +264,7 @@ export default function ApplicationDetails() {
             formType: 'KIYOLIVE',
             description: 'شحن موقع KIYO LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: KIYOLIVE,
         },
         {
@@ -277,7 +272,7 @@ export default function ApplicationDetails() {
             formType: 'LAMICHAT',
             description: 'شحن موقع LAMI CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: LAMICHAT,
         },
         {
@@ -285,7 +280,7 @@ export default function ApplicationDetails() {
             formType: 'YOOY',
             description: 'شحن موقع YOOY بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: YOOY,
         },
         {
@@ -293,7 +288,7 @@ export default function ApplicationDetails() {
             formType: 'XENALIVE',
             description: 'شحن موقع XENA LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: XENALIVE,
         },
         {
@@ -301,7 +296,7 @@ export default function ApplicationDetails() {
             formType: 'AYOME',
             description: 'شحن موقع AYOME بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: AYOME,
         },
         {
@@ -309,7 +304,7 @@ export default function ApplicationDetails() {
             formType: 'LIGOLIVE',
             description: 'شحن موقع LIGO LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: LIGOLIVE,
         },
         {
@@ -317,7 +312,7 @@ export default function ApplicationDetails() {
             formType: 'HAKICHAT',
             description: 'شحن موقع HAKI CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: HAKICHAT,
         },
         {
@@ -325,7 +320,7 @@ export default function ApplicationDetails() {
             formType: 'FANCYLIVE',
             description: 'شحن موقع FANCY LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: FANCYLIVE,
         },
         {
@@ -333,7 +328,7 @@ export default function ApplicationDetails() {
             formType: 'OOHLA',
             description: 'شحن موقع OOHLA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: OOHLA,
         },
         {
@@ -341,7 +336,7 @@ export default function ApplicationDetails() {
             formType: 'CHAMET',
             description: 'شحن موقع CHAMET بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: CHAMET,
         },
         {
@@ -349,7 +344,7 @@ export default function ApplicationDetails() {
             formType: 'MICOCHAT',
             description: 'شحن موقع MICO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: MICOCHAT,
         },
         {
@@ -357,7 +352,7 @@ export default function ApplicationDetails() {
             formType: 'IMO',
             description: 'شحن موقع IMO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: IMO,
         },
         {
@@ -365,7 +360,7 @@ export default function ApplicationDetails() {
             formType: 'AMAR',
             description: 'شحن موقع AMAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: AMAR,
         },
         {
@@ -373,7 +368,7 @@ export default function ApplicationDetails() {
             formType: 'WEGO',
             description: 'شحن موقع WEGO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: WEGO,
         },
         {
@@ -381,7 +376,7 @@ export default function ApplicationDetails() {
             formType: 'BINMOCHAT',
             description: 'شحن موقع BINMO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: BINMOCHAT,
         },
         {
@@ -389,7 +384,7 @@ export default function ApplicationDetails() {
             formType: 'LITCHAT',
             description: 'شحن موقع LiT CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: LITCHAT,
         },
         {
@@ -397,7 +392,7 @@ export default function ApplicationDetails() {
             formType: 'TAMICHAT',
             description: 'شحن موقع TAMI CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: TAMICHAT,
         },
         {
@@ -405,7 +400,7 @@ export default function ApplicationDetails() {
             formType: 'TOPTOP',
             description: 'شحن موقع TOP TOP بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: TOPTOP,
         },
         {
@@ -413,7 +408,7 @@ export default function ApplicationDetails() {
             formType: 'MANGOLIVE',
             description: 'شحن موقع MANGO LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: MANGOLIVE,
         },
         {
@@ -421,7 +416,7 @@ export default function ApplicationDetails() {
             formType: 'SOYOCHAT',
             description: 'شحن موقع SOYO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SOYOCHAT,
         },
         {
@@ -429,7 +424,7 @@ export default function ApplicationDetails() {
             formType: 'MR7BA',
             description: 'شحن موقع MR7BA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: MR7BA,
         },
         {
@@ -437,7 +432,7 @@ export default function ApplicationDetails() {
             formType: 'SALAMCHAT',
             description: 'شحن موقع SALAM CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SALAMCHAT,
         },
         {
@@ -445,7 +440,7 @@ export default function ApplicationDetails() {
             formType: 'DITTOLIVE',
             description: 'شحن موقع DITTO LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: DITTOLIVE,
         },
         {
@@ -453,7 +448,7 @@ export default function ApplicationDetails() {
             formType: 'NABDCHAT',
             description: 'شحن موقع NABD CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: NABDCHAT,
         },
         {
@@ -461,7 +456,7 @@ export default function ApplicationDetails() {
             formType: 'GIMMELIVE',
             description: 'شحن موقع GIMME LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: GIMMELIVE,
         },
         {
@@ -469,7 +464,7 @@ export default function ApplicationDetails() {
             formType: 'WYAKCHAT',
             description: 'شحن موقع WYAK CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: WYAKCHAT,
         },
         {
@@ -477,7 +472,7 @@ export default function ApplicationDetails() {
             formType: 'TAKALIVE',
             description: 'شحن موقع TAKA LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: TAKALIVE,
         },
         {
@@ -485,7 +480,7 @@ export default function ApplicationDetails() {
             formType: 'MIGOLIVE',
             description: 'شحن موقع MIGO LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: MIGOLIVE,
         },
         {
@@ -493,7 +488,7 @@ export default function ApplicationDetails() {
             formType: 'UPLIVE',
             description: 'شحن موقع UP LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: UPLIVE,
         },
         {
@@ -501,7 +496,7 @@ export default function ApplicationDetails() {
             formType: 'YOBICHAT',
             description: 'شحن موقع YOBI CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: YOBICHAT,
         },
         {
@@ -509,7 +504,7 @@ export default function ApplicationDetails() {
             formType: 'LIVU',
             description: 'شحن موقع LIVU بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: LIVU,
         },
         {
@@ -517,7 +512,7 @@ export default function ApplicationDetails() {
             formType: 'SABACHAT',
             description: 'شحن موقع SABA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SABACHAT,
         },
         {
@@ -525,7 +520,7 @@ export default function ApplicationDetails() {
             formType: 'OLAMET',
             description: 'شحن موقع OLAMET بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: OLAMET,
         },
         {
@@ -533,7 +528,7 @@ export default function ApplicationDetails() {
             formType: 'SUGO',
             description: 'شحن موقع SUGO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SUGO,
         },
         {
@@ -541,7 +536,7 @@ export default function ApplicationDetails() {
             formType: 'HAWACHAT',
             description: 'شحن موقع HAWA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: HAWACHAT,
         },
         {
@@ -549,7 +544,7 @@ export default function ApplicationDetails() {
             formType: 'YALLALIVE',
             description: 'شحن موقع YALLA LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: YALLALIVE,
         },
         {
@@ -557,7 +552,7 @@ export default function ApplicationDetails() {
             formType: 'ROOKA',
             description: 'شحن موقع ROOKA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: ROOKA,
         },
         {
@@ -565,7 +560,7 @@ export default function ApplicationDetails() {
             formType: 'SKYCHAT',
             description: 'شحن موقع SKY CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SKYCHAT,
         },
         {
@@ -573,7 +568,7 @@ export default function ApplicationDetails() {
             formType: 'SUPERLIVE',
             description: 'شحن موقع SUPER LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SUPERLIVE,
 
         },
@@ -582,7 +577,7 @@ export default function ApplicationDetails() {
             formType: 'ROOHCHAT',
             description: 'شحن موقع ROOH CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: ROOHCHAT,
         },
         {
@@ -590,7 +585,7 @@ export default function ApplicationDetails() {
             formType: 'DIMOCHAT',
             description: 'شحن موقع DIMO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: DIMOCHAT,
         },
         {
@@ -598,7 +593,7 @@ export default function ApplicationDetails() {
             formType: 'LIONSCHAT',
             description: 'شحن موقع LIONS CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: LIONSCHAT,
         },
         {
@@ -606,7 +601,7 @@ export default function ApplicationDetails() {
             formType: 'HIPARTY',
             description: 'شحن موقع HIPARTY بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: HIPARTY,
         },
         {
@@ -614,7 +609,7 @@ export default function ApplicationDetails() {
             formType: 'BELLA',
             description: 'شحن موقع BELLA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: BELLA,
         },
         {
@@ -622,7 +617,7 @@ export default function ApplicationDetails() {
             formType: 'HAMIPARTY',
             description: 'شحن موقع HAMI PARTY بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: HAMIPARTY,
         },
         {
@@ -630,7 +625,7 @@ export default function ApplicationDetails() {
             formType: 'WESTAR',
             description: 'شحن موقع WESTAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: WESTAR,
         },
         {
@@ -638,7 +633,7 @@ export default function ApplicationDetails() {
             formType: 'HABICHAT',
             description: 'شحن موقع HABI CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: HABICHAT,
         },
         {
@@ -646,7 +641,7 @@ export default function ApplicationDetails() {
             formType: 'SOMATCH',
             description: 'شحن موقع SOMATCH بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SOMATCH,
         },
         {
@@ -654,7 +649,7 @@ export default function ApplicationDetails() {
             formType: 'LAYLACHAT',
             description: 'شحن موقع LAYLA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: LAYLACHAT,
         },
         {
@@ -662,7 +657,7 @@ export default function ApplicationDetails() {
             formType: 'PARTYHERO',
             description: 'شحن موقع PARTY HERO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: PARTYHERO,
         },
         {
@@ -670,7 +665,7 @@ export default function ApplicationDetails() {
             formType: 'FOFOCHAT',
             description: 'شحن موقع FOFO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: FOFOCHAT,
         },
         {
@@ -678,7 +673,7 @@ export default function ApplicationDetails() {
             formType: 'HALAME',
             description: 'شحن موقع HALA ME بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: HALAME,
         },
         {
@@ -686,7 +681,7 @@ export default function ApplicationDetails() {
             formType: 'DANACHAT',
             description: 'شحن موقع DANA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: DANACHAT,
         },
         {
@@ -694,7 +689,7 @@ export default function ApplicationDetails() {
             formType: 'KITI',
             description: 'شحن موقع KITI بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: KITI,
         },
         {
@@ -702,7 +697,7 @@ export default function ApplicationDetails() {
             formType: 'SAYALIKEE',
             description: 'شحن موقع SAYA LIKEE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SAYALIKEE,
         },
         {
@@ -710,7 +705,7 @@ export default function ApplicationDetails() {
             formType: 'MASHICHAT',
             description: 'شحن موقع MASHI CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: MASHICHAT,
         },
         {
@@ -718,7 +713,7 @@ export default function ApplicationDetails() {
             formType: 'AZALLIVE',
             description: 'شحن موقع AZAL LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: AZALLIVE,
         },
         {
@@ -726,7 +721,7 @@ export default function ApplicationDetails() {
             formType: 'IMUCHAT',
             description: 'شحن موقع IMU CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: IMUCHAT,
         },
         {
@@ -734,7 +729,7 @@ export default function ApplicationDetails() {
             formType: 'HIPLAYCHAT',
             description: 'شحن موقع HIPLAY CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: HIPLAYCHAT,
         },
         {
@@ -742,7 +737,7 @@ export default function ApplicationDetails() {
             formType: 'MOLISTAR',
             description: 'شحن موقع MOLI STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: MOLISTAR,
         },
         {
@@ -750,7 +745,7 @@ export default function ApplicationDetails() {
             formType: 'YOLO',
             description: 'شحن موقع YOLO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             iage: YOLO,
         },
         {
@@ -758,7 +753,7 @@ export default function ApplicationDetails() {
             formType: '7STAR',
             description: 'شحن موقع 7STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: STAR,
         },
         {
@@ -766,7 +761,7 @@ export default function ApplicationDetails() {
             formType: 'MAZYOUN',
             description: 'شحن موقع MAZYOUN بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: MAZYOUN,
         },
         {
@@ -774,7 +769,7 @@ export default function ApplicationDetails() {
             formType: 'SAADACHAT',
             description: 'شحن موقع SAADA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: SAADACHAT,
         },
         {
@@ -782,7 +777,7 @@ export default function ApplicationDetails() {
             formType: 'NAWALIVE',
             description: 'شحن موقع NAWA LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: NAWALIVE,
         },
         {
@@ -790,7 +785,7 @@ export default function ApplicationDetails() {
             formType: 'YAMISTAR',
             description: 'شحن موقع YAMI STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: YAMISTAR,
         },
         {
@@ -798,7 +793,7 @@ export default function ApplicationDetails() {
             formType: 'WESOCHAT',
             description: 'شحن موقع WESO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :WESOCHAT,
         },
         {
@@ -806,7 +801,7 @@ export default function ApplicationDetails() {
             formType: 'ASHA',
             description: 'شحن موقع ASHA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: ASHA
         },
         {
@@ -814,7 +809,7 @@ export default function ApplicationDetails() {
             formType: 'YAAHLANCHAT',
             description: 'شحن موقع YAAHLAN CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :YAAHLANCHAT,
         },
         {
@@ -822,7 +817,7 @@ export default function ApplicationDetails() {
             formType: 'YAHLLA',
             description: 'شحن موقع YAHLLA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :YAHLLA,
         },
         {
@@ -830,7 +825,7 @@ export default function ApplicationDetails() {
             formType: 'TALKTALK',
             description: 'شحن موقع TALK TALK بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :TALKTALK,
         },
         {
@@ -838,7 +833,7 @@ export default function ApplicationDetails() {
             formType: 'HIYACHAT',
             description: 'شحن موقع HIYA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :HIYACHAT,
         },
         {
@@ -846,7 +841,7 @@ export default function ApplicationDetails() {
             formType: 'MAJLISCHAT',
             description: 'شحن موقع MAJLIS CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :MAJLISCHAT,
         },
         {
@@ -854,7 +849,7 @@ export default function ApplicationDetails() {
             formType: 'ZNET',
             description: 'شحن موقع ZNET بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :ZNET,
         },
         {
@@ -862,7 +857,7 @@ export default function ApplicationDetails() {
             formType: 'BOBO',
             description: 'شحن موقع BOBO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :BOBO,
         },
         {
@@ -870,7 +865,7 @@ export default function ApplicationDetails() {
             formType: 'HIGOLIVE',
             description: 'شحن موقع HIGO LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :HIGOLIVE,
         },
         {
@@ -878,7 +873,7 @@ export default function ApplicationDetails() {
             formType: 'TADACHAT',
             description: 'شحن موقع TADA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :TADACHAT
         },
         {
@@ -886,7 +881,7 @@ export default function ApplicationDetails() {
             formType: 'OPALIVE',
             description: 'شحن موقع OPA LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :OPALIVE,
         },
         {
@@ -894,7 +889,7 @@ export default function ApplicationDetails() {
             formType: 'AMO',
             description: 'شحن موقع AMO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :AMO,
         },
         {
@@ -902,7 +897,7 @@ export default function ApplicationDetails() {
             formType: 'KWAI',
             description: 'شحن موقع KWAI بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :KWAI,
         },
         {
@@ -910,7 +905,7 @@ export default function ApplicationDetails() {
             formType: 'VECOCHAT',
             description: 'شحن موقع VECO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :VECOCHAT,
         },
         {
@@ -918,7 +913,7 @@ export default function ApplicationDetails() {
             formType: 'HABBEYCHAT',
             description: 'شحن موقع HABBEY CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :HABBEYCHAT,
         },
         {
@@ -926,7 +921,7 @@ export default function ApplicationDetails() {
             formType: 'TANGO',
             description: 'شحن موقع TANGO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :TANGO,
         },
         {
@@ -934,7 +929,7 @@ export default function ApplicationDetails() {
             formType: 'HIYOOCHAT',
             description: 'شحن موقع HIYOO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :HIYOOCHAT,
         },
         {
@@ -942,7 +937,7 @@ export default function ApplicationDetails() {
             formType: 'SOULCHAT',
             description: 'شحن موقع SOUL CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :SOULCHAT,
         },
         {
@@ -950,7 +945,7 @@ export default function ApplicationDetails() {
             formType: 'HOBYCHAT',
             description: 'شحن موقع HOBY CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :HOBYCHAT,
         },
         {
@@ -958,7 +953,7 @@ export default function ApplicationDetails() {
             formType: 'GALASTAR',
             description: 'شحن موقع GALA STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :GALASTAR,
         },
         {
@@ -966,7 +961,7 @@ export default function ApplicationDetails() {
             formType: 'JUNKOCHAT',
             description: 'شحن موقع JUNKO CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :JUNKOCHAT,
         },
         {
@@ -974,7 +969,7 @@ export default function ApplicationDetails() {
             formType: 'EPARTY',
             description: 'شحن موقع E PARTY بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :EPARTY,
         },
         {
@@ -982,7 +977,7 @@ export default function ApplicationDetails() {
             formType: 'KAFU',
             description: 'شحن موقع KAFU بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             هةشلث :KAFU
         },
         {
@@ -990,7 +985,7 @@ export default function ApplicationDetails() {
             formType: 'SAHRACHAT',
             description: 'شحن موقع SAHRA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image:SAHRACHAT,
         },
         {
@@ -998,7 +993,7 @@ export default function ApplicationDetails() {
             formType: 'FALLA',
             description: 'شحن موقع FALLA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :FALLA,
         },
         {
@@ -1006,7 +1001,7 @@ export default function ApplicationDetails() {
             formType: 'KESSMETCHAT',
             description: 'شحن موقع KESSMET CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :KESSMETCHAT,
         },
         {
@@ -1014,7 +1009,7 @@ export default function ApplicationDetails() {
             formType: 'HARTLIVE',
             description: 'شحن موقع HART LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :HARTLIVE,
         },
         {
@@ -1022,7 +1017,7 @@ export default function ApplicationDetails() {
             formType: 'NADDYSTAR',
             description: 'شحن موقع NADDY STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :NADDYSTAR,
         },
         {
@@ -1030,7 +1025,7 @@ export default function ApplicationDetails() {
             formType: 'WAKISTAR',
             description: 'شحن موقع WAKI STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :WAKISTAR,
         },
         {
@@ -1038,7 +1033,7 @@ export default function ApplicationDetails() {
             formType: 'LAKICHAT',
             description: 'شحن موقع LAKI CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :LAKICHAT,
         },
         {
@@ -1046,7 +1041,7 @@ export default function ApplicationDetails() {
             formType: 'UPFUN',
             description: 'شحن موقع UP FUN بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :UPFUN,
         },
         {
@@ -1054,7 +1049,7 @@ export default function ApplicationDetails() {
             formType: 'TIKTOK',
             description: 'شحن موقع TIK TOK بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :TIKTOK,
         },
         {
@@ -1062,7 +1057,7 @@ export default function ApplicationDetails() {
             formType: 'SIYACHAT',
             description: 'شحن موقع SIYA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :SIYACHAT,
         },
         {
@@ -1070,7 +1065,7 @@ export default function ApplicationDetails() {
             formType: 'POTALIVE',
             description: 'شحن موقع POTA LIVE بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :POTALIVE,
         },
         {
@@ -1078,7 +1073,7 @@ export default function ApplicationDetails() {
             formType: 'YOPARTI',
             description: 'شحن موقع YOPARTI بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :YOPARTI,
         },
         {
@@ -1086,7 +1081,7 @@ export default function ApplicationDetails() {
             formType: 'SODFACHAT',
             description: 'شحن موقع SODFA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image :SODFACHAT,
         },
         {
@@ -1094,56 +1089,56 @@ export default function ApplicationDetails() {
             formType: 'HALOSTAR',
             description: 'شحن موقع HALO STAR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
         },
         {
             title: 'شحن BOLI',
             formType: 'BOLI',
             description: 'شحن موقع BOLI بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
         },
         {
             title: 'شحن VOVA',
             formType: 'VOVA',
             description: 'شحن موقع VOVA بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
         },
         {
             title: 'شحن JOYO',
             formType: 'JOYO',
             description: 'شحن موقع JOYO بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
         },
         {
             title: 'شحن WAAW CHAT',
             formType: 'WAAWCHAT',
             description: 'شحن موقع WAAW CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
         },
         {
             title: 'شحن SAMA CHAT',
             formType: 'SAMACHAT',
             description: 'شحن موقع SAMA CHAT بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
         },
         {
             title: 'شحن YOKI',
             formType: 'YOKI',
             description: 'شحن موقع YOKI بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
         },
         {
             title: 'شحن FUN UP',
             formType: 'FUNUP',
             description: 'شحن موقع FUN UP بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
         },
     ];
 

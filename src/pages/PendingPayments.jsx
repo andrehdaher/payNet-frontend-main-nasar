@@ -1,6 +1,6 @@
+import { PAYNET_BASE_URL } from "../api";
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import Navbar from "../components/NavBar";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { Input } from "../components/Custom/Input";
 import { Card, CardContent, CardHeader } from "../components/Custom/Card";
@@ -28,7 +28,7 @@ export default function PendingPayments() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "https://paynet-main-nasar.onrender.com/api/admin/user/pending", // نفس API البيان المالي
+        `${PAYNET_BASE_URL}/api/admin/user/pending`, // نفس API البيان المالي
         {
           headers: {
             Authorization: `Bearer ${token}`,

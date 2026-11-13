@@ -1,30 +1,47 @@
-// components/ServiceCard.jsx
-const ServiceCard = ({ title, description, image, buttonText, onClick, tag  }) => {
-  return (
-    <div className="max-w-xs p-6 rounded-md shadow-md  transform transition-transform duration-300 hover:-translate-y-2 hover:scale-105 hover:shadow-xl bg-[#00000050]  text-[#ffffffd3] border-none m-2">
+import { Link } from "react-router-dom";
+import { CardDescription, CardFooter, CardHeader, CardTitle } from "./Custom/Card";
+
+export default function ServiceCard({
+  title,
+  description,
+  image,
+  buttonText,
+  to,
+  state,
+  externalUrl,
+  eager,
+}) {
+  const content = (
+    <>
       <img
+        className="service-image"
         src={image}
         alt=""
-        className="object-cover object-center w-full rounded-md h-72 "
+        width="480"
+        height="270"
+        loading={eager ? "eager" : "lazy"}
+        decoding="async"
       />
-      <div className="mt-6 mb-2 space-y-2">
-        {tag && (
-          <span className="block text-xs font-medium tracking-widest uppercase text-violet-400">
-            {tag}
-          </span>
-        )}
-        <h2 className="text-2xl font-semibold tracking-wide text-[#ffffffed] font-arabic">{title}</h2>
-      </div>
-      <p className="text-[#ffffffd3] mb-4">{description}</p>
-      <button
-        type="button"
-        onClick={onClick}
-        className="w-full bg-violet-700 text-white py-3 rounded-lg hover:bg-purple-800 transition duration-300 text-lg"
-      >
-        {buttonText}
-      </button>
-    </div>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardFooter className="mt-auto">
+        <span className="ml-auto rounded-md border border-input bg-background px-4 py-2 text-sm font-medium group-hover:bg-violet-700 group-hover:text-white">
+          {buttonText}
+        </span>
+      </CardFooter>
+    </>
   );
-};
 
-export default ServiceCard;
+  const className = "service-card service-card-link group rounded-lg border bg-card text-card-foreground shadow-sm";
+  return externalUrl ? (
+    <a className={className} href={externalUrl} target="_blank" rel="noopener noreferrer">
+      {content}
+    </a>
+  ) : (
+    <Link className={className} to={to} state={state}>
+      {content}
+    </Link>
+  );
+}

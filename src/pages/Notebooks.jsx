@@ -1,3 +1,5 @@
+import { PAYNET_BASE_URL } from "../api";
+import { useToast } from "../context/ToastContext";
 import React, { useState, useEffect } from "react";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { Button } from "../components/Custom/Button";
@@ -7,6 +9,7 @@ import axios from "axios";
 
 
 export default function Notebooks() {
+  const toast = useToast();
 
   function parseJwt(token) {
     try {
@@ -33,7 +36,7 @@ export default function Notebooks() {
     const handleData = async () => {
       setLoading(true); // بدء التحميل
       try {
-        const res = await axios.get(`https://paynet-main-nasar.onrender.com/api/payment/save-number?email=${email}`)
+        const res = await axios.get(`${PAYNET_BASE_URL}/api/payment/save-number?email=${email}`)
         console.log("البيانات المسترجعة:", res.data)
         console.log("بنية البيانات:", JSON.stringify(res.data, null, 2))
         setFormData(res.data || []) // تأكد من أن البيانات مصفوفة
@@ -59,7 +62,7 @@ export default function Notebooks() {
   const refreshData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`https://paynet-main-nasar.onrender.com/api/payment/save-number?email=${email}`)
+      const res = await axios.get(`${PAYNET_BASE_URL}/api/payment/save-number?email=${email}`)
       console.log("تم إعادة تحميل البيانات:", res.data)
       setFormData(res.data || [])
       setSelectedRows([]) // إعادة تعيين الـ checkboxes المحددة
@@ -186,7 +189,7 @@ export default function Notebooks() {
         const rowId = row._id || row.id || row.landline;
         const isEditing = editingId === rowId;
         return (
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {isEditing ? (
               <>
                 <Button
@@ -245,14 +248,14 @@ export default function Notebooks() {
 
     // إذا لم يتم تحديد أي رقم
     if (selectedNumbers.length === 0) {
-      alert("لم يتم تحديد أي رقم");
+      toast.warning("لم يتم تحديد أي رقم");
       return;
     }
 
     try {
       // إرسال الأرقام المحددة إلى API للتسديد
       const response = await axios.post(
-        'https://paynet-main-nasar.onrender.com/api/payment/pay-selected',
+        `${PAYNET_BASE_URL}/api/payment/pay-selected`,
         {
           email: email,
           numbers: numbers,
@@ -266,14 +269,14 @@ export default function Notebooks() {
       );
 
       console.log("استجابة التسديد:", response.data);
-      alert(`تم تسديد ${selectedNumbers.length} رقم بنجاح: ${numbers.join(', ')}`);
+      toast.success(`تم تسديد ${selectedNumbers.length} رقم بنجاح: ${numbers.join(', ')}`);
 
       // إعادة تحميل البيانات وإعادة تعيين التحديد
       await refreshData();
 
     } catch (error) {
       console.error("خطأ في تسديد الأرقام:", error);
-      alert("حدث خطأ في تسديد الأرقام. حاول مرة أخرى.");
+      toast.error("حدث خطأ في تسديد الأرقام. حاول مرة أخرى.");
     }
   }
 
@@ -299,7 +302,7 @@ export default function Notebooks() {
   const saveEdit = async (rowId) => {
     try {
       await axios.put(
-        `https://paynet-main-nasar.onrender.com/api/payment/save-number/${rowId}`,
+        `${PAYNET_BASE_URL}/api/payment/save-number/${rowId}`,
         {
           landline: editedRow.landline,
           company: editedRow.company,
@@ -316,7 +319,7 @@ export default function Notebooks() {
       await refreshData();
     } catch (error) {
       console.error("خطأ في حفظ التعديلات:", error);
-      alert("تعذر حفظ التعديلات. حاول لاحقاً.");
+      toast.error("تعذر حفظ التعديلات. حاول لاحقاً.");
     }
   }
 
@@ -326,7 +329,7 @@ export default function Notebooks() {
 
     try {
       await axios.delete(
-        `https://paynet-main-nasar.onrender.com/api/payment/save-number/${row._id || row.id}`,
+        `${PAYNET_BASE_URL}/api/payment/save-number/${row._id || row.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -334,11 +337,11 @@ export default function Notebooks() {
           data: { email },
         }
       );
-      alert("تم حذف الرقم من القائمة");
+      toast.success("تم حذف الرقم من القائمة");
       await refreshData();
     } catch (error) {
       console.error("خطأ في حذف الرقم:", error);
-      alert("تعذر حذف الرقم.");
+      toast.error("تعذر حذف الرقم.");
     }
   }
 
@@ -346,10 +349,10 @@ export default function Notebooks() {
     <div>
       <ScreenWrapper>
         <div className="flex flex-col items-center justify-center space-y-4">
-          <h1 className="text-xl font-bold text-center">
+          <h1 className="page-title">
             اضافة الارقام التي يتم تسديدها بشكل دائم
           </h1>
-          <div className="w-full flex justify-between px-4">
+          <div className="flex w-full flex-wrap justify-between gap-2">
             <div className="flex gap-2">
               <Button
                 className="bg-blue-400 text-white text-sm"

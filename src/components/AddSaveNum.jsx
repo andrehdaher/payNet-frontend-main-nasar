@@ -1,7 +1,10 @@
+import { PAYNET_BASE_URL } from "../api";
+import { useToast } from "../context/ToastContext";
 import React, { useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import axios from 'axios';
 export default function AddSaveNum({ onClose }) {
+  const toast = useToast();
 
   function parseJwt(token) {
     try {
@@ -71,42 +74,43 @@ export default function AddSaveNum({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios.post('https://paynet-main-nasar.onrender.com/api/payment/save-number',
-
-      formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-
-      }
+    try {
+      await axios.post(
+        `${PAYNET_BASE_URL}/api/payment/save-number`,
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success('تم حفظ الرقم بنجاح')
+      setFormData({
+        name: "",
+        number: "",
+        company: "",
+        date: "",
+        amount: "",
+      })
+    } catch (error) {
+      toast.error(error.response?.data?.message || "تعذر حفظ الرقم. حاول مرة أخرى.");
     }
-    )
-    alert('تم حفظ الرقم بنجاح')
-    setFormData({
-      name: "",
-      number: "",
-      company: "",
-      date: "",
-      amount: "",
-    })
-
 
   };
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-[9999] p-4 flex items-center justify-center bg-black bg-opacity-50"
       onClick={onClose}
     >
       <div
-        className="bg-white p-6 rounded-xl shadow-md w-96 z-[10000]"
+        className="bg-white p-6 rounded-xl shadow-md paynet-modal-panel z-[10000]"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="saved-number-title"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-black font-bold text-lg">اضافة رقم</h1>
-          <AiOutlineCloseCircle
-            className="text-gray-500 hover:text-gray-700 cursor-pointer text-xl"
-            onClick={onClose}
-          />
+          <h2 id="saved-number-title" className="text-lg font-bold">إضافة رقم</h2>
+          <button type="button" className="paynet-menu-button" aria-label="إغلاق نافذة إضافة رقم" onClick={onClose}>
+            <AiOutlineCloseCircle aria-hidden="true" size={20} />
+          </button>
         </div>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input

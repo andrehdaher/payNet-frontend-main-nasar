@@ -1,8 +1,11 @@
+import { PAYNET_BASE_URL } from "../api";
+import { useToast } from "../context/ToastContext";
 // components/AddPointForm.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function AddPointForm({ onClose }) {
+  const toast = useToast();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false); // ✅ حالة التحميل
 
@@ -44,12 +47,12 @@ export default function AddPointForm({ onClose }) {
   const handelSave = async () => {
     try {
       setLoading(true); // ✅ بدء التحميل
-      await axios.post("https://paynet-main-nasar.onrender.com/api/point/add-point", { formData, email })
-      alert("تم اضافة نقطة البيع بنجاح")
+      await axios.post(`${PAYNET_BASE_URL}/api/point/add-point`, { formData, email })
+      toast.success("تم اضافة نقطة البيع بنجاح")
     }
     catch (err) {
       console.log(err)
-      alert("الايميل موجود مسبقا")
+      toast.error("الايميل موجود مسبقا")
 
     }
     finally {
@@ -60,8 +63,8 @@ export default function AddPointForm({ onClose }) {
 
   return (
 
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
-      <div className="bg-white rounded-lg p-6 w-[400px] shadow-lg">
+    <div className="fixed inset-0 z-50 p-4 flex items-center justify-center bg-black bg-opacity-50 ">
+      <div className="bg-white rounded-lg p-6 paynet-modal-panel shadow-lg">
         <h2 className="text-xl font-bold mb-4 text-center">إضافة نقطة بيع</h2>
 
         <form onSubmit={handleSubmit} className="space-y-3">

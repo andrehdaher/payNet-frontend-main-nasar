@@ -1,6 +1,6 @@
+import { PAYNET_BASE_URL } from "../api";
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import Navbar from "../components/NavBar";
 import { useNotification } from "../context/NotificationContext";
 import ScreenWrapper from "../components/ScreenWrapper";
 import DataTable from "../components/Custom/DataTable";
@@ -35,7 +35,7 @@ export default function FinancialStatement() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("https://paynet-main-nasar.onrender.com/api/saveBalance/all", {
+      const res = await axios.get(`${PAYNET_BASE_URL}/api/saveBalance/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

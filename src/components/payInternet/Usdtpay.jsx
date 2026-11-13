@@ -1,15 +1,10 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
 import USDTTRC20 from '../../assets/USDT-TRC20.jpeg'
 import USDTBEB20 from '../../assets/USDTBEB20.jpeg'
 import BANKTR from '../../assets/BANKTR.jpeg'
 import PAYCELL from '../../assets/PAYCELL.jpeg'
 
 export default function Usdtpay() {
-    const navigate = useNavigate();
-    const Action = (formType) => {
-        navigate('/payinternet', { state: formType });
-    };
 
 
     const usdtpay = [
@@ -18,7 +13,7 @@ export default function Usdtpay() {
             formType: 'USDTTRC20',
             description: 'شحن USDT-TRC20 بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: USDTTRC20
         },
         {
@@ -26,7 +21,7 @@ export default function Usdtpay() {
             formType: 'USDTBEB20',
             description: 'شحن USDT-BEB20 بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: USDTBEB20
         },
         {
@@ -34,7 +29,7 @@ export default function Usdtpay() {
             formType: 'BANKTR',
             description: 'شحن BANK-TR بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: BANKTR
         },
         {
@@ -42,7 +37,7 @@ export default function Usdtpay() {
             formType: 'PAYCELL',
             description: 'شحن PAYCELL بسرعة وأمان',
             buttonText: "عرض التفاصيل",
-            Action: Action,
+            route: "/payinternet",
             image: PAYCELL
         },
 

@@ -11,7 +11,7 @@ export default function DataTable({
   return (
     <div className="bg-white shadow-md rounded-xl overflow-hidden">
       {/* جعل الجدول قابل للتمرير على الشاشات الصغيرة */}
-      <div className="overflow-x-auto">
+      <div className="table-scroll" role="region" aria-label="جدول البيانات" tabIndex={0}>
         <table className="w-full text-sm text-gray-700">
           <thead className="bg-gray-100 text-xs uppercase text-gray-600">
             <tr>
@@ -60,7 +60,7 @@ export default function DataTable({
             ) : (
               <tr>
                 <td
-                  colSpan={columns.length}
+                  colSpan={columns.filter((col) => !col.hidden).length}
                   className="py-6 text-gray-500 text-center"
                 >
                   لا توجد بيانات

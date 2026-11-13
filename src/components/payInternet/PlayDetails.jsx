@@ -10,10 +10,8 @@ import Ludo from '../../assets/ludo.jpeg'
 import MobileLegend from '../../assets/mobile-leg.jpeg'
 import ProjectEntropy from '../../assets/ProjectEntropy.jpeg'
 import without from '../../assets/without.jpeg'
-import { useNavigate } from 'react-router-dom';
 
 export default function PlayDetails() {
-    const navigate = useNavigate();
 
     const playDetails = [
         {
@@ -21,7 +19,7 @@ export default function PlayDetails() {
             formType: "pubg",
             description: "شحن حسابات لعبة pubg mobile بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: Pubg
         },
         {
@@ -29,7 +27,7 @@ export default function PlayDetails() {
             formType: "pubgtr",
             description: "شحن حسابات لعبة pubg turkey بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: Pubgtr
         },
         {
@@ -37,7 +35,7 @@ export default function PlayDetails() {
             formType: "freefire",
             description: "شحن حسابات لعبة فري فاير-free fire بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: Freefire
         },
         {
@@ -45,7 +43,7 @@ export default function PlayDetails() {
             formType: "ballpool8",
             description: "شحن حسابات لعبة ball pool 8 بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: Ballbool8
         },
         {
@@ -53,7 +51,7 @@ export default function PlayDetails() {
             formType: "clashclans",
             description: "شحن حسابات لعبة clash of clans بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: Clashclans
         },
         {
@@ -61,7 +59,7 @@ export default function PlayDetails() {
             formType: "clashroyal",
             description: "شحن حسابات لعبة clash royal بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: Clashroyall
         },
         {
@@ -69,7 +67,7 @@ export default function PlayDetails() {
             formType: "jawakerman",
             description: "شحن حسابات لعبة جواكر-jawaker بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: Jawaker
         },
         {
@@ -77,7 +75,7 @@ export default function PlayDetails() {
             formType: "jawaker",
             description: "شحن حسابات لعبة جواكر-jawaker بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: Jawaker
         },
         {
@@ -85,7 +83,7 @@ export default function PlayDetails() {
             formType: "knivesout",
             description: "شحن حسابات لعبة knives out بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: KnivesOut
         },
         {
@@ -93,7 +91,7 @@ export default function PlayDetails() {
             formType: "ludoking",
             description: "شحن حسابات لعبة ludo king بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: Ludo
         },
         {
@@ -101,7 +99,7 @@ export default function PlayDetails() {
             formType: "mobilelegend",
             description: "شحن حسابات لعبة mobile legend بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: MobileLegend
         },
         {
@@ -109,7 +107,7 @@ export default function PlayDetails() {
             formType: "projectentropy",
             description: "شحن حسابات لعبة project entropy بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: ProjectEntropy
         },
         {
@@ -117,7 +115,7 @@ export default function PlayDetails() {
             formType: "whithoutsurvivial",
             description: "شحن حسابات لعبة whithout survivial بسرعة وأمان.",
             buttonText: "عرض التفاصيل",
-            Action: (formType) => { navigate('/payinternet', { state: formType }) },
+            route: "/payinternet",
             image: without
         },
     ];

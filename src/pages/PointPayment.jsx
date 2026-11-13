@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
-import Navbar from "../components/NavBar";
+import { PAYNET_BASE_URL } from "../api";
+import DataFeedback from "../components/DataFeedback";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function PaymentStatement() {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const vantaRef = useRef(null);
-  const [vantaEffect, setVantaEffect] = useState(null);
+  const [loadError, setLoadError] = useState(false);
   function parseJwt(token) {
     try {
       return JSON.parse(atob(token.split(".")[1]));
@@ -21,37 +21,20 @@ export default function PaymentStatement() {
 
 
 
-  useEffect(() => {
-    if (!vantaEffect && window.VANTA) {
-      setVantaEffect(
-        window.VANTA.NET({
-          el: vantaRef.current,
-          color: 0x0f172a,
-          backgroundColor: 0xeaeaea,
-          points: 8.0,
-          maxDistance: 20.0,
-          spacing: 15.0,
-        })
-      );
-    }
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
-  }, [vantaEffect]);
 
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`https://paynet-main-nasar.onrender.com5000/api/point/all-point?email=${email}`, {
+        const res = await axios.get(`${PAYNET_BASE_URL}/api/point/all-point?email=${encodeURIComponent(email)}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setPayments(res.data);
-      } catch (error) {
-        console.error("فشل في جلب الدفعات:", error);
+      } catch {
+        setLoadError(true);
       } finally {
         setLoading(false);
       }
@@ -62,18 +45,13 @@ export default function PaymentStatement() {
 
   return (
     <div >
-      <Navbar />
-      <div ref={vantaRef} className="p-6 bg-gray-100 min-h-screen relative" dir="rtl">
+      <div className="paynet-point-surface" dir="rtl">
         <div className="relative z-10">
 
-          <h2 className="text-3xl font-bold mb-6 text-black text-center">البيان المالي للدفعات</h2>
+          <h1 className="page-title">البيان المالي للدفعات</h1>
 
-          {loading ? (
-            <p className="text-center text-gray-500">جاري تحميل البيانات...</p>
-          ) : payments.length === 0 ? (
-            <p className="text-center text-gray-500">لا توجد دفعات محفوظة.</p>
-          ) : (
-            <div className="overflow-x-auto">
+          <DataFeedback loading={loading} error={loadError} empty={!payments.length}>
+            <div className="table-scroll" role="region" aria-label="دفعات نقطة البيع" tabIndex={0}>
               <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden text-sm">
                 <thead className="bg-violet-600 text-white">
                   <tr>
@@ -88,7 +66,7 @@ export default function PaymentStatement() {
                 </thead>
                 <tbody>
                   {payments.map((payment, index) => (
-                    <tr key={index} className="text-center border-b bg-[#00000050] hover:bg-gray-300">
+                    <tr key={index} className="text-center border-b bg-white hover:bg-gray-300">
                       <td className="p-3">{payment.name}</td>
                       <td className="p-3">{payment.destination}</td>
                       <td className="p-3">{payment.number}</td>
@@ -101,9 +79,10 @@ export default function PaymentStatement() {
                 </tbody>
               </table>
             </div>
-          )}
+          </DataFeedback>
 
-        </div>      </div>
+        </div>
+      </div>
     </div>
   );
 }

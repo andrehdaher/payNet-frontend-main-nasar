@@ -1,20 +1,24 @@
+import { PAYNET_BASE_URL } from "../api";
+import { useToast } from "../context/ToastContext";
+import DataFeedback from "../components/DataFeedback";
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/NavbarAdmin";
 import axios from "axios";
 
 export default function PaymentStatement() {
+  const toast = useToast();
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [confirmedPayments, setConfirmedPayments] = useState({});
 
   const fetchPayments = async () => {
     try {
       const res = await axios.get(
-        "https://paynet-main-nasar.onrender.com/api/admin/daen"
+        `${PAYNET_BASE_URL}/api/admin/daen`
       );
       setPayments(res.data);
     } catch (error) {
-      console.error("فشل في جلب الدفعات:", error);
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -28,7 +32,7 @@ export default function PaymentStatement() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "https://paynet-main-nasar.onrender.com/api/admin/confirm-daen",
+        `${PAYNET_BASE_URL}/api/admin/confirm-daen`,
         {
           id: payment._id,
           email: payment.name, // أو يمكن تغيير الحقل حسب اسم الحقل الحقيقي للبريد
@@ -39,7 +43,7 @@ export default function PaymentStatement() {
       return res.data;
     } catch (error) {
       console.error("فشل تأكيد الدفعة:", error);
-      alert("حدث خطأ أثناء تأكيد الدفعة.");
+      toast.error("حدث خطأ أثناء تأكيد الدفعة.");
     }
   };
 
@@ -60,8 +64,8 @@ export default function PaymentStatement() {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`https://paynet-main-nasar.onrender.com/api/admin/delete/${id}`)
-      alert("تم حذف الدفعة بنجاح")
+      await axios.delete(`${PAYNET_BASE_URL}/api/admin/delete/${id}`)
+      toast.success("تم حذف الدفعة بنجاح")
       fetchPayments();
 
 
@@ -73,18 +77,13 @@ export default function PaymentStatement() {
 
   return (
     <div>
-      <Navbar />
-      <div className="p-6 bg-gray-100 min-h-screen" dir="rtl">
-        <h2 className="text-2xl font-bold mb-6 text-blue-700 text-center">
+      <div className="p-3 sm:p-6 bg-gray-100 rounded-lg" dir="rtl">
+        <h1 className="page-title">
           البيان المالي للدفعات
-        </h2>
+        </h1>
 
-        {loading ? (
-          <p className="text-center text-gray-500">جاري تحميل البيانات...</p>
-        ) : payments.length === 0 ? (
-          <p className="text-center text-gray-500">لا توجد دفعات محفوظة.</p>
-        ) : (
-          <div className="overflow-x-auto">
+        <DataFeedback loading={loading} error={loadError} empty={!payments.length}>
+          <div className="table-scroll" role="region" aria-label="الديون" tabIndex={0}>
             <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden text-sm">
               <thead className="bg-blue-600 text-white">
                 <tr>
@@ -134,7 +133,7 @@ export default function PaymentStatement() {
               </tbody>
             </table>
           </div>
-        )}
+        </DataFeedback>
       </div>
     </div>
   );

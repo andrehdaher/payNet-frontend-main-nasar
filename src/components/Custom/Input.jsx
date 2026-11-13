@@ -42,7 +42,7 @@ const SInput = ({ className, type, ...props }, ref) => {
           placeholder:text-foreground focus-visible:outline-none 
           focus-visible:ring-2 focus-visible:ring-ring 
           focus-visible:ring-offset-2 disabled:cursor-not-allowed 
-          disabled:opacity-50 md:text-sm transition-all duration-500 ${className}`}
+          disabled:opacity-50 md:text-sm transition-colors duration-150 ${className}`}
       ref={ref}
       {...props}
     />

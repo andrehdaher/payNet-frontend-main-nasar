@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import { PAYNET_BASE_URL } from "../api";
+import DataFeedback from "../components/DataFeedback";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "../components/NavBar";
 import { useNotification } from "../context/NotificationContext";
 import ScreenWrapper from "../components/ScreenWrapper";
 import DataTable from "../components/Custom/DataTable";
@@ -12,6 +13,8 @@ import { useLocation } from "react-router-dom";
 
 export default function FinancialStatement() {
   const [confirmedPayments, setConfirmedPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const location = useLocation()
@@ -22,7 +25,7 @@ export default function FinancialStatement() {
   const [searchLandline, setSearchLandline] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("");
-  const { hasNewUnpaid, setHasNewUnpaid } = useNotification(); // ✅ Context
+  const { setHasNewUnpaid } = useNotification(); // ✅ Context
 
   useEffect(() => {
     fetchConfirmed();
@@ -50,7 +53,7 @@ export default function FinancialStatement() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        `https://paynet-main-nasar.onrender.com/api/point/user/confirmed/point?emailPoint=${email}`,
+        `${PAYNET_BASE_URL}/api/point/user/confirmed/point?emailPoint=${email}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,7 +65,9 @@ export default function FinancialStatement() {
       setHasNewUnpaid(false);
 
     } catch (err) {
-      console.error("فشل في جلب البيانات:", err);
+      setLoadError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -134,15 +139,15 @@ export default function FinancialStatement() {
 
   return (
     <ScreenWrapper>
-      <Card className="m-6">
+      <Card className="min-w-0">
         <CardHeader>
-          <h2 className="text-3xl font-bold text-center text-gray-700">
+          <h1 className="page-title">
             البيان المالي ل{pointData?.owner}
-          </h2>
+          </h1>
         </CardHeader>
         <CardContent>
           {/* واجهة البحث */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6 ">
             <Input
               label={'بحث'}
               type="text"
@@ -187,16 +192,18 @@ export default function FinancialStatement() {
               </select>
             </div>
           </div>
-          <DataTable
-            columns={FinColumns}
-            data={currentItems}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            onRowClick={(r) => {
-              console.log(r)
-            }}
-          />
+          <DataFeedback loading={loading} error={loadError}>
+            <DataTable
+              columns={FinColumns}
+              data={currentItems}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              onRowClick={(r) => {
+                console.log(r)
+              }}
+            />
+          </DataFeedback>
         </CardContent>
       </Card>
     </ScreenWrapper>

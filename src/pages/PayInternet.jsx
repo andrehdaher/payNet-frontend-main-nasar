@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import { PAYNET_BASE_URL } from "../api";
+import { useToast } from "../context/ToastContext";
+import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { Card, CardContent, CardHeader } from "../components/Custom/Card";
 import { Input } from "../components/Custom/Input";
 import { Button } from "../components/Custom/Button";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { internetDetails } from "../components/payInternet/internetDetails";
 
 export default function PayInternet() {
-  const vantaRef = useRef(null);
+  const toast = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [landline, setLandline] = useState("");
@@ -16,8 +18,10 @@ export default function PayInternet() {
   const [selectedSpeed, setSelectedSpeed] = useState("");
   const [amountToPay, setAmountToPay] = useState("");
   const [paymentType, setPaymentType] = useState("cash"); // القيمة الافتراضية نقداً
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
   const formType = location.state
+  const defaultSpeed = ['PHONE', 'PAYCELL', 'USDTTRC20', 'USDTBEB20', 'SYR', 'MTN', 'pubg', 'pubgtr', 'freefire', 'ballpool8', 'clashclans', 'clashroyal', 'jawakerman', 'jawaker', 'knivesout', 'ludoking', 'mobilelegend', 'projectentropy', 'whithoutsurvivial'].includes(formType) ? "0" : "";
   const config = internetDetails[formType] || {};
 
 
@@ -83,7 +87,7 @@ export default function PayInternet() {
 
     try {
       const res = await axios.post(
-        "https://paynet-main-nasar.onrender.com/api/payment/internet-full",
+        `${PAYNET_BASE_URL}/api/payment/internet-full`,
         {
           landline,
           company: selectedCompany,
@@ -99,51 +103,56 @@ export default function PayInternet() {
           },
         }
       );
-      alert("تم التسديد بنجاح. الرصيد الجديد: " + res.data.newBalance);
+      toast.success("تم التسديد بنجاح. الرصيد الجديد: " + res.data.newBalance);
 
 
       // إعادة تعيين الحقول
       setLandline("");
       setSelectedCompany("");
-      setSelectedSpeed("");
+      setSelectedSpeed(defaultSpeed);
+      setPaymentType("cash");
       setAmountToPay("");
-      // إعادة تحميل الصفحة أو تحديث الحالة حسب الحاجة
-      window.location.reload();
+      navigate(location.pathname, { replace: true, state: location.state, preventScrollReset: true });
 
     } catch (err) {
-      alert(err.response?.data?.message || "حدث خطأ");
+      toast.error(err.response?.data?.message || "حدث خطأ");
       // التوكن غير صالح، نسجل الخروج
       localStorage.removeItem('token'); // أو حسب تخزينك للتوكن
-      window.location.href = '/login'; // إعادة توجيه لصفحة تسجيل الدخول
+      navigate("/login", { replace: true });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   useEffect(() => {
-    if (['PHONE', 'PAYCELL', 'USDTTRC20', 'USDTBEB20', 'SYR', 'MTN', 'pubg', 'pubgtr', 'freefire', 'ballpool8', 'clashclans', 'clashroyal', 'jawakerman', 'jawaker', 'knivesout', 'ludoking', 'mobilelegend', 'projectentropy', 'whithoutsurvivial'].includes(formType)) { setSelectedSpeed('0') }
-  }, [])
+    setSelectedSpeed(defaultSpeed);
+  }, [formType, defaultSpeed]);
+
+  if (!title) {
+    return <p className="page-message">اختر خدمة من <Link className="text-violet-700 underline" to="/">الصفحة الرئيسية</Link>.</p>;
+  }
 
   return (
-    <ScreenWrapper className={'min-h-screen flex items-center justify-center p-4'}>
+    <ScreenWrapper className="mx-auto max-w-2xl">
       <Card>
         <CardHeader>
 
-          <h1 className="text-2xl">
+          <h1 className="page-title mb-0">
             {title}
           </h1>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6 ">
             {/* الحقول النصية */}
-            <div className="grid grid-cols-2 gap-6">
-              {inputs.map((input, idx) => (
-                input.id == 1 ? <>
-                  <div className="relative">
-                    <label className="block mb-1 mr-3 text-sm font-medium text-foreground">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {inputs.map((input) => (
+                input.id === "1" ? (
+                  <div key={input.id} className="relative">
+                    <label htmlFor="payment-company" className="block mb-1 mr-3 text-sm font-medium text-foreground">
                       {config.description}
                     </label>
                     <select
+                      id="payment-company"
                       value={selectedCompany}
                       onChange={(e) => setSelectedCompany(e.target.value)}
                       className="peer h-10 w-full text-foreground px-2 bg-foreground/10 border rounded-md border-foreground/50 outline-none"
@@ -156,8 +165,8 @@ export default function PayInternet() {
                       ))}
                     </select>
                   </div>
-                </>
-                  : input.id == 2 ? <>
+                )
+                  : input.id === "2" ? <Fragment key={input.id}>
                     {/* اختيار السرعة أو العداد */}
                     {(Array.isArray(config.speeds) && config.speeds.length > 0) || config.speeds === "counter" || config.speeds === 'mobilelegend' || config.speeds === 'BANKTR' ? (
                       config.speeds === "counter" || config.speeds === 'mobilelegend' || config.speeds === 'BANKTR' ? (
@@ -165,17 +174,19 @@ export default function PayInternet() {
                           key={input.id}
                           id={input.id}
                           label={config.speeds === 'mobilelegend' ? 'يرجى ادخال Zone ID' : config.speeds === 'BANKTR' ? "يرجى ادخال رقم الحساب" : 'رقم الاشتراك / العداد'}
+                          dir="ltr"
                           type={'number'}
                           value={selectedSpeed}
                           onChange={(e) => setSelectedSpeed(e.target.value)}
                           required
                         />
                       ) : (
-                        <div className="relative col-span-2">
-                          <label className="block mb-1 mr-3 text-sm font-medium text-foreground">
+                        <div className="relative sm:col-span-2">
+                          <label htmlFor="payment-speed" className="block mb-1 mr-3 text-sm font-medium text-foreground">
                             {formType == 'ADSL' ? 'اختر السرعة' : 'اختر الباقة'}
                           </label>
                           <select
+                            id="payment-speed"
                             value={selectedSpeed}
                             onChange={(e) => setSelectedSpeed(e.target.value)}
                             className="peer h-10 w-full text-foreground px-2 bg-foreground/10 border rounded-md border-foreground/50 outline-none"
@@ -191,12 +202,13 @@ export default function PayInternet() {
                         </div>
                       )
                     ) : null}
-                  </>
+                  </Fragment>
                     :
                     <Input
                       key={input.id}
                       id={input.id}
                       label={input.label}
+                      dir="ltr"
                       type={input.type}
                       value={input.value}
                       onChange={(e) => input.onChange && input.onChange(e.target.value)}

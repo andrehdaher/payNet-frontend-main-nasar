@@ -1,63 +1,58 @@
-import React from "react";
-import ProtectedRoute from "./components/ProtectedRoute";
-import react from "react";
+import { lazy } from "react";
+import { Link, Navigate } from "react-router-dom";
 
-const Login = React.lazy(() => import("./pages/Login"));
-const Home = React.lazy(() => import("./pages/Home"));
-const Internet = React.lazy(() => import("./pages/Internet"));
-const AddPoint = React.lazy(() => import("./pages/AddPoint"));
-const HomePoint = React.lazy(() => import("./pages/HomePoint"));
-const Balance = React.lazy(() => import("./pages/Balance"));
-const FinancialStatement = React.lazy(() => import("./pages/FinancialStatement"));
-const PendingPayments = React.lazy(() => import("./pages/PendingPayments"));
-const PayInternet = React.lazy(() => import("./pages/PayInternet"));
-const AdminPending = React.lazy(() => import("./pages/AdminPending"));
-const GetUser = React.lazy(() => import("./pages/GetUser"));
-const AdminPaymentStatement = React.lazy(() => import("./pages/AdminPaymentStatement"));
-const Adminadminfinancial = React.lazy(() => import("./pages/Adminfinancial"));
-const Admindaen = React.lazy(() => import("./pages/Admindaen"));
-const AddUser = React.lazy(() => import("./pages/AddUser"));
-const Astalam = React.lazy(() => import("./pages/Astalam"));
-const Haram = React.lazy(() => import("./pages/Haram"));
-const PaymentStatement = React.lazy(() => import("./pages/PaymentStatement"));
-const FinancialPoint = React.lazy(() => import("./pages/FinancialPoint"));
-const Notebooks = React.lazy(() => import("./pages/Notebooks"));
-// const ProductUpload = react.lazy(()=> import('./pages/ProductUpload') )
-// const MaintenancePage = react.lazy(()=> import('./pages/MaintenancePage') )
-const PointPayment = react.lazy(()=> import('./pages/PointPayment') )
-const Play = react.lazy(()=> import('./pages/Play') )
-const PayApp = react.lazy(()=> import('./pages/PayApp') )
+export const Login = lazy(() => import("./pages/Login"));
+const Home = lazy(() => import("./pages/Home"));
+const Internet = lazy(() => import("./pages/Internet"));
+const AddPoint = lazy(() => import("./pages/AddPoint"));
+const HomePoint = lazy(() => import("./pages/HomePoint"));
+const Balance = lazy(() => import("./pages/Balance"));
+const FinancialStatement = lazy(() => import("./pages/FinancialStatement"));
+const PayInternet = lazy(() => import("./pages/PayInternet"));
+const AdminPending = lazy(() => import("./pages/AdminPending"));
+const GetUser = lazy(() => import("./pages/GetUser"));
+const AdminPaymentStatement = lazy(() => import("./pages/AdminPaymentStatement"));
+const AdminFinancial = lazy(() => import("./pages/Adminfinancial"));
+const AdminDaen = lazy(() => import("./pages/Admindaen"));
+const AddUser = lazy(() => import("./pages/AddUser"));
+const Astalam = lazy(() => import("./pages/Astalam"));
+const Haram = lazy(() => import("./pages/Haram"));
+const FinancialPoint = lazy(() => import("./pages/FinancialPoint"));
+const Notebooks = lazy(() => import("./pages/Notebooks"));
+const PointPayment = lazy(() => import("./pages/PointPayment"));
+const Play = lazy(() => import("./pages/Play"));
+const PayApp = lazy(() => import("./pages/PayApp"));
 
+function NotFound() {
+  return (
+    <section className="page-message">
+      <h1 className="page-title">الصفحة غير موجودة</h1>
+      <Link to="/" className="text-violet-700 underline">العودة إلى الرئيسية</Link>
+    </section>
+  );
+}
 
 export const routesConfig = [
-  { path: "/login", element: <Login /> },
-  { path: "/", element: <ProtectedRoute><Home /></ProtectedRoute> },
-  { path: "/add-point", element: <ProtectedRoute><AddPoint /></ProtectedRoute> },
-  { path: "/HomePoint", element: <ProtectedRoute><HomePoint /></ProtectedRoute> },
-  {path : '/PointPayment' , element : <ProtectedRoute><PointPayment/></ProtectedRoute>},
-  { path: "/play", element: <ProtectedRoute><Play /></ProtectedRoute> },
-  { path: "/internet", element: <ProtectedRoute><Internet /></ProtectedRoute> },
-  { path: "/payinternet", element: <ProtectedRoute><PayInternet /></ProtectedRoute> },
-  { path: "/payapp", element: <ProtectedRoute><PayApp /></ProtectedRoute> },
-  { path: "/astalam", element: <ProtectedRoute><Astalam /></ProtectedRoute> },
-
-  { path: "/balance", element: <ProtectedRoute><Balance /></ProtectedRoute> },
-  { path: "/financial", element: <ProtectedRoute><FinancialStatement /></ProtectedRoute> },
-  // { path: "/pending", element: <ProtectedRoute><PendingPayments /></ProtectedRoute> },
-  { path: "/notebooks", element: <ProtectedRoute><Notebooks /></ProtectedRoute> },
-  { path: "/astalam", element: <ProtectedRoute><Astalam /></ProtectedRoute> },
-
-
-  { path: "/adminpending", element: <ProtectedRoute allowedRoles={["admin"]}><AdminPending /></ProtectedRoute> },
-  { path: "/allUser", element: <ProtectedRoute allowedRoles={["admin"]}><GetUser /></ProtectedRoute> },
-  { path: "/adminPaymentStatement", element: <ProtectedRoute allowedRoles={["admin"]}><AdminPaymentStatement /></ProtectedRoute> },
-  { path: "/adminfinancial", element: <ProtectedRoute allowedRoles={["admin"]}><Adminadminfinancial /></ProtectedRoute> },
-  { path: "/admindaen", element: <ProtectedRoute allowedRoles={["admin"]}><Admindaen /></ProtectedRoute> },
-  { path: "/adminAddUser", element: <ProtectedRoute allowedRoles={["admin"]}><AddUser /></ProtectedRoute> },
-
-  { path: "/haram", element: <ProtectedRoute><Haram /></ProtectedRoute> },
-  // { path: "/PaymentStatement", element: <ProtectedRoute><PaymentStatement /></ProtectedRoute> },
-  { path: "/financial-point", element: <ProtectedRoute><FinancialPoint /></ProtectedRoute> },
-
-  { path: "*", element: <Home /> },
+  { path: "/", element: <Home /> },
+  { path: "/add-point", element: <AddPoint /> },
+  { path: "/HomePoint", element: <HomePoint /> },
+  { path: "/home-point", element: <Navigate to="/HomePoint" replace /> },
+  { path: "/PointPayment", element: <PointPayment /> },
+  { path: "/play", element: <Play /> },
+  { path: "/internet", element: <Internet /> },
+  { path: "/payinternet", element: <PayInternet /> },
+  { path: "/payapp", element: <PayApp /> },
+  { path: "/astalam", element: <Astalam /> },
+  { path: "/balance", element: <Balance /> },
+  { path: "/financial", element: <FinancialStatement /> },
+  { path: "/notebooks", element: <Notebooks /> },
+  { path: "/adminpending", element: <AdminPending />, allowedRoles: ["admin"] },
+  { path: "/allUser", element: <GetUser />, allowedRoles: ["admin"] },
+  { path: "/adminPaymentStatement", element: <AdminPaymentStatement />, allowedRoles: ["admin"] },
+  { path: "/adminfinancial", element: <AdminFinancial />, allowedRoles: ["admin"] },
+  { path: "/admindaen", element: <AdminDaen />, allowedRoles: ["admin"] },
+  { path: "/adminAddUser", element: <AddUser />, allowedRoles: ["admin"] },
+  { path: "/haram", element: <Haram /> },
+  { path: "/financial-point", element: <FinancialPoint /> },
+  { path: "*", element: <NotFound /> },
 ];

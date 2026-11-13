@@ -1,26 +1,42 @@
+import { ToastProvider } from "./context/ToastContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { NotificationProvider } from "./context/NotificationContext";
 import { Suspense } from "react";
 import AutoLogout from "./hooks/AutoLogout";
-import { routesConfig } from "./RoutesConfig";
+import AppLayout, { PageLoading } from "./components/AppLayout";
+import Footer from "./components/Footer";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { Login, routesConfig } from "./RoutesConfig";
 
-function App() {
+export function AppRoutes() {
   return (
-    <div>
+    <ToastProvider>
       <NotificationProvider>
-          <BrowserRouter>
-          <AutoLogout />
-          <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
-            <Routes>
-              {routesConfig.map((route, index) => (
-                <Route key={index} path={route.path} element={route.element} />
+        <AutoLogout />
+        <Routes>
+          <Route path="/login" element={
+            <div className="paynet-shell">
+              <main className="paynet-login">
+                <Suspense fallback={<PageLoading />}><Login /></Suspense>
+              </main>
+              <Footer />
+            </div>
+          } />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppLayout />}>
+              {routesConfig.map(({ path, element, allowedRoles }) => (
+                <Route key={path} path={path} element={
+                  allowedRoles ? <ProtectedRoute allowedRoles={allowedRoles}>{element}</ProtectedRoute> : element
+                } />
               ))}
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
+            </Route>
+          </Route>
+        </Routes>
       </NotificationProvider>
-    </div>
+    </ToastProvider>
   );
 }
 
-export default App;
+export default function App() {
+  return <BrowserRouter><AppRoutes /></BrowserRouter>;
+}

@@ -209,3 +209,160 @@
   }
 }
 
+
+@layer components {
+  .paynet-shell {
+    @apply flex min-h-screen flex-col bg-muted;
+    min-height: 100dvh;
+  }
+
+  .paynet-header {
+    @apply sticky top-0 z-30 flex min-h-16 items-center gap-3 border-b bg-background px-3 py-2 sm:px-6;
+  }
+
+  .paynet-body {
+    @apply flex flex-1;
+  }
+
+  .paynet-sidebar {
+    @apply sticky top-16 w-56 shrink-0 self-start overflow-y-auto border-e bg-background p-3;
+    height: calc(100dvh - 4rem);
+  }
+
+  .paynet-content {
+    @apply flex min-w-0 flex-1 flex-col;
+  }
+
+  .paynet-main {
+    @apply mx-auto w-full min-w-0 max-w-7xl flex-1 px-3 py-5 sm:px-5 lg:px-6;
+  }
+
+  .paynet-login {
+    @apply grid flex-1 place-items-center p-4;
+  }
+
+  .paynet-nav-link {
+    @apply flex min-h-11 items-center gap-2 rounded-md px-3 py-2 text-start text-sm font-medium hover:bg-violet-50;
+  }
+
+  .paynet-nav-link[aria-current="page"] {
+    @apply bg-violet-100 font-bold text-violet-800;
+  }
+
+  .paynet-menu-button {
+    @apply grid size-11 shrink-0 place-items-center rounded-md text-violet-700 hover:bg-violet-100;
+  }
+
+  .paynet-nav-link:focus-visible,
+  .paynet-menu-button:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-violet-700;
+  }
+
+  .paynet-drawer {
+    @apply fixed inset-y-0 end-auto start-0 m-0 h-full max-h-none w-72 max-w-[calc(100%-2rem)] overflow-y-auto overscroll-contain border-e bg-background p-4 text-foreground;
+  }
+
+  .paynet-drawer::backdrop {
+    background: rgb(15 23 42 / 55%);
+  }
+
+  body:has(.paynet-drawer[open]) {
+    overflow: hidden;
+  }
+
+  .paynet-point-surface {
+    @apply rounded-xl border bg-gradient-to-b from-violet-50 to-background p-3 sm:p-5;
+  }
+
+  .page-title {
+    @apply mb-4 text-2xl font-bold text-foreground sm:text-3xl;
+  }
+
+  .page-message {
+    @apply rounded-lg border bg-background p-5 text-center text-slate-700;
+  }
+
+  .service-grid {
+    @apply grid gap-4 sm:grid-cols-2 xl:grid-cols-4;
+  }
+
+  .service-card {
+    @apply flex h-full min-w-0 flex-col;
+  }
+
+  .service-image {
+    @apply mx-auto aspect-video w-full rounded-t-lg bg-slate-50 object-contain;
+  }
+
+  .table-scroll {
+    @apply w-full min-w-0 overflow-x-auto;
+  }
+
+  .paynet-modal-panel {
+    max-width: min(32rem, 100%);
+    max-height: calc(100dvh - 2rem);
+    @apply w-full overflow-y-auto overscroll-contain;
+  }
+}
+
+.service-card-link:focus-visible {
+  outline: 2px solid #6d28d9;
+  outline-offset: 2px;
+}
+
+@keyframes paynet-enter {
+  from { opacity: 0.65; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .paynet-page-enter,
+  .paynet-toast-enter {
+    animation: paynet-enter 160ms ease-out both;
+  }
+
+  .paynet-pressable,
+  .service-card-link {
+    transition: transform 120ms ease-out, background-color 150ms ease, color 150ms ease;
+  }
+
+  .paynet-pressable:enabled:active,
+  .service-card-link:active {
+    transform: scale(0.98);
+  }
+
+  @supports (transition-behavior: allow-discrete) and (overlay: auto) {
+    .paynet-drawer {
+      --drawer-offset: -100%;
+      transform: translateX(var(--drawer-offset));
+      transition: transform 180ms ease-out, display 180ms allow-discrete, overlay 180ms allow-discrete;
+    }
+
+    .paynet-drawer:dir(rtl) {
+      --drawer-offset: 100%;
+    }
+
+    .paynet-drawer[open] {
+      transform: translateX(0);
+    }
+
+    .paynet-drawer::backdrop {
+      opacity: 0;
+      transition: opacity 180ms ease-out, display 180ms allow-discrete, overlay 180ms allow-discrete;
+    }
+
+    .paynet-drawer[open]::backdrop {
+      opacity: 1;
+    }
+
+    @starting-style {
+      .paynet-drawer[open] {
+        transform: translateX(var(--drawer-offset));
+      }
+
+      .paynet-drawer[open]::backdrop {
+        opacity: 0;
+      }
+    }
+  }
+}

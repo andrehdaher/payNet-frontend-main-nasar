@@ -1,35 +1,23 @@
 import ServiceCard from "../components/Card";
-import { useNavigate } from "react-router-dom";
-import HARAM from "../assets/HARAM.png"
-import SHAMKASH from "../assets/SHAMKASH.png"
-import cash from "../assets/cash.jpeg"
-import syrmtn from "../assets/syrmtn.png"
-import NavBar from '../components/NavBar'
-import React, { useEffect, useState, useRef } from "react";
+import SHAMKASH from "../assets/SHAMKASH.png";
 import ScreenWrapper from "../components/ScreenWrapper";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/Custom/Card";
-import { Button } from "../components/Custom/Button";
-
-
 
 const Balance = () => {
 
-  const navigate = useNavigate();
-
   const services = [
-    {
-      title: "شركة الهرم",
-      description: "يمكنك الحصول على معلومات التحويل من هنا",
-      image: HARAM,
-      service: 'HARAM',
-      buttonText: "تعبئة رصيد",
-      route: "/haram",
-    },
+    // {
+    //   title: "شركة الهرم",
+    //   description: "يمكنك الحصول على معلومات التحويل من هنا",
+    //   image: HARAM,
+    //   service: "HARAM",
+    //   buttonText: "تعبئة رصيد",
+    //   route: "/haram",
+    // },
     {
       title: "شام كاش",
       description: "تعبئة رصيد عن طريق شام كاش",
       image: SHAMKASH,
-      service: 'SHAMKASH',
+      service: "SHAMKASH",
       buttonText: "تعبئة رصيد",
       route: "/haram",
     },
@@ -41,53 +29,30 @@ const Balance = () => {
     //   buttonText: "تعبئة رصيد",
     //   route: "/haram",
     // },
-    {
-      title: "syriatel and mtn",
-      description: "للحصول على معلومات التحويل عن طريق كاش سريتل و mtn",
-      image: syrmtn,
-      service:'SYRMTN',
-      buttonText: "معلومات التحويل",
-      route: "/haram",
-    },
-    {
-      title: "دفعة نقدية",
-      description: "اضافة دفعة نقدية عن طريق المكتب",
-      image: cash,
-      service: 'CASH',
-      buttonText: "معلومات التحويل",
-      route: "/haram",
-    },
-
+    // {
+    //   title: "syriatel and mtn",
+    //   description: "للحصول على معلومات التحويل عن طريق كاش سريتل و mtn",
+    //   image: syrmtn,
+    //   service: "SYRMTN",
+    //   buttonText: "معلومات التحويل",
+    //   route: "/haram",
+    // },
+    // {
+    //   title: "دفعة نقدية",
+    //   description: "اضافة دفعة نقدية عن طريق المكتب",
+    //   image: cash,
+    //   service: "CASH",
+    //   buttonText: "معلومات التحويل",
+    //   route: "/haram",
+    // },
   ];
 
   return (
     <ScreenWrapper>
-      <div
-        className="grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 place-items-center"
-        dir="rtl"
-      >
+      <h1 className="page-title">تعبئة الرصيد</h1>
+      <div className="service-grid">
         {services.map((service, idx) => (
-          <Card key={idx} className="">
-            <CardContent>
-              <img className="w-96 h-48 mx-auto" src={service.image} alt="" />
-            </CardContent>
-
-            <CardHeader>
-              <CardTitle>{service.title}</CardTitle>
-              <CardDescription>{service.description}</CardDescription>
-            </CardHeader>
-
-
-            <CardFooter>
-              <Button
-                className="ml-auto"
-                variant="outline"
-                onClick={() => navigate(service.route, { state: service.service })}
-              >
-                {service.buttonText}
-              </Button>
-            </CardFooter>
-          </Card>
+          <ServiceCard key={service.title} {...service} to={service.route} state={service.service} eager={idx < 3} />
         ))}
       </div>
     </ScreenWrapper>

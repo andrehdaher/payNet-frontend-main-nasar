@@ -1,8 +1,11 @@
+import { PAYNET_BASE_URL } from "../api";
+import { useToast } from "../context/ToastContext";
 // components/EditUserForm.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function EditUserForm({ userId, onClose, onUpdate }) {
+  const toast = useToast();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -11,7 +14,7 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
   });
 
   useEffect(() => {
-    axios.get(`https://paynet-main-nasar.onrender.com/api/admin/user/${userId}`)
+    axios.get(`${PAYNET_BASE_URL}/api/admin/user/${userId}`)
       .then(res => setUserData(res.data))
       .catch(err => console.error("حدث خطأ في جلب المستخدم", err));
   }, [userId]);
@@ -24,19 +27,19 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://paynet-main-nasar.onrender.com/api/admin/updateuser/${userId}`, userData);
-      alert("تم التعديل بنجاح ✅");
+      await axios.put(`${PAYNET_BASE_URL}/api/admin/updateuser/${userId}`, userData);
+      toast.success("تم التعديل بنجاح ✅");
       onUpdate();  // إعادة تحميل المستخدمين
       onClose();   // إغلاق النموذج
     } catch (err) {
       console.error("خطأ في التعديل", err);
-      alert("حدث خطأ أثناء التعديل");
+      toast.error("حدث خطأ أثناء التعديل");
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
-      <div className="bg-white p-6 rounded shadow-lg w-[400px]">
+    <div className="fixed inset-0 z-50 p-4 flex items-center justify-center bg-black bg-opacity-30">
+      <div className="bg-white p-6 rounded shadow-lg paynet-modal-panel">
         <h2 className="text-xl font-bold mb-4">تعديل المستخدم</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
